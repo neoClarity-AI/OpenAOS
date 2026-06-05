@@ -4,7 +4,7 @@ file_type: agent_builder
 builder_version: 1.0.0
 schema_version: 1.0.0
 created_date: 2026-06-03
-last_updated: 2026-06-03
+last_updated: 2026-06-05
 status: active
 compatible_aos_versions:
   - 1.x
@@ -16,6 +16,8 @@ requires_approval_for_overwrite: true
 ## Builder Purpose
 
 Build the **Chief of Staff Agent**, a required governance agent. It owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination (Section 7.4). It coordinates rather than doing the work itself; responsibility is pushed down to specialized agents (Sections 2.2, 7.6). Standardized purpose, short interview.
+
+It is also a **joint owner of the AOS-03 instance router** (`/aos-router.md`): the Chief of Staff agents of `work-aos` and `personal-aos` share ownership of the router that resolves the active target (`aos-factory`, `work-aos`, or `personal-aos`) before any workflow runs. This agent must honor router resolution — ask on weak or mixed signals, never silently pick or merge instances — and log instance-routing choices to its own decision log.
 
 ## When to Use This Builder
 
@@ -62,7 +64,7 @@ Short batch interview (Section 9.1).
 
 ## Agent Instruction Generation Rules
 
-Generate `chief-of-staff-agent.md` per Section 11 with `agent_instruction` frontmatter. Emphasize Non-Responsibilities: it coordinates, prioritizes, routes, and resolves conflicts; it is not a universal worker (Sections 2.2, 7.6). Document routing, prioritization, and conflict-resolution behavior, and its default-coordinator role (Section 23).
+Generate `chief-of-staff-agent.md` per Section 11 with `agent_instruction` frontmatter. Emphasize Non-Responsibilities: it coordinates, prioritizes, routes, and resolves conflicts; it is not a universal worker (Sections 2.2, 7.6). Document routing, prioritization, and conflict-resolution behavior, and its default-coordinator role (Section 23). Document its **joint ownership of the instance router** (`/aos-router.md`): resolve the active target before running any workflow, honor the ask-don't-guess rule on weak or mixed signals, and never silently pick or merge instances.
 
 ## Workflow Generation Rules
 
@@ -78,7 +80,7 @@ Create `chief-of-staff-config.md` (Section 16.1) referencing global permissions 
 
 ## Logging Rules
 
-Create `chief-of-staff-decision-log.md` (Section 16.5). Log routing and prioritization decisions and conflict resolutions that affect future behavior.
+Create `chief-of-staff-decision-log.md` (Section 16.5). Log routing and prioritization decisions and conflict resolutions that affect future behavior. This log is also the home for **instance-routing choices** resolved via `/aos-router.md` (chosen instance, trigger, default vs. asked), per the router's logging rule.
 
 ## Validation Checklist
 
@@ -86,6 +88,7 @@ Create `chief-of-staff-decision-log.md` (Section 16.5). Log routing and prioriti
 [ ] Standard seven-file set created.
 [ ] Instruction file follows Section 11 schema with strong Non-Responsibilities.
 [ ] Routing, prioritization, and conflict-resolution behavior documented.
+[ ] Joint ownership of /aos-router.md documented, with ask-don't-guess and no silent instance merge.
 [ ] Handoff protocol references the global handoff template.
 [ ] Decision log present and append-only.
 [ ] Registry and map updated; build logged.

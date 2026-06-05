@@ -4,7 +4,7 @@ file_type: config
 schema_version: 1.0.0
 builder_version: 1.0.0
 created_date: 2026-06-04
-last_updated: 2026-06-04
+last_updated: 2026-06-05
 status: active
 ---
 
@@ -16,7 +16,7 @@ One row per agent. Status values: installed | available | paused | retired.
 |---|---|---|---|---|---|
 | Security / Permissions | installed | yes | /builders/build-security-agent.md | /agents/security-agent | Owns permissions + tool matrix |
 | Memory | installed | yes | /builders/build-memory-agent.md | /agents/memory-agent | Owns memory routing + hygiene |
-| Chief of Staff | installed | yes | /builders/build-chief-of-staff-agent.md | /agents/chief-of-staff-agent | Default coordinator |
+| Chief of Staff | installed | yes | /builders/build-chief-of-staff-agent.md | /agents/chief-of-staff-agent | Default coordinator; joint owner of /aos-router.md |
 | Review / Reflection | installed | yes | /builders/build-review-agent.md | /agents/review-agent | Owns reviews + user guide |
 | Inbox / Communications | installed | no | /builders/build-inbox-agent.md | /agents/inbox-agent | Drafts; send = approval |
 | Calendar / Scheduling | installed | no | /builders/build-calendar-agent.md | /agents/calendar-agent | Modify = approval |

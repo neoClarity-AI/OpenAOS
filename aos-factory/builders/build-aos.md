@@ -4,7 +4,7 @@ file_type: aos_builder
 builder_version: 1.0.0
 schema_version: 1.0.0
 created_date: 2026-06-03
-last_updated: 2026-06-03
+last_updated: 2026-06-05
 status: active
 compatible_aos_versions:
   - 1.x
@@ -17,7 +17,7 @@ requires_approval_for_overwrite: true
 
 This builder runs the interactive setup that creates a complete **Agentic Operating System (AOS) instance**: its folder structure, global files, required governance agents, at least one optional productive agent, workflows, templates, logs, and the AOS User Guide.
 
-It produces a working AOS the user can operate immediately. It does not install or modify the reusable framework itself; that is the installer's job (`/install-aos-factory.md`).
+It produces a working AOS the user can operate immediately. It does not modify the reusable framework itself; the framework is generated from the design specification and distributed as a Claude plugin, and maintaining it is a separate manual, approval-gated operation (design spec Section 28).
 
 ## When to Use This Builder
 
@@ -57,6 +57,7 @@ Ask in small batches:
 - Which optional productive agents do you want first? (At least one is required — see Optional Agent Selection.)
 - What are your communication and approval preferences (how cautious, how much autonomy)?
 - Are there tools the AOS should know it can or cannot use yet?
+- If this instance will run alongside another that shares an input channel (e.g. a single inbox feeding both `work-aos` and `personal-aos`), what **routing signals** distinguish it — its email aliases, sender domains, and project names? Capture these so `/aos-router.md` can differentiate instances rather than falling back to ASK.
 
 ## Recommended Defaults
 
@@ -71,7 +72,7 @@ Ask in small batches:
 Follow the ten-step initial setup sequence (Section 9.3):
 
 ```text
-0. (Pre-step) install-aos-factory.md has installed or refreshed the framework.
+0. (Pre-step) The factory framework already exists (generated from the design spec and installed as a Claude plugin).
 1. Start the user-facing AOS setup interview.
 2. Create the top-level folder structure.
 3. Create global config, memory, log, workflow, template, inbox, and archive files.
@@ -168,6 +169,16 @@ Each builder creates that agent's standard file set (Section 5.1). Required-agen
 - Update `/aos-map.md` to distinguish installed, available-but-not-installed, required core, optional productive, paused, and retired agents.
 - Log the build in `/logs/aos-decision-log.md` and `/logs/change-log.md`.
 - Record builder and schema versions in `/aos-manifest.md`.
+
+## Instance Routing Signals
+
+When this instance shares an input channel with another (the AOS-03 case, where one inbox feeds both `work-aos` and `personal-aos`), routing only produces different results once the instances' signals diverge. During the build, populate the instance-specific signals the router relies on so it can resolve automatically instead of asking every time:
+
+- Email aliases and sender domains tied to this instance → capture in `/memory/user-profile.md` and `/memory/people.md`.
+- This instance's project names → ensure `/memory/projects.md` is populated (the router matches `[instance]/projects` names).
+- Add the manifest pointer blockquote under `# AOS Manifest`: "Instance selection is governed by `/aos-router.md`. Do not assume this instance is active."
+
+Without these, the router correctly falls back to ASK rather than guessing — functional but noisier than necessary.
 
 ## Validation Checklist
 

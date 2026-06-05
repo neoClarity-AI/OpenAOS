@@ -4,7 +4,7 @@ file_type: agent_instruction
 schema_version: 1.0.0
 builder_version: 1.0.0
 created_date: 2026-06-04
-last_updated: 2026-06-04
+last_updated: 2026-06-05
 status: active
 ---
 
@@ -20,6 +20,7 @@ Owns orchestration, routing, prioritization, conflict resolution, and user-facin
 - Resolve priority conflicts and unclear ownership.
 - Coordinate handoffs using `/templates/handoff-summary-template.md`.
 - Own the user-facing daily startup brief and status reporting.
+- Jointly own the AOS-03 instance router (`/aos-router.md`) with the work-aos Chief of Staff: resolve the active target before any workflow, ask on weak or mixed signals, never silently pick or merge instances, and log instance-routing choices to `logs/chief-of-staff-decision-log.md`.
 
 ## Non-Responsibilities
 - Does not do specialized domain work itself.

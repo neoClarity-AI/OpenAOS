@@ -3,7 +3,7 @@ title: AOS Factory Design Specification - Final
 file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
-last_updated: 2026-06-03
+last_updated: 2026-06-05
 status: final_design_ready_for_generation_planning
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -45,7 +45,7 @@ The following design inconsistencies were identified during the final consistenc
 
 3. Tool access source of truth — The global tool access matrix (/configs/tool-access-matrix.md) is authoritative and overrides agent configs on conflict; agent config Tool Access sections only reference it. See Sections 22 and 16.1.
 
-4. Missing builder schemas — Section schemas are now defined for /builders/build-aos.md and /install-aos-factory.md. See Sections 12.1 and 12.2.
+4. Missing builder schemas — A section schema is now defined for /builders/build-aos.md. See Section 12.1.
 ```
 
 The remaining minor consistency items from that check, together with further consistency passes on 2026-06-03, have since been resolved. All resolutions are recorded in `AOS-Generator_Design-Consistency-Changelog.md`.
@@ -319,7 +319,6 @@ The reusable AOS Factory framework and the AOS instances it produces are kept as
 The framework occupies the root level:
 
 ```text
-/install-aos-factory.md
 /build-aos.md
 /builder-changelog.md
 /builders/
@@ -512,6 +511,7 @@ Owns shared memory structure, memory hygiene, preference capture, and cross-agen
 
 Chief of Staff Agent
 Owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination.
+Also a joint owner of the AOS-03 instance router (/aos-router.md): the Chief of Staff agents of work-aos and personal-aos share ownership of the router that resolves the active target before any workflow runs. Each must honor router resolution (ask-don't-guess; never silently pick or merge instances) and log instance-routing choices to its own /agents/chief-of-staff-agent/logs/chief-of-staff-decision-log.md.
 
 Review / Reflection Agent
 Owns retrospectives, system improvement, weekly reviews, decision audits, AOS refinement, and the AOS User Guide (/docs/aos-user-guide.html), which it refreshes during the monthly review.
@@ -594,28 +594,11 @@ Decision:
 The root build-aos.md is a short entry file that points to /builders/build-aos.md.
 ```
 
-## 8.4 Installer File
+## 8.4 Separation of Concerns
 
-The reusable AOS Factory should include a root-level installer:
-
-```text
-/install-aos-factory.md
-```
-
-Purpose:
+There is no runtime installer. The factory framework is generated once from this design specification and then manually packaged and distributed as a Claude plugin (see Section 28). Within the generated framework, responsibilities separate as:
 
 ```text
-Install, validate, or refresh the reusable AOS Factory framework.
-```
-
-The installer should install the builder framework only. It must not build the user’s actual AOS instance.
-
-Separation of concerns:
-
-```text
-install-aos-factory.md
-Installs, validates, or refreshes the reusable builder framework.
-
 build-aos.md
 Runs the interactive setup process and builds a specific AOS instance.
 
@@ -623,52 +606,7 @@ build-[agent-name]-agent.md
 Builds one specific agent inside an AOS instance.
 ```
 
-## 8.5 Installer Responsibilities
-
-`install-aos-factory.md` should be responsible for:
-
-```text
-- Creating the /builders folder
-- Creating all builder files
-- Creating or refreshing the root build-aos.md entry file
-- Verifying required builder files exist
-- Reporting missing or outdated builder files
-- Producing an installer summary
-```
-
-## 8.6 Installer Must Not Build AOS Instances
-
-`install-aos-factory.md` must not create the user’s actual AOS instance.
-
-The actual AOS instance should be created by:
-
-```text
-/builders/build-aos.md
-```
-
-or through the root entry:
-
-```text
-/build-aos.md
-```
-
-## 8.7 Installer Summary
-
-The installer should produce:
-
-```markdown
-# AOS Factory Installer Summary
-
-## Builder Files Created
-
-## Builder Files Already Present
-
-## Builder Files Requiring Approval to Update
-
-## Root Entry File Status
-
-## Next Step
-```
+Maintaining or refreshing the framework files themselves is a manual, approval-gated operation followed by re-packaging the plugin (Section 28); it is never an automatic build step.
 
 ---
 
@@ -717,7 +655,7 @@ Recommended sequence:
 Initial setup should use this sequence:
 
 ```text
-0. install-aos-factory.md installs or refreshes the reusable builder framework
+0. The factory framework already exists (generated from this design spec and installed as a Claude plugin; see Section 28)
 1. /builders/build-aos.md starts the user-facing AOS setup interview
 2. Create top-level folder structure
 3. Create global config, memory, log, workflow, template, inbox, and archive files
@@ -823,8 +761,11 @@ Recommended table:
 | Agent | Status | Required? | Builder File | Agent Folder | Notes |
 |---|---|---:|---|---|---|
 | Security Agent | Active | Yes | /builders/build-security-agent.md | /agents/security-agent/ | Required core agent |
+| Chief of Staff Agent | Active | Yes | /builders/build-chief-of-staff-agent.md | /agents/chief-of-staff-agent/ | Required core agent; joint owner of /aos-router.md |
 | Research Agent | Available | No | /builders/build-research-agent.md | Not created | Optional productive agent |
 ```
+
+The Chief of Staff Agent's registry entry should note its joint ownership of the AOS-03 instance router (`/aos-router.md`), so router responsibility is discoverable from the registry as well as the agent definition.
 
 ## 10.4 AOS Map
 
@@ -961,36 +902,6 @@ Every `build-[agent-name]-agent.md` should follow this structure:
 
 The root entry `/build-aos.md` (file_type `builder_entry`) is a short pointer to `/builders/build-aos.md` and does not repeat this schema.
 
-## 12.2 Installer File Schema
-
-`/install-aos-factory.md` (file_type `installer`) installs, validates, or refreshes the reusable builder framework only and must never build an AOS instance. It should follow this structure:
-
-```markdown
-# Install AOS Factory
-
-## Installer Purpose
-
-## When to Use This Installer
-
-## Installer Operating Mode
-
-## Update Modes
-
-## Files Managed
-
-## Validation Checks
-
-## Approval Gates
-
-## Installer Summary
-
-## Logging Rules
-
-## Next Step
-```
-
-`Installer Operating Mode` must default to dry-run / preview and must never silently overwrite existing builder files (see Sections 14.7 and 28). `Update Modes` are the four modes defined in Section 14.4 (check only, install missing, update with approval, full reinstall). `Files Managed` are the `/builders/*` files, the root `/build-aos.md` entry, and `/builder-changelog.md`. `Validation Checks` use frontmatter detection plus expected-file-list and required-heading checks (Section 28). `Installer Summary` uses the format defined in Section 8.7.
-
 ---
 
 # 13. Completion Artifact
@@ -1074,7 +985,7 @@ Each generated AOS instance should track its own version separately from the bui
 
 ## 14.4 Update Modes
 
-The installer should support these update modes:
+When the framework is maintained manually (then re-packaged as a plugin; see Section 28), these update modes apply:
 
 ```text
 Check only
@@ -1086,7 +997,7 @@ Create missing builder files only.
 Update with approval
 Refresh existing builder files only after the user types Proceed.
 
-Full reinstall
+Full rebuild
 Recreate the builder framework, requiring explicit approval for every overwrite.
 ```
 
@@ -1185,7 +1096,6 @@ last_updated: 2026-06-02
 Approved initial vocabulary:
 
 ```text
-installer
 builder_entry
 aos_builder
 agent_builder
@@ -1202,9 +1112,13 @@ documentation
 project_doc
 handoff_summary
 agent_instruction
+aos_router
+project_instructions
 ```
 
-`change_log` applies to a generated AOS instance log (`/logs/change-log.md`). `builder_changelog` applies to the reusable builder framework changelog (`/builder-changelog.md`). The two are tracked separately so the installer can distinguish framework files from instance files via frontmatter.
+`aos_router` applies to the AOS-03 root router (`/aos-router.md`) that resolves the active target — `aos-factory`, `work-aos`, or `personal-aos` — before any workflow runs. `project_instructions` applies to the root project instruction file (`/claude.md`) that serves as the session-start instruction file and wires in the router. Both files live at the AOS-03 workspace root, above the instances and the factory, because they govern selection *across* targets rather than belonging to any one of them.
+
+`change_log` applies to a generated AOS instance log (`/logs/change-log.md`). `builder_changelog` applies to the reusable builder framework changelog (`/builder-changelog.md`), which also tracks the plugin version when the framework is distributed (Section 28). The two are tracked separately so framework files can be distinguished from instance files via frontmatter.
 
 `config` and `memory` each cover both global and agent scope, because scope is fully recoverable from a file's path (instance root vs. an agent subfolder). File-type assignments by file:
 
@@ -1228,6 +1142,11 @@ project_doc   project-brief.md, project-plan.md, project-status.md,
 
 documentation /docs/aos-user-guide.html (HTML metadata is carried via meta
               tags or an HTML comment rather than YAML frontmatter)
+
+aos_router    /aos-router.md (AOS-03 root, shared across instances and factory)
+
+project_instructions
+              /claude.md (AOS-03 root, session-start instruction file)
 ```
 
 ## 15.5 Controlled Status Vocabulary
@@ -1511,6 +1430,8 @@ Purpose:
 ```text
 Help the user start the day by reviewing priorities, calendar, commitments, inbox items, active projects, and recently processed inbox items.
 ```
+
+Instance resolution (first step): before gathering any inputs, the Chief of Staff resolves the active target via `/aos-router.md` — explicit override, then framework-vs-instance, then session pin, then signal match, else ASK. The brief runs against exactly one resolved instance (or, for a cross-instance request, each instance separately with labeled output); it never blends instance memory. State the resolved target on the first line of the brief (e.g. `**[work-aos]** Daily Brief — …`). Generated `daily-startup-workflow.md` files must include this resolution step ahead of input gathering.
 
 Approved review question:
 
@@ -2066,7 +1987,9 @@ Approved decisions:
 
 ---
 
-# 28. Installation and Update Mechanics
+# 28. Distribution and Update Mechanics
+
+The AOS Factory is generated once from this design specification and then **manually packaged and distributed as a Claude plugin**. There is no runtime installer. Framework maintenance and re-distribution are manual, approval-gated operations.
 
 Approved decisions:
 
@@ -2081,10 +2004,9 @@ Approved decisions:
 - Require Proceed before refreshing, replacing, or overwriting any existing builder file.
 ```
 
-Files affected later:
+Files affected when the framework is updated:
 
 ```text
-/install-aos-factory.md
 /builders/build-aos.md
 /builders/build-[agent-name]-agent.md
 /builder-changelog.md
@@ -2092,6 +2014,74 @@ Files affected later:
 /logs/change-log.md
 /logs/aos-decision-log.md
 ```
+
+## 28.1 Generating a Factory Instance
+
+These are the user-facing steps to generate the reusable factory framework from this design specification:
+
+```text
+1. Open a Claude session with this design specification available.
+2. Review the proposed generation scope in Section 35 — the exact list of
+   framework files to be created.
+3. Type exactly `Proceed` to authorize generation (the safety gate in
+   Section 34.2). Nothing is written before this.
+4. Claude previews, then on `Proceed` writes the framework files:
+   - the root entry pointer `/build-aos.md`,
+   - all `/builders/build-*.md` files (one master AOS builder plus one
+     builder per agent in the Section 7 roster),
+   - the framework changelog `/builder-changelog.md`.
+5. This phase does NOT create a user AOS instance. Instructions for creating an AOS instance are outside the scope of this document.
+6. Validate the generated framework against the QA checks in Sections 27 and 34.
+```
+
+The workspace-root router (`/aos-router.md`, file_type `aos_router`) and project instructions (`/claude.md`, file_type `project_instructions`) govern target selection *across* instances and the factory; they sit above the factory and are not produced by the factory build.
+
+## 28.2 Packaging the Factory as a Claude Plugin
+
+Once generated, the factory is distributed as a Claude plugin. A plugin is a directory whose only required file is a manifest at `.claude-plugin/plugin.json`; all functional components live at the plugin root (not inside `.claude-plugin/`).
+
+```text
+my-aos-factory/                 (plugin root)
+  .claude-plugin/
+    plugin.json                 (REQUIRED manifest: name, version, description, author)
+  skills/                       (each builder exposed as a skill, or as commands/)
+    build-aos/ ...
+    build-security-agent/ ...
+    ...
+  commands/                     (optional: slash-command entry points)
+  agents/                       (optional)
+  .mcp.json                     (optional: bundled MCP servers)
+  builder-changelog.md          (framework/plugin changelog)
+  examples/                     (shipped example workspace-root files)
+    aos-router.md               (example router; user copies to workspace root)
+    claude.md                   (example project instructions; user copies to root)
+```
+
+Steps:
+
+```text
+1. Create the plugin directory and add .claude-plugin/plugin.json with the
+   plugin's name, version, description, and author. Keep the plugin version in
+   sync with the framework builder_version and /builder-changelog.md.
+2. Place the generated factory content at the plugin root: expose the builder
+   files (build-aos.md and each /builders/build-*.md) as skills or slash
+   commands so Claude can invoke them after install. Components must sit at the
+   plugin root, never inside .claude-plugin/.
+3. (Optional) Bundle MCP servers via .mcp.json at the plugin root.
+4. Test locally before publishing: load the plugin without installing using
+   `claude --plugin-dir <path>`.
+5. Package for distribution as a .zip archive of the plugin directory
+   (requires Claude Code v2.1.128 or later), OR publish via a marketplace.
+6. To distribute via a marketplace, create .claude-plugin/marketplace.json
+   listing the plugin (at minimum a name and source) and host it on GitHub,
+   GitLab, or another git host. URL-based marketplaces must reference external
+   sources (GitHub, npm, or git URLs); use a Git-based marketplace for plugins
+   referenced by relative path.
+7. On each framework change, bump plugin.json version and /builder-changelog.md,
+   then re-package and re-publish.
+```
+
+The router (`/aos-router.md`) and project instructions (`/claude.md`) are workspace-root files, not factory components, but the plugin **ships example copies** of both under `examples/`. After installing the plugin and generating their first instance, the user copies these examples to their AOS workspace root and edits them (default instance, routing signals, planning-mode rules) for their setup. Shipping them as examples — rather than writing them to the workspace automatically — keeps the plugin from overwriting a user's existing root files.
 
 ---
 
@@ -2209,7 +2199,7 @@ Approved consolidation defaults:
 [x] Global files are defined.
 [x] Agent file sets are defined.
 [x] Builder file structure is defined.
-[x] Installer behavior is defined.
+[x] Distribution and plugin-packaging mechanics are defined.
 [x] Permissions and approval rules are defined.
 [x] Tool access model is defined.
 [x] Memory governance is defined.
@@ -2242,7 +2232,6 @@ Approved consolidation defaults:
 ```text
 [x] Generate reusable AOS Factory framework files only.
 [x] Do not generate a user-specific AOS instance yet.
-[x] Include installer file.
 [x] Include root build entry file.
 [x] Include /builders folder files.
 [x] Include builder changelog.
@@ -2260,7 +2249,6 @@ When the user later types exactly `Proceed`, the generation phase may create the
 No AOS instance should be generated in this first generation phase unless the user separately requests that after the Builder framework exists.
 
 ```text
-/install-aos-factory.md
 /build-aos.md
 /builder-changelog.md
 /builders/build-aos.md
