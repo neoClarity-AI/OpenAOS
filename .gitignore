@@ -9,6 +9,7 @@ Thumbs.db
 *.swo
 .idea/
 .vscode/
+.claude/
 
 # Logs that may contain personal data
 *.log
