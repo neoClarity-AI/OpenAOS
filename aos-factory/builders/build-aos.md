@@ -81,7 +81,8 @@ Follow the ten-step initial setup sequence (Section 9.3):
 6. Ask the user to select at least one optional productive agent.
 7. Build the selected optional agents.
 8. Update the agent registry.
-9. Produce an AOS setup summary.
+9. Update /aos-router.md with this instance's slug and routing signals.
+10. Produce an AOS setup summary.
 ```
 
 File creation in every step waits for `Proceed`.
@@ -169,10 +170,11 @@ Each builder creates that agent's standard file set (Section 5.1). Required-agen
 - Update `/aos-map.md` to distinguish installed, available-but-not-installed, required core, optional productive, paused, and retired agents.
 - Log the build in `/logs/aos-decision-log.md` and `/logs/change-log.md`.
 - Record builder and schema versions in `/aos-manifest.md`.
+- **Update `/aos-router.md`** (workspace root, sibling to all instance folders): add the new instance slug to the `applies_to` front-matter list; add a classification-signals entry under §2 using the routing signals gathered in the interview (email aliases, sender domains, project keywords); if this is the first non-factory instance, set it as the default instance in §2; bump `last_updated` to today's date. Log this change in `aos-factory/logs/factory-routing-decision-log.md`.
 
 ## Instance Routing Signals
 
-When this instance shares an input channel with another (the AOS-03 case, where one inbox feeds both `work-aos` and `personal-aos`), routing only produces different results once the instances' signals diverge. During the build, populate the instance-specific signals the router relies on so it can resolve automatically instead of asking every time:
+When this instance shares an input channel with another (e.g. one inbox feeds both `work-aos` and `personal-aos`), routing only produces different results once the instances' signals diverge. During the build, populate the instance-specific signals the router relies on so it can resolve automatically instead of asking every time:
 
 - Email aliases and sender domains tied to this instance → capture in `/memory/user-profile.md` and `/memory/people.md`.
 - This instance's project names → ensure `/memory/projects.md` is populated (the router matches `[instance]/projects` names).
@@ -194,6 +196,7 @@ Confirm the AOS is complete (Section 27):
 [ ] Global permissions, tool access matrix, workflows, templates, and logs exist.
 [ ] AOS User Guide (/docs/aos-user-guide.html) exists with an Invocation Reference scoped to installed agents.
 [ ] aos-manifest.md records AOS, builder, and schema versions.
+[ ] /aos-router.md applies_to list includes this instance and §2 has its classification signals.
 ```
 
 The Review / Reflection Agent audits completeness and consistency; the Security / Permissions Agent audits permissions and tool access; the Memory Agent audits memory routing and boundaries.

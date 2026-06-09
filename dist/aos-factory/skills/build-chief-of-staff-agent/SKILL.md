@@ -1,15 +1,8 @@
 ---
-title: Build Chief of Staff Agent
-file_type: agent_builder
-builder_version: 1.0.0
-schema_version: 1.0.0
-created_date: 2026-06-03
-last_updated: 2026-06-05
-status: active
-compatible_aos_versions:
-  - 1.x
-requires_approval_for_overwrite: true
+name: build-chief-of-staff-agent
+description: "Build the Chief of Staff Agent, a required AOS governance agent that owns orchestration, routing, prioritization, conflict resolution, user-facing coordination, and joint ownership of the instance router. Use during initial AOS setup or when restoring or rebuilding the chief of staff agent."
 ---
+
 
 # Build Chief of Staff Agent
 

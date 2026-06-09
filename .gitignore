@@ -1,0 +1,18 @@
+# AOS instance folders — never commit user instances to this factory repo
+*-aos/
+!aos-factory/
+
+# Common OS and editor files
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+.idea/
+.vscode/
+
+# Logs that may contain personal data
+*.log
+
+# Temp/scratch files
+*.tmp
+*.bak

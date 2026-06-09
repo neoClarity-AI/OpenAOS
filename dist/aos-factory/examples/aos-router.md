@@ -1,29 +1,31 @@
 ---
-title: AOS Instance Router
+title: AOS Instance Router — Example (two instances)
 file_type: aos_router
 schema_version: 1.0.0
 builder_version: 1.0.0
-created_date: 2026-06-05
-last_updated: 2026-06-05
+created_date: YYYY-MM-DD
+last_updated: YYYY-MM-DD
 status: active
 applies_to:
   - aos-factory
-# Add your instance names here once you build them, e.g.:
-#  - work-aos
-#  - personal-aos
+  - work-aos
+  - personal-aos
 ---
 
 # AOS Instance Router
 
-Read this BEFORE loading any target. This workspace contains the **factory
-framework** (`aos-factory/`, which builds and maintains instances) and any
-**instances** you have created (e.g. `work-aos`, `personal-aos`). Exactly one
-target is active per request. This file decides which.
+> **This is an example** showing a two-instance setup. In normal use you do not
+> need to copy or edit this file manually — the `build-aos` builder writes to
+> `/aos-router.md` automatically when it creates a new instance, adding the
+> slug to `applies_to` and populating §2 with the instance's routing signals.
+> Refer to this example only if you need to understand the format or make a
+> manual correction.
 
-> **New workspace?** No instances exist yet — all requests route to `aos-factory`
-> by default. The `build-aos` builder updates this file automatically when it
-> creates a new instance — adding the slug to `applies_to` and populating §2
-> with the instance's routing signals. No manual editing required.
+Read this BEFORE loading any target. This workspace contains the **factory
+framework** (`aos-factory/`, which builds and maintains instances) and two
+**instances** (`work-aos`, `personal-aos`). Exactly one target is active per
+request. This file decides which, and is owned jointly by the two Chief of
+Staff agents.
 
 ## 1. Resolution order (stop at the first that applies)
 1. **Explicit user override** — the user names a target ("in work-aos…",
@@ -40,34 +42,31 @@ target is active per request. This file decides which.
    target to use. Do NOT silently pick, and do NOT merge instances.
 
 ## 2. Classification signals
-
-> **Fill this section in** after building your instances. The examples below
-> are illustrative; replace them with your actual instance names and signals.
-
 - **Factory/framework signals:** build/set-up/create an AOS; install or refresh
   the factory; add or modify a builder or agent definition; edits under
   `aos-factory/` or `/builders/`; references to `build-*.md`;
   schema/builder maintenance. The factory operates
   *on* instances but is not itself an instance.
-- **Default instance:** _(set to your primary instance slug once built, e.g. `work-aos`)_
-- **Instance A signals:** _(e.g. work-related requests, client names, work
-  project names, work email aliases)_
-- **Instance B signals:** _(e.g. personal requests, family/friends, personal
-  project names, personal email aliases)_
-- **Shared inbox note:** If one inbox feeds multiple instances, route on
-  sender, alias, and request intent — not on the mere presence of email.
+- **Default instance:** `work-aos`.
+- **Work signals:** requests mentioning clients, the company, billing,
+  hiring, work projects in `work-aos/projects`, or recipients/aliases tied
+  to work email addresses.
+- **Personal signals:** family/friends, personal admin, personal email aliases,
+  personal projects in `personal-aos/projects`.
+- **Shared inbox note:** If a single inbox address feeds both instances, route
+  on sender, alias, and request intent — not on the mere presence of email.
 
 ## 3. Confidence bar
 - Act automatically only when one side has clear signals AND the other has
   none. Mixed or weak signals → fall through to §1.5 (ASK).
 - Factory vs. instance is usually unambiguous (build/install verbs vs.
-  run-a-workflow verbs). Ambiguous cases fall through to ASK.
+  run-a-workflow verbs). Ambiguous cases — e.g. "add a finance agent" could
+  mean build the agent (factory) or a work task (instance) — fall through to ASK.
 - Cross-instance requests ("brief me on everything") → run each instance
   separately and label the output by instance; never blend their memory.
 
 ## 4. Session pin
-- "Use [instance-name] for now" or "switch to [instance-name]" sets the pin
-  for the session.
+- "Use work-aos for now" or "switch to personal" sets the pin for the session.
 - "Work in the factory" / "switch to the builder" pins `aos-factory`.
 - "Clear AOS" or "ask me each time" removes the pin.
 - State the active target in the first line of any brief or routed output

@@ -1,0 +1,10 @@
+{
+  "name": "aos-factory",
+  "version": "1.0.0",
+  "description": "Agentic Operating System (AOS) Factory — builders that stand up a complete AOS instance (four required governance agents, optional productive agents, workflows, templates, configs, logs, and a User Guide) and add or rebuild individual agents.",
+  "author": {
+    "name": "AOS Factory",
+    "email": "your-email@example.com"
+  },
+  "keywords": ["aos", "agentic-operating-system", "agents", "productivity", "builder"]
+}
