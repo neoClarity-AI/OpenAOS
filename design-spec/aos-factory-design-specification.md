@@ -1,9 +1,10 @@
 ---
-title: AOS Factory Design Specification - Final
+title: AOS Factory Design Specification
 file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
 last_updated: 2026-06-10
+spec_version: 1.0.6
 status: design_ready_for_generation_planning
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -12,9 +13,7 @@ important_constraint: Do not generate actual AOS Factory files unless the user e
 
 ## Purpose of This Document
 
-This document is the final consolidated design specification for the **AOS Factory Project**, also described as a reusable **Agentic Operating System Factory** for **Claude Cowork**.
-
-It consolidates the decisions completed across the AOS Factory design interview through Part 4. It supersedes earlier handoff documents for generation-planning purposes.
+This document is the consolidated design specification for the **Agentic Operating System (AOS) Factory**.
 
 This document is a design artifact only. It does **not** authorize creation of actual AOS Factory files.
 
@@ -34,21 +33,27 @@ The assistant continuing from this document must:
 - Wait for the user to enter the exact instruction “Proceed” to generate the AOS Factory files.
 ```
 
-## Design Consistency Resolutions (2026-06-02)
+## Document Set
 
-The following design inconsistencies were identified during the final consistency check and resolved with the user before generation planning continued:
+This specification is maintained as a small set of companion files in this folder:
 
 ```text
-1. Framework vs. instance layout — The reusable builder framework and the AOS instances it produces are sibling structures at the repository root. Instance-relative paths resolve against the target AOS instance root. See Section 4.1.
-
-2. Inbox move approval — Moving files always requires explicit approval, with one narrow pre-authorized exception: moving items into /inbox/processed under the approved inbox-to-task workflow. See Sections 3.2, 17.6, and 31.
-
-3. Tool access source of truth — The global tool access matrix (/configs/tool-access-matrix.md) is authoritative and overrides agent configs on conflict; agent config Tool Access sections only reference it. See Sections 22 and 16.1.
-
-4. Missing builder schemas — A section schema is now defined for /builders/build-aos.md. See Section 12.1.
+aos-factory-design-specification.md   - the canonical design (this file), Sections 1-32
+aos-factory-generation-runbook.md     - build, generation scope, and handoff procedure (Sections 33-37)
+aos-factory-consistency-history.md    - dated revision and consistency-resolution history
 ```
 
-The remaining minor consistency items from that check, together with further consistency passes on 2026-06-03, have since been resolved and are recorded in the Design Consistency Resolutions section above; the full change history is tracked in Git.
+The canonical specification remains the single source of truth (Section 1.6.1); the companion files are extracted from it for readability and are governed by the same `Proceed` safety gate.
+
+## Revision History
+
+The full revision history of this specification — including all dated Design Consistency Resolution passes — is maintained in a companion file:
+
+```text
+aos-factory-consistency-history.md
+```
+
+Entries there are maintained in reverse chronological order (newest first); new entries are added at the top.
 
 ---
 
@@ -74,6 +79,20 @@ The builder framework is referred to as:
 ```text
 AOS Factory
 Reusable AOS Factory
+```
+
+Three terms are used together throughout this document and should not be conflated:
+
+```text
+AOS Workspace  - The top-level container. Its root holds the workspace-governing
+                 files (/aos-router.md, /CLAUDE.md). The AOS Factory and each
+                 AOS instance live inside it as sibling folders.
+
+AOS Factory    - The reusable builder framework (aos-factory/) that generates
+                 AOS instances.
+
+AOS            - A generated Agentic Operating System instance (/[aos-name]/),
+                 a sibling of the AOS Factory within the AOS Workspace.
 ```
 
 ## 1.2 Target Platform
@@ -158,7 +177,7 @@ This is what makes the system auditable and reproducible: anyone can regenerate 
 
 ### 1.6.2 Governance Before Productivity
 
-Safety, memory, coordination, and quality review must exist before any productive work happens. The four required governance agents (Security / Permissions, Memory, Chief of Staff, Review / Reflection) are mandatory and are built before any optional productive agent (Section 2.3). Productivity is additive; governance is foundational. A user cannot end up with a fast, capable, ungoverned system.
+Safety, memory, coordination, and quality review must exist before any productive work happens. The four required governance agents (Security, Memory, Chief of Staff, Review) are mandatory and are built before any optional productive agent (Section 2.3). Productivity is additive; governance is foundational. A user cannot end up with a fast, capable, ungoverned system.
 
 ### 1.6.3 Single Responsibility at Every Level
 
@@ -178,7 +197,7 @@ One workspace can host the factory framework and many AOS instances (work, perso
 
 ### 1.6.7 Self-Documenting and Self-Improving
 
-The system explains itself and improves itself on a cadence. Every instance generates a plain-language HTML user guide (Section 16.6). A set of operating rhythms running from daily through quarterly keeps the system operationally clean, structurally healthy, and aligned with the user's actual goals (Section 25). The Review / Reflection Agent owns the improvement rhythms — the weekly review, the monthly review (including the user-guide refresh), and the quarterly review — while the daily startup and end-of-day rhythms are driven by the Chief of Staff Agent (Sections 17.1–17.5, 7.4). Maintenance is a built-in behavior, not a manual afterthought.
+The system explains itself and improves itself on a cadence. Every instance generates a plain-language HTML user guide (Section 16.6). A set of operating rhythms running from daily through quarterly keeps the system operationally clean, structurally healthy, and aligned with the user's actual goals (Section 25). The Review Agent owns the improvement rhythms — the weekly review, the monthly review (including the user-guide refresh), and the quarterly review — while the daily startup and end-of-day rhythms are driven by the Chief of Staff Agent (Sections 17.1–17.5, 7.4). Maintenance is a built-in behavior, not a manual afterthought.
 
 ### 1.6.8 Built for Non-Technical Users, Portable Across Platforms
 
@@ -248,10 +267,10 @@ The AOS should have a small required governance layer and optional productive ag
 Required governance agents:
 
 ```text
-1. Security / Permissions Agent
+1. Security Agent
 2. Memory Agent
 3. Chief of Staff Agent
-4. Review / Reflection Agent
+4. Review Agent
 ```
 
 Optional productive agents are selected by the user. The user must select at least one optional productive agent before initial AOS setup is considered complete.
@@ -381,6 +400,8 @@ The generated AOS should use this top-level folder structure:
 
 ```text
 /[aos-name]
+  aos-manifest.md
+  aos-map.md
   /agents
   /workflows
   /memory
@@ -393,6 +414,8 @@ The generated AOS should use this top-level folder structure:
     /processed
   /archive
 ```
+
+The `aos-manifest.md` and `aos-map.md` files sit at the instance root (see Section 6); all other generated files live inside the subfolders shown above.
 
 The AOS should propose a name during setup and allow the user to modify it.
 
@@ -400,20 +423,24 @@ The top-level folder name should reflect the user’s chosen AOS name.
 
 ## 4.1 Framework vs. Instance Layout
 
-The reusable AOS Factory framework and the AOS instances it produces are kept as **sibling structures** at the repository root.
-
-The framework occupies the root level:
+The **AOS Workspace** is the top-level container. Its root holds the workspace-governing files:
 
 ```text
-/build-aos.md
-/builder-changelog.md
-/builders/
+/aos-router.md
+/CLAUDE.md
 ```
 
-Each AOS instance is created as a sibling folder named for the user’s chosen AOS name:
+Inside the AOS Workspace, the **AOS Factory** (the reusable builder framework) and each generated **AOS** instance are **sibling folders**:
 
 ```text
+/aos-factory/
+  /build-aos.md
+  /builder-changelog.md
+  /builders/
+
 /[aos-name]/
+  aos-manifest.md
+  aos-map.md
   /agents
   /workflows
   /memory
@@ -427,9 +454,13 @@ Each AOS instance is created as a sibling folder named for the user’s chosen A
   /archive
 ```
 
-All instance-relative paths in this document (for example `/configs/global-permissions.md`, `/memory/user-profile.md`, `/agents/[agent-name]-agent/`) are interpreted relative to the **target AOS instance root** (`/[aos-name]/`), not the framework root. `/builders/build-aos.md` establishes the target AOS root at build time and resolves all instance paths against it.
+Each AOS instance is created as a sibling folder named for the user’s chosen AOS name.
 
-The framework never writes files inside an AOS instance except through `/builders/build-aos.md` (or the root entry `/build-aos.md`) during an authorized build.
+All instance-relative paths in this document (for example `/configs/global-permissions.md`, `/memory/user-profile.md`, `/agents/[agent-name]-agent/`) are interpreted relative to the **target AOS instance root** (`/[aos-name]/`), not the AOS Factory root. `/builders/build-aos.md` establishes the target AOS root at build time and resolves all instance paths against it.
+
+Likewise, all factory-internal paths in this document (for example `/build-aos.md`, `/builders/build-aos.md`, `/builder-changelog.md`) are interpreted relative to the **AOS Factory root** (`/aos-factory/`), per the factory tree above — for example, `/builders/build-aos.md` resolves to `/aos-factory/builders/build-aos.md`. In short, a leading slash denotes the root of the relevant container (the AOS Factory root for factory files, the target AOS instance root for instance files), not the AOS Workspace root. The AOS Workspace root itself is referenced only by the two workspace-governing files named explicitly as such (`/aos-router.md`, `/CLAUDE.md`).
+
+The AOS Factory never writes files inside an AOS instance except through `/builders/build-aos.md` (or the root entry `/build-aos.md`) during an authorized build, and never writes to the AOS Workspace root files (`/aos-router.md`, `/CLAUDE.md`) except via the example copies described in Section 28.2, which the user copies and edits manually.
 
 ---
 
@@ -536,10 +567,10 @@ The global file is an index or routing map, not a centralized dumping ground for
 Every AOS must include:
 
 ```text
-1. Security / Permissions Agent
+1. Security Agent
 2. Memory Agent
 3. Chief of Staff Agent
-4. Review / Reflection Agent
+4. Review Agent
 ```
 
 ## 7.2 Optional Productive Agents
@@ -589,7 +620,7 @@ automation-agent
 ## 7.4 Required Agent Responsibilities
 
 ```text
-Security / Permissions Agent
+Security Agent
 Owns permission rules, approval requirements, access boundaries, the tool access matrix, and safety checks.
 
 Memory Agent
@@ -597,9 +628,9 @@ Owns shared memory structure, memory hygiene, preference capture, and cross-agen
 
 Chief of Staff Agent
 Owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination.
-Also a joint owner of the AOS-03 instance router (/aos-router.md): the Chief of Staff agents of work-aos and personal-aos share ownership of the router that resolves the active target before any workflow runs. Each must honor router resolution (ask-don't-guess; never silently pick or merge instances) and log instance-routing choices to its own /agents/chief-of-staff-agent/logs/chief-of-staff-decision-log.md.
+Also a joint owner of the AOS Workspace router (/aos-router.md): every AOS instance's Chief of Staff Agent is a joint owner of the router that resolves the active target before any workflow runs. Each must honor router resolution (ask-don't-guess; never silently pick or merge instances) and log instance-routing choices to its own /agents/chief-of-staff-agent/logs/chief-of-staff-decision-log.md.
 
-Review / Reflection Agent
+Review Agent
 Owns retrospectives, system improvement, weekly reviews, decision audits, AOS refinement, and the AOS User Guide (/docs/aos-user-guide.html), which it refreshes during the monthly review.
 ```
 
@@ -707,9 +738,11 @@ The builder interview should follow this pattern:
 2. Summarize what the user said.
 3. Recommend defaults for anything vague.
 4. Ask for approval on important design decisions.
-5. Generate a build summary.
+5. Generate a build plan / pre-build preview.
 6. Ask the user to type Proceed before creating files.
 ```
+
+The step 5 **build plan / pre-build preview** is shown *before* the user types Proceed and before any files are created; it previews what will be built. It is distinct from the **Build Summary** (Section 13), which is generated *after* files are created — the canonical end-of-build artifact (file_type `build_summary`) saved to the agent's logs folder. "Build Summary" refers only to the Section 13 post-build artifact and is not used for the pre-Proceed preview.
 
 Exception:
 
@@ -851,7 +884,7 @@ Recommended table:
 | Research Agent | Available | No | /builders/build-research-agent.md | Not created | Optional productive agent |
 ```
 
-The Chief of Staff Agent's registry entry should note its joint ownership of the AOS-03 instance router (`/aos-router.md`), so router responsibility is discoverable from the registry as well as the agent definition.
+The Chief of Staff Agent's registry entry should note its joint ownership of the AOS Workspace router (`/aos-router.md`), shared with every other AOS instance's Chief of Staff Agent, so router responsibility is discoverable from the registry as well as the agent definition.
 
 ## 10.4 AOS Map
 
@@ -992,7 +1025,9 @@ The root entry `/build-aos.md` (file_type `builder_entry`) is a short pointer to
 
 # 13. Completion Artifact
 
-At the end of each agent build, Cowork should produce a short handoff summary:
+At the end of each agent build, Cowork should produce a short Build Summary. This is the canonical end-of-build artifact: the builder's `## Handoff Summary` step (Section 12) emits this Build Summary. It is distinct from the general `/templates/handoff-summary-template.md` (Section 18.4), which covers cross-agent handoffs, escalations, and major-work transfers rather than build completion. It is also distinct from the Section 9.1 step-5 **build plan / pre-build preview**, which is shown before the user types Proceed and before any files are created; the term "Build Summary" refers only to this Section 13 post-build saved artifact.
+
+The Build Summary is a saved file (file_type `build_summary`; see Section 15.4), written to the built agent's own logs folder as `/agents/[agent-name]-agent/logs/[agent-name]-build-summary.md`, so each agent retains a durable record of its build.
 
 ```markdown
 # [Agent Name] Build Summary
@@ -1197,12 +1232,16 @@ builder_changelog
 documentation
 project_doc
 handoff_summary
+build_summary
 agent_instruction
 aos_router
 project_instructions
+design_spec
 ```
 
-`aos_router` applies to the AOS-03 root router (`/aos-router.md`) that resolves the active target — `aos-factory`, `work-aos`, or `personal-aos` — before any workflow runs. `project_instructions` applies to the root project instruction file (`/claude.md`) that serves as the session-start instruction file and wires in the router. Both files live at the AOS-03 workspace root, above the instances and the factory, because they govern selection *across* targets rather than belonging to any one of them.
+`design_spec` applies to this design specification itself (`aos-factory-design-specification.md`), the source document the AOS Factory is generated from. It is the one source/design artifact in the vocabulary; the other types all describe factory-generated files.
+
+`aos_router` applies to the AOS Workspace root router (`/aos-router.md`) that resolves the active target — the AOS Factory, or a generated AOS instance — before any workflow runs. `project_instructions` applies to the root project instruction file (`/CLAUDE.md`) that serves as the session-start instruction file and wires in the router. Both files live at the AOS Workspace root, alongside the AOS Factory and AOS instance folders, because they govern selection *across* targets rather than belonging to any one of them.
 
 `change_log` applies to a generated AOS instance log (`/logs/change-log.md`). `builder_changelog` applies to the reusable builder framework changelog (`/builder-changelog.md`), which also tracks the plugin version when the framework is distributed (Section 28). The two are tracked separately so framework files can be distinguished from instance files via frontmatter.
 
@@ -1223,16 +1262,19 @@ decision_log  /logs/aos-decision-log.md, each agent's
               /logs/[agent-name]-decision-log.md, and project
               project-decisions.md
 
+build_summary each agent's /logs/[agent-name]-build-summary.md
+              (the end-of-build record; see Section 13)
+
 project_doc   project-brief.md, project-plan.md, project-status.md,
               and project-notes.md
 
 documentation /docs/aos-user-guide.html (HTML metadata is carried via meta
               tags or an HTML comment rather than YAML frontmatter)
 
-aos_router    /aos-router.md (AOS-03 root, shared across instances and factory)
+aos_router    /aos-router.md (AOS Workspace root, shared across instances and factory)
 
 project_instructions
-              /claude.md (AOS-03 root, session-start instruction file)
+              /CLAUDE.md (AOS Workspace root, session-start instruction file)
 ```
 
 ## 15.5 Controlled Status Vocabulary
@@ -1260,6 +1302,8 @@ archived
 ```
 
 `active` is the only value valid for both fields. All other values belong to exactly one field.
+
+The controlled `status` values above govern factory-generated files. This design specification itself (file_type `design_spec`) is a source/design artifact, not a generated file, and its `status` field tracks design-phase lifecycle (for example, `design_ready_for_generation_planning`); it is exempt from the four controlled artifact-status values.
 
 Important distinction:
 
@@ -1413,11 +1457,11 @@ Decision logs should be append-only, with newest entries at the top.
 
 ## 16.6 AOS User Guide Schema
 
-Per-folder README files have been retired in favor of a single consolidated user document, `/docs/aos-user-guide.html`, owned by the Review / Reflection Agent and refreshed during the monthly review (Sections 6, 7.4, 17.4). The guide documents each folder's purpose and handling rules, provides plain-language orientation to the AOS structure, and includes an embedded change-log section so the user can see what is new in the guide itself.
+Per-folder README files have been retired in favor of a single consolidated user document, `/docs/aos-user-guide.html`, owned by the Review Agent and refreshed during the monthly review (Sections 6, 7.4, 17.4). The guide documents each folder's purpose and handling rules, provides plain-language orientation to the AOS structure, and includes an embedded change-log section so the user can see what is new in the guide itself.
 
 Because the guide is an HTML file, it carries its metadata via meta tags or an HTML comment (file_type `documentation`, AOS name, `aos_version`, `last_updated`) rather than YAML frontmatter.
 
-The guide has a defined **skeleton** so that `/builders/build-aos.md` can always generate a valid, useful file. The richer prose within each section is refined later by the Review / Reflection Agent during the monthly review (Section 17.4). Every section below the Table of Contents carries a unique HTML bookmark (an `id` anchor), and every Table of Contents item is an in-page link to the corresponding bookmark. The skeleton is a minimal valid HTML document with these fixed top-level sections, in order:
+The guide has a defined **skeleton** so that `/builders/build-aos.md` can always generate a valid, useful file. The richer prose within each section is refined later by the Review Agent during the monthly review (Section 17.4). Every section below the Table of Contents carries a unique HTML bookmark (an `id` anchor), and every Table of Contents item is an in-page link to the corresponding bookmark. The skeleton is a minimal valid HTML document with these fixed top-level sections, in order:
 
 ```text
 - Header metadata (meta tags / HTML comment: file_type documentation, AOS name, aos_version, last_updated)
@@ -1451,12 +1495,12 @@ The guide carries its own embedded Change Log, distinct from the global `/logs/c
 
 - Place the Change Log immediately after the Table of Contents, under `<h2 id="change-log">`.
 - On initial generation, seed it with a single dated entry recording that the guide was created, for example: `[last_updated] — Initial guide generated during AOS setup.`
-- The Review / Reflection Agent appends a dated entry at each monthly refresh (Section 17.4), **newest on top** (matching the convention used by `/logs/change-log.md` and `/logs/aos-decision-log.md`).
+- The Review Agent appends a dated entry at each monthly refresh (Section 17.4), **newest on top** (matching the convention used by `/logs/change-log.md` and `/logs/aos-decision-log.md`).
 - The Change Log is always present and never empty; it always holds at least the initial entry.
 
 ### Skeleton HTML Pattern
 
-The builder emits a structure equivalent to the following. Section bodies are placeholders refined later by the Review / Reflection Agent, but the TOC, anchors, and Change Log are generated complete:
+The builder emits a structure equivalent to the following. Section bodies are placeholders refined later by the Review Agent, but the TOC, anchors, and Change Log are generated complete:
 
 ```html
 <h1>[AOS name]</h1>
@@ -1495,7 +1539,7 @@ The generated guide is invalid, and `/builders/build-aos.md` must correct it bef
 - Every section after the TOC has a corresponding TOC entry.
 - The Change Log section exists, sits immediately after the TOC, and contains at least one dated entry.
 
-The Review / Reflection Agent verifies these checks at generation and at every monthly refresh (Section 17.4).
+The Review Agent verifies these checks at generation and at every monthly refresh (Section 17.4).
 
 ---
 
@@ -1543,6 +1587,12 @@ The startup brief should distinguish between:
 
 These promotion categories mirror the full set of promotion targets in the inbox-to-task workflow (Sections 17.6 and 31).
 
+Primary owner:
+
+```text
+Chief of Staff Agent
+```
+
 ## 17.2 End-of-Day Shutdown Workflow
 
 Create:
@@ -1561,6 +1611,12 @@ Approved review question:
 
 ```text
 What changed today, and what must not be lost?
+```
+
+Primary owner:
+
+```text
+Chief of Staff Agent
 ```
 
 ## 17.3 Weekly Review Workflow
@@ -1586,7 +1642,7 @@ What needs follow-up soon?
 Primary owner:
 
 ```text
-Review / Reflection Agent
+Review Agent
 ```
 
 ## 17.4 Monthly Review Workflow
@@ -1613,7 +1669,13 @@ Stale project review is part of monthly review.
 
 Memory hygiene receives lightweight weekly review and deeper monthly review.
 
-The Review / Reflection Agent refreshes the AOS User Guide (`/docs/aos-user-guide.html`) as part of the monthly review.
+The Review Agent refreshes the AOS User Guide (`/docs/aos-user-guide.html`) as part of the monthly review.
+
+Primary owner:
+
+```text
+Review Agent
+```
 
 ## 17.5 Quarterly Review Workflow
 
@@ -1633,6 +1695,12 @@ Approved review question:
 
 ```text
 Is the whole system still aimed at the right goals?
+```
+
+Primary owner:
+
+```text
+Review Agent
 ```
 
 ## 17.6 Inbox-to-Task Workflow
@@ -1657,6 +1725,12 @@ Processed inbox items should be moved to:
 
 Moving an item to `/inbox/processed` is treated as part of normal inbox processing and should be allowed if the user has approved the inbox-processing workflow. This is the single pre-authorized exception to the Section 3.2 rule that moving files requires explicit approval.
 
+Primary owner:
+
+```text
+Chief of Staff Agent, with Inbox / Communications Agent support when installed.
+```
+
 ## 17.7 Project Kickoff Workflow
 
 Create:
@@ -1671,6 +1745,12 @@ Purpose:
 Turn a new project idea into a project folder, project brief, goals, stakeholders, milestones, tasks, and review cadence.
 ```
 
+Primary owner:
+
+```text
+Chief of Staff Agent, with Project Manager Agent support when installed.
+```
+
 ## 17.8 Decision Capture Workflow
 
 Create:
@@ -1683,6 +1763,12 @@ Purpose:
 
 ```text
 Capture important decisions consistently in the correct decision log, including context, rationale, affected files, and follow-up.
+```
+
+Primary owner:
+
+```text
+Chief of Staff Agent, with Memory Agent support.
 ```
 
 ## 17.9 Memory Review Workflow
@@ -1702,7 +1788,7 @@ Review memory files for stale, duplicated, misplaced, sensitive, or low-value in
 Primary owner:
 
 ```text
-Memory Agent, with Review / Reflection Agent support.
+Memory Agent, with Review Agent support.
 ```
 
 ---
@@ -1766,7 +1852,7 @@ Create:
 Purpose:
 
 ```text
-Create consistent summaries when an agent completes a build, finishes major work, escalates, or transfers context to another agent.
+Create consistent summaries when an agent finishes major work, escalates, or transfers context to another agent. Build completion is covered separately by the Build Summary (Section 13), not by this template.
 ```
 
 ## 18.5 Approval Request Template
@@ -1954,10 +2040,10 @@ Approved rules:
 - Access levels are: Allowed, Read-only, Approval-required, Prohibited, Not configured.
 - Not configured means the agent may not use the tool until access is explicitly granted.
 - Sending, publishing, spending money, sharing private information, or affecting other people requires explicit approval.
-- Security / Permissions Agent owns the tool access matrix.
+- Security Agent owns the tool access matrix.
 - The global tool access matrix is the single source of truth for tool access and overrides any agent config on conflict.
 - Agent config Tool Access sections reference the matrix and list only agent-specific notes or requests; they do not restate or override matrix grants (parallel to the permissions pattern in Section 3.5).
-- Chief of Staff Agent and Review / Reflection Agent may recommend changes.
+- Chief of Staff Agent and Review Agent may recommend changes.
 ```
 
 Recommended table structure:
@@ -1981,7 +2067,7 @@ Approved decisions:
 - Chief of Staff Agent is the default coordinator for cross-agent routing.
 - Agents may directly hand off to another agent only when the receiving agent has clear domain ownership and no safety, permission, or priority conflict exists.
 - Conflicts between agents escalate to Chief of Staff Agent.
-- Permission or access conflicts escalate to Security / Permissions Agent.
+- Permission or access conflicts escalate to Security Agent.
 - Cross-agent handoffs should use /templates/handoff-summary-template.md.
 ```
 
@@ -1993,7 +2079,7 @@ Approved decisions:
 
 ```text
 - Escalate to the user for approval-required actions, ambiguity with material consequences, external communication, publishing, spending, sensitive information, or irreversible changes.
-- Escalate to Security / Permissions Agent for permission conflicts, prohibited actions, tool access uncertainty, privacy risk, or sensitive memory questions.
+- Escalate to Security Agent for permission conflicts, prohibited actions, tool access uncertainty, privacy risk, or sensitive memory questions.
 - Escalate to Chief of Staff Agent for priority conflicts, cross-agent routing issues, unclear ownership, or competing project demands.
 - Failed actions should be reported to the user when relevant and logged if they affect future behavior, files, permissions, or project status.
 ```
@@ -2066,8 +2152,8 @@ Approved decisions:
 ```text
 - A complete AOS must include required folders, required global files, required agents, at least one optional productive agent, registry entries, AOS map, permissions, workflows, templates, logs, and the AOS User Guide.
 - A complete agent build must include instruction file, memory file, learnings file, primary workflow, output template, config, and decision log.
-- Review / Reflection Agent audits generated files for completeness and consistency.
-- Security / Permissions Agent audits permissions and tool access.
+- Review Agent audits generated files for completeness and consistency.
+- Security Agent audits permissions and tool access.
 - Memory Agent audits memory routing and memory file boundaries.
 ```
 
@@ -2120,7 +2206,9 @@ These are the user-facing steps to generate the reusable factory framework from 
 6. Validate the generated framework against the QA checks in Sections 27 and 34.
 ```
 
-The workspace-root router (`/aos-router.md`, file_type `aos_router`) and project instructions (`/claude.md`, file_type `project_instructions`) govern target selection *across* instances and the factory; they sit above the factory and are not produced by the factory build.
+The workspace-root router (`/aos-router.md`, file_type `aos_router`) and project instructions (`/CLAUDE.md`, file_type `project_instructions`) govern target selection *across* instances and the factory; they live at the AOS Workspace root alongside the factory and instances and are not produced by the factory build.
+
+Framework generation, as scoped above and in Section 35, produces only the AOS Factory's own files: the root build entry (`/build-aos.md`), the `/builders/build-*.md` files, and `/builder-changelog.md`. The example workspace-root files referenced in Section 28.2 (`examples/aos-router.md`, `examples/CLAUDE.md`) are not part of this generation phase — they are authored separately during plugin packaging.
 
 ## 28.2 Packaging the Factory as a Claude Plugin
 
@@ -2140,7 +2228,7 @@ my-aos-factory/                 (plugin root)
   builder-changelog.md          (framework/plugin changelog)
   examples/                     (shipped example workspace-root files)
     aos-router.md               (example router; user copies to workspace root)
-    claude.md                   (example project instructions; user copies to root)
+    CLAUDE.md                   (example project instructions; user copies to root)
 ```
 
 Steps:
@@ -2153,21 +2241,25 @@ Steps:
    files (build-aos.md and each /builders/build-*.md) as skills or slash
    commands so Claude can invoke them after install. Components must sit at the
    plugin root, never inside .claude-plugin/.
-3. (Optional) Bundle MCP servers via .mcp.json at the plugin root.
-4. Test locally before publishing: load the plugin without installing using
+3. Author the example workspace-root files under examples/ (aos-router.md,
+   CLAUDE.md). These are written during this packaging step, not during
+   framework generation (Section 35) — they are starting-point templates for
+   the AOS Workspace root files described below.
+4. (Optional) Bundle MCP servers via .mcp.json at the plugin root.
+5. Test locally before publishing: load the plugin without installing using
    `claude --plugin-dir <path>`.
-5. Package for distribution as a .zip archive of the plugin directory
+6. Package for distribution as a .zip archive of the plugin directory
    (requires Claude Code v2.1.128 or later), OR publish via a marketplace.
-6. To distribute via a marketplace, create .claude-plugin/marketplace.json
+7. To distribute via a marketplace, create .claude-plugin/marketplace.json
    listing the plugin (at minimum a name and source) and host it on GitHub,
    GitLab, or another git host. URL-based marketplaces must reference external
    sources (GitHub, npm, or git URLs); use a Git-based marketplace for plugins
    referenced by relative path.
-7. On each framework change, bump plugin.json version and /builder-changelog.md,
+8. On each framework change, bump plugin.json version and /builder-changelog.md,
    then re-package and re-publish.
 ```
 
-The router (`/aos-router.md`) and project instructions (`/claude.md`) are workspace-root files, not factory components, but the plugin **ships example copies** of both under `examples/`. After installing the plugin and generating their first instance, the user copies these examples to their AOS workspace root and edits them (default instance, routing signals, planning-mode rules) for their setup. Shipping them as examples — rather than writing them to the workspace automatically — keeps the plugin from overwriting a user's existing root files.
+The router (`/aos-router.md`) and project instructions (`/CLAUDE.md`) are AOS Workspace root files, not factory components, but the plugin **ships example copies** of both under `examples/`, authored at packaging time per step 3 above. After installing the plugin and generating their first instance, the user copies these examples to their AOS Workspace root and edits them (default instance, routing signals, planning-mode rules) for their setup. Shipping them as examples — rather than writing them to the workspace automatically — keeps the plugin from overwriting a user's existing root files.
 
 ---
 
@@ -2252,151 +2344,12 @@ Approved decisions:
 
 ---
 
-# 33. Final Consolidation Decisions
+# 33. Generation Runbook
 
-The user accepted final consolidation recommendations.
-
-Approved consolidation defaults:
+Sections 33-37 — the final consolidation decisions, ready-to-generate checklist, proposed builder generation scope, required continuation behavior, and status — have been moved to a companion file so this specification holds the design and the runbook holds the build-and-handoff procedure:
 
 ```text
-- Treat Part 4 as the authoritative design handoff.
-- Preserve all completed decisions unless the user explicitly modifies them.
-- Reconcile older sections with later addenda where Part 4 decisions supersede earlier open statuses.
-- Do not rewrite the full design spec unless the user asks for a cleaned consolidated version.
-- Produce a compact contradiction and gap check before builder generation.
-- Produce a ready-to-generate checklist.
-- Produce a proposed builder generation scope.
-- Require the user to type exactly Proceed before creating any actual AOS Factory files.
-- Do not generate a user-specific AOS instance during the first generation phase.
-- Generate only the reusable AOS Factory framework when authorized.
-- Treat the Agent Maker Agent reference as a design note, not as authorization to add a new agent to the initial roster.
+aos-factory-generation-runbook.md
 ```
 
----
-
-# 34. Ready-to-Generate Checklist
-
-## 34.1 Design Completion
-
-```text
-[x] Required governance agents are defined.
-[x] Optional productive agent roster is defined.
-[x] Folder structures are defined.
-[x] Global files are defined.
-[x] Agent file sets are defined.
-[x] Builder file structure is defined.
-[x] Distribution and plugin-packaging mechanics are defined.
-[x] Permissions and approval rules are defined.
-[x] Tool access model is defined.
-[x] Memory governance is defined.
-[x] Logging model is defined.
-[x] Workflow set is defined.
-[x] Template set is defined.
-[x] AOS User Guide skeleton (including the Invocation Reference) is defined.
-[x] Project structure is defined.
-[x] Inbox policy is defined.
-[x] Archive policy is defined.
-[x] Validation and QA rules are defined.
-[x] Output style standards are defined.
-[x] Part 4 supersession of earlier Part 3 open statuses is recognized.
-[x] Agent Maker Agent ambiguity has a recommended default.
-```
-
-## 34.2 Safety Confirmation
-
-```text
-[x] No builder files have been generated yet.
-[x] No user-specific AOS instance will be generated yet.
-[x] No existing files will be overwritten without explicit approval.
-[x] Any actual generation action requires the user to type exactly: Proceed.
-[x] Refreshing, replacing, or overwriting existing builder files requires a separate Proceed approval.
-[x] Deleting, renaming, moving, archiving, publishing, sending, spending, or sharing private information requires explicit approval.
-```
-
-## 34.3 Generation Scope Confirmation
-
-```text
-[x] Generate reusable AOS Factory framework files only.
-[x] Do not generate a user-specific AOS instance yet.
-[x] Include root build entry file.
-[x] Include /builders folder files.
-[x] Include builder changelog.
-[x] Include all approved agent builder files.
-[x] Include dry-run / preview mode in all builders.
-[x] Include approval gates before any file overwrite or refresh.
-```
-
----
-
-# 35. Proposed Builder Generation Scope
-
-When the user later types exactly `Proceed`, the generation phase may create the reusable AOS Factory framework files listed below.
-
-No AOS instance should be generated in this first generation phase unless the user separately requests that after the Builder framework exists.
-
-```text
-/build-aos.md
-/builder-changelog.md
-/builders/build-aos.md
-/builders/build-security-agent.md
-/builders/build-memory-agent.md
-/builders/build-chief-of-staff-agent.md
-/builders/build-review-agent.md
-/builders/build-learning-agent.md
-/builders/build-inbox-agent.md
-/builders/build-calendar-agent.md
-/builders/build-task-agent.md
-/builders/build-project-manager-agent.md
-/builders/build-research-agent.md
-/builders/build-writing-agent.md
-/builders/build-document-librarian-agent.md
-/builders/build-personal-crm-agent.md
-/builders/build-finance-agent.md
-/builders/build-health-life-logistics-agent.md
-/builders/build-automation-agent.md
-```
-
----
-
-# 36. Required Continuation Behavior
-
-The assistant continuing from this final design spec must follow these rules:
-
-```text
-1. Treat this final design spec as the current authoritative handoff.
-2. Preserve completed decisions unless the user explicitly modifies them.
-3. Review the next steps with the user.
-4. The user may ask additional questions about the design or next steps.
-5. Wait for the user to enter the exact instruction “Proceed” to generate the AOS Factory files.
-6. Do not create actual AOS Factory files before that exact instruction.
-7. Do not create a user-specific AOS instance as part of the Builder framework generation phase.
-8. Use dry-run / preview mode and approval gates where required.
-```
-
-## 36.1 Suggested Next Assistant Prompt
-
-```text
-Read the source file `AOS_Factory_Design_Specification_Final.md`.
-
-Next steps:
-1. Conduct a final design consistency check. Report any inconsistencies to the user. Work with the user to resolve each issue one at a time. Offer options with a recommendation for each issue.
-2. Continue with the following steps once all the inconsistencies have been resolved and the user types exactly: Continue.
-3. Review the proposed Builder generation scope and plan with the user.
-4. Answer any additional user questions about the design or generation plan.
-5. Wait for the user to type exactly: Proceed.
-6. Only after that exact instruction, generate the reusable AOS Factory framework files.
-
-Do not generate actual AOS Factory files unless the user types exactly: Proceed.
-```
-
----
-
-# 37. Status
-
-Current status:
-
-```text
-Final design accepted.
-Ready for next-step review and generation planning.
-Actual AOS Factory file generation is blocked until the user types exactly: Proceed.
-```
+Cross-references elsewhere in this document to Sections 33-37 (for example Section 34.2 and Section 35 in Section 28.1) resolve to the runbook, where the original 33-37 numbering is preserved. The `Proceed` safety gate is unchanged: actual AOS Factory file generation remains blocked until the user types exactly `Proceed`, per the Purpose section above and the runbook.
