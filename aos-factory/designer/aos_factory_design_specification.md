@@ -3,12 +3,12 @@ title: AOS Factory Design Specification - Final
 file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
-last_updated: 2026-06-05
-status: final_design_ready_for_generation_planning
+last_updated: 2026-06-10
+status: design_ready_for_generation_planning
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
 
-# AOS Factory Design Specification - Final
+# AOS Factory Design Specification
 
 ## Purpose of This Document
 
@@ -48,7 +48,7 @@ The following design inconsistencies were identified during the final consistenc
 4. Missing builder schemas — A section schema is now defined for /builders/build-aos.md. See Section 12.1.
 ```
 
-The remaining minor consistency items from that check, together with further consistency passes on 2026-06-03, have since been resolved. All resolutions are recorded in `AOS-Generator_Design-Consistency-Changelog.md`.
+The remaining minor consistency items from that check, together with further consistency passes on 2026-06-03, have since been resolved and are recorded in the Design Consistency Resolutions section above; the full change history is tracked in Git.
 
 ---
 
@@ -135,6 +135,92 @@ The builder should:
 - Ask for approval on important design decisions.
 - Move forward with documented assumptions for low-risk details.
 - Defer to the user’s wishes.
+```
+
+## 1.6 Design Principles and Goals
+
+This section states the principles and goals that motivate the rest of this specification. Section 2 and beyond define *how* the AOS Factory behaves; this section defines *why*. When a future design decision is ambiguous, it should be resolved in favor of these principles. They are normative, not aspirational.
+
+### 1.6.1 Design Spec as the Single Source of Truth
+
+The AOS Factory is generated from this design specification, not the other way around. The spec is canonical; the factory framework, the builder files, the plugin package, and any outward-facing description of the project are all **renderings** of it.
+
+```text
+- Every builder, agent schema, workflow, and config traces back to a decision
+  recorded here.
+- When the spec and a generated artifact disagree, the spec wins and the
+  artifact is corrected.
+- Outward-facing material (README, pitch, user guide) derives from the spec so
+  that documentation and marketing cannot silently drift away from the design.
+```
+
+This is what makes the system auditable and reproducible: anyone can regenerate the factory from the spec and get the same result.
+
+### 1.6.2 Governance Before Productivity
+
+Safety, memory, coordination, and quality review must exist before any productive work happens. The four required governance agents (Security / Permissions, Memory, Chief of Staff, Review / Reflection) are mandatory and are built before any optional productive agent (Section 2.3). Productivity is additive; governance is foundational. A user cannot end up with a fast, capable, ungoverned system.
+
+### 1.6.3 Single Responsibility at Every Level
+
+Each agent owns exactly one domain, with explicit non-responsibilities and escalation rules; coordination is the Chief of Staff's job rather than being absorbed into a catch-all central agent (Sections 2.1, 2.2). The same discipline applies to files: one file, one purpose, scope recoverable from its path. This keeps the system legible to non-technical users and extensible without redesign.
+
+### 1.6.4 Non-Destructive and Approval-Gated by Default
+
+The system prefers actions that cannot lose work. Agents create, append, or ask rather than overwrite, delete, move, or bulk-modify (Section 2.4). Anything consequential is gated behind a single, unambiguous approval signal — the user typing exactly `Proceed` (Section 3.1) — and approval is specific to the action described, never a standing grant (Section 2.5). The goal is that a user can trust the AOS with real work without fear that it will quietly damage their files.
+
+### 1.6.5 Standardization and Extensibility
+
+Uniform schemas — builder files, agent instruction files, configs, memory, workflows, logs (Sections 11, 12, 15, 16) — let new agents and capabilities be added without inventing new formats. The factory ships builder files for every approved agent even when they are not initially installed (Section 8.1), so the collection is extensible by design rather than by exception.
+
+### 1.6.6 Multiple Instances, Intelligent Routing
+
+One workspace can host the factory framework and many AOS instances (work, personal, or purpose-specific) as siblings, with a router that resolves exactly one active target per request and never blends instance memory (Section 4.1 and the instance router). A user grows from one AOS to several without re-architecting.
+
+### 1.6.7 Self-Documenting and Self-Improving
+
+The system explains itself and improves itself on a cadence. Every instance generates a plain-language HTML user guide (Section 16.6). A set of operating rhythms running from daily through quarterly keeps the system operationally clean, structurally healthy, and aligned with the user's actual goals (Section 25). The Review / Reflection Agent owns the improvement rhythms — the weekly review, the monthly review (including the user-guide refresh), and the quarterly review — while the daily startup and end-of-day rhythms are driven by the Chief of Staff Agent (Sections 17.1–17.5, 7.4). Maintenance is a built-in behavior, not a manual afterthought.
+
+### 1.6.8 Built for Non-Technical Users, Portable Across Platforms
+
+The primary user is non-technical and the primary interface is conversational: setup is an interview, invocation is by intent-matched trigger phrases, and the only exact-string command is `Proceed` (Sections 1.5, 9.1, 16.6). The target platform is Claude Cowork, but because the entire system is plain markdown plus a thin routing layer, it is portable to Claude Code and adaptable to other LLMs. The design avoids platform-specific mechanisms wherever a portable one exists.
+
+### 1.6.9 Multiple Delivery Formats
+
+The same design is consumable at three levels of readiness, so adopters can enter at whatever depth suits them:
+
+```text
+- The design specification — for those who want to understand or fork the design.
+- A prebuilt factory instance — for those who want to run it directly.
+- A Claude plugin — for those who want one-step install (Section 28).
+```
+
+The prebuilt factory instance was generated using Claude Opus 4.8. Because the spec is the single source of truth (Section 1.6.1), the instance can be regenerated against newer models as they ship; the model used is a property of a given build, not of the design.
+
+### 1.6.10 Open Source
+
+The project is released openly in the hope of attracting contributors and evolving into a widely used application on Claude. Openness reinforces the principles above: a single-source-of-truth spec, standardized schemas, and self-documenting output are precisely what make external contribution tractable.
+
+The project is hosted at:
+
+```text
+https://github.com/neoClarity-AI/Open-AOS-Factory
+```
+
+The contribution model follows directly from Section 1.6.1 (design spec as the single source of truth). The repository accepts pull requests **only against the design specification**. The prebuilt factory instance and the Claude plugin are not accepted as direct contributions; they are regenerated and published by neoClarity from the approved spec, so that quality and safety can be maintained and every released artifact provably traces back to a reviewed design. Although you can generate your own factory and plugin, the way to change the "official" neoClarity factory or plugin is to change the spec.
+
+### 1.6.11 Goals (Summary)
+
+```text
+G1. Give non-technical users a full-featured, extensible, self-improving AOS.
+G2. Keep the system safe and trustworthy by default (governance-first,
+    non-destructive, approval-gated).
+G3. Keep the design auditable and reproducible (spec as single source of truth).
+G4. Keep the system extensible without redesign (standardized schemas,
+    builder-per-agent).
+G5. Support many instances with reliable routing and no memory bleed.
+G6. Stay portable across Claude Cowork, Claude Code, and other LLMs.
+G7. Be self-documenting and self-maintaining.
+G8. Be open source and contributor-friendly.
 ```
 
 ---
