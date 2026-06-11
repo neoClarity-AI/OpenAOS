@@ -82,11 +82,12 @@ AOS/                             ← project root
 ├── claude.md                    ← session-start instructions for Claude
 ├── aos-router.md                ← instance router (read first every session)
 │
+├── design-spec/                 ← canonical design specification document set
+│   └── aos-factory-design-specification.md  ← canonical design spec
+│
 ├── aos-factory/                 ← factory source (not an AOS instance)
 │   ├── build-aos.md             ← entry-point pointer to the master builder
 │   ├── builders/                ← one builder file per agent + master build-aos
-│   ├── designer/
-│   │   └── aos_factory_design_specification.md  ← canonical design spec
 │   └── logs/
 │       └── factory-routing-decision-log.md
 │
@@ -134,7 +135,7 @@ AOS instances are created as **sibling folders** at the project root alongside `
 
 ## Open AOS Factory Design Specification
 
-The canonical source of truth for the factory is `aos-factory/designer/aos_factory_design_specification.md`. It records every design decision made during the factory's development: the governance model, the permission levels, the folder schema, the builder section structure, agent responsibilities and boundaries, workflow definitions, escalation rules, and the framework-vs-instance layout. If the spec and a builder file ever disagree, the spec wins.
+The canonical source of truth for the factory is `design-spec/aos-factory-design-specification.md`. It records every design decision made during the factory's development: the governance model, the permission levels, the folder schema, the builder section structure, agent responsibilities and boundaries, workflow definitions, escalation rules, and the framework-vs-instance layout. If the spec and a builder file ever disagree, the spec wins.
 
 The spec is also the correct starting point for any change to the factory itself. The workflow is: propose a change in the spec → review with the user → receive explicit approval → regenerate the affected builder file(s) → rebuild and repackage `dist/`. Direct edits to builder files in `builders/` or skill files in `dist/` without a corresponding spec update are discouraged; they create drift between the design record and the implementation.
 
@@ -148,7 +149,7 @@ Contributions to the **Open AOS Factory** follow the same governance model the f
 
 **To propose a change:**
 
-1. Open `aos-factory/designer/aos_factory_design_specification.md` and identify the section(s) your change affects.
+1. Open `design-spec/aos-factory-design-specification.md` and identify the section(s) your change affects.
 2. Draft the proposed revision and discuss it in a Planning mode session (`pmode` at the start of your Claude session). Claude will not create or modify any files in this mode.
 3. Once the revision is agreed, type `Proceed` to authorize the spec update.
 4. Identify which builder file(s) in `builders/` are affected by the spec change and regenerate them (one builder at a time, each gated by `Proceed`).
@@ -158,4 +159,4 @@ Contributions to the **Open AOS Factory** follow the same governance model the f
 
 **Adding a new agent builder** follows the same sequence plus one additional step: add the new agent to the available-agent roster in the spec (Section 2.3 or equivalent), define its full section schema, then generate the builder file and SKILL.md together.
 
-For questions or to discuss larger architectural changes before drafting spec language, open an issue or start a discussion in the repository.
+For questions or to discuss larger architectural changes before drafting spec language, open an issue 
