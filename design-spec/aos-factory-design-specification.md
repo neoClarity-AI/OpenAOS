@@ -3,8 +3,8 @@ title: AOS Factory Design Specification
 file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
-last_updated: 2026-06-10
-spec_version: 1.0.2
+last_updated: 2026-06-11
+spec_version: 1.0.3
 status: design_ready_for_generation_planning
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -2197,8 +2197,9 @@ These are the user-facing steps to generate the reusable factory framework from 
 1. Open a Claude session with this design specification available.
 2. Review the proposed generation scope in Section 35 — the exact list of
    framework files to be created.
-3. Type exactly `Proceed` to authorize generation (the safety gate in
-   Section 34.2). Nothing is written before this.
+3. Type exactly `Proceed` to authorize generation (the approval gate in
+   Section 3.1; the §34.2 Safety Confirmation Checklist must also be
+   satisfied). Nothing is written before this.
 4. Claude previews, then on `Proceed` writes the framework files:
    - the root entry pointer `/build-aos.md`,
    - all `/builders/build-*.md` files (one master AOS builder plus one

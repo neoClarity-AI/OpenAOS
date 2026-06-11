@@ -2,9 +2,9 @@
 title: AOS Factory Design Specification — Revision History
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 1.0.2
+spec_version: 1.0.3
 created_date: 2026-06-02
-last_updated: 2026-06-10
+last_updated: 2026-06-11
 status: design_ready_for_generation_planning
 ---
 
@@ -16,9 +16,18 @@ Entries below are in reverse chronological order (newest first).
 
 | spec_version | Date       | Change |
 |--------------|------------|--------|
+| 1.0.3        | 2026-06-11 | §36.1 Design Readiness Review cycle — checklists verified; §34.2 item 1 dispositioned N/A; §28.1 step 3 citation corrected; no functionality-impacting inconsistencies found |
 | 1.0.2        | 2026-06-10 | Document restructure — light split into the 3-file set |
 | 1.0.1        | 2026-06-10 | Design consistency resolution cycle — 16 items, surfaced across 5 re-read iterations of the §36.1 loop |
 | 1.0.0        | 2026-06-02 | Baseline design accepted; initial consistency resolution (4 items) |
+
+## 1.0.3 — Design Readiness Review (2026-06-11)
+
+A §36.1 Design Readiness Review was run end to end. The cycle surfaced no inconsistencies that impact the functionality of the generated factory; the design remained internally consistent across path conventions (§4.1), the file_type/status vocabularies (§15.4–15.5), the agent roster and builder set (§7–§8, §35.2), workflow/template ownership (§17–§18), and the inbox-move exception (§3.2/17.6/31). The items below record the cycle's dispositions.
+
+1. **§34.1 Design Completion Checklist** — all 20 items re-verified against current spec content and confirmed Done. Cross-checks reconciled: 4 required + 12 optional agents = 16, matching the 16 agent builders (§8.2) and the §35.2 generation scope; 9 global workflows (§17) and 6 templates (§18) match the §6 global-files list.
+2. **§34.2 Safety Confirmation Checklist** — items 2–6 verified Done. Item 1 ("No builder files have been generated yet") is no longer literally true: the factory builders already exist under `aos-factory/`. Per user decision, item 1 is dispositioned **N/A** for the post-generation state, with its wording left unchanged; the operative safety property (no overwrite without a separate `Proceed`) remains enforced by §34.2 items 3 and 5 and by §3.2. Consequence noted: a §36.2 generation run will halt at its step-2 check on item 1 and notify the user, which is acceptable safe behavior.
+3. **§28.1 step 3 citation corrected** — step 3 previously called `Proceed` "the safety gate in Section 34.2"; the exact-string approval gate is defined in §3.1, while §34.2 is the Safety Confirmation Checklist. Step 3 now reads "the approval gate in Section 3.1; the §34.2 Safety Confirmation Checklist must also be satisfied." This corrects user-facing generation documentation only; no normative behavior changed.
 
 ## 1.0.2 — Document Restructure (2026-06-10, Light Split)
 

@@ -2,9 +2,9 @@
 title: AOS Factory Generation Runbook
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 1.0.2
+spec_version: 1.0.3
 created_date: 2026-06-02
-last_updated: 2026-06-10
+last_updated: 2026-06-11
 status: design_ready_for_generation_planning
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -69,22 +69,13 @@ and the exact `Proceed` approval — are enforced in Sections 34 and 35.
 ## 34.2 Safety Confirmation Checklist
 
 ```text
-[x] No builder files have been generated yet.
+[ ] No builder files have been generated yet.
 [x] No user-specific AOS instance will be generated yet.
 [x] No existing files will be overwritten without explicit approval.
 [x] Any actual generation action requires the user to type exactly: Proceed.
 [x] Refreshing, replacing, or overwriting existing builder files requires a separate Proceed approval.
 [x] Deleting, renaming, moving, archiving, publishing, sending, spending, or sharing private information requires explicit approval.
 ```
-
-## 
-
-```text
-
-```
-
----
-
 # 35. AOS Factory Generation
 
 ## 35.1 Generation Rules
@@ -142,9 +133,9 @@ When the user requests a "Design Readiness Review", using this workflow.
 Read the source file `design-spec/aos-factory-design-specification.md`.
 1. Verify with the user that we are entering a Design Readiness Review. When the user types "Proceed", do the following:
    1.1 Update all design specs with the status of "in_review".
-   1.2 In Section "34. Ready-to-Generate Checklists", mark every checklist item as Not Done. (Replace [x] with [ ]).
-2. Conduct a completeness check by verifying each item in the "34.1 Design Completion Checklist". When an item has been verified, mark it as Done (Replace [ ] with [x]). Report any missing items and recommended actions. Repeat this step until all items are marked Done.
-3. Conduct a safety check by verifying each item in the "34.3 Generation Scope Checklist". Report any safety issues and recommended actions.
+   1.2 In Section "34. AOS Factory Design Checklists", mark every checklist item as Not Done. (Replace [x] with [ ]).
+2. Conduct a completeness check by verifying each item in the "34.1 Design Completion Checklist". When an item has been verified, mark it as Done (Replace [ ] with [x]). Report any missing items and recommended actions. Repeat this step until you have marked all items Done.
+3. Conduct a safety check by verifying each item in the "34.2 Safety Confirmation Checklist". Report any safety issues and recommended actions. Repeat this step until you have marked all items Done.
 4. Review the design in "aos-factory-design-specification.md" for logical consistency. Report any inconsistencies to the user. Include only inconsistencies that impact the functionality of the factory it generates. If no such inconsistencies exist then inform the user. Otherwise, work with the user to resolve each issue one at a time. For each issue, offer the user options and a recommendation.
 5. When all inconsistencies are resolved, present the consolidated resolutions and wait for the user to type exactly: Proceed — to finalize the consistency review. This gate authorizes only finalization of the review and update of the spec, not the generation of AOS Factory files.
 6. Repeat steps 1 and 2 until no more issues are surfaced.
