@@ -3,12 +3,11 @@ name: build-review-agent
 description: "Build the Review / Reflection Agent, a required AOS governance agent that owns completeness audits, consistency checks, retrospectives, and quality review. Use during initial AOS setup or when restoring or rebuilding the review or reflection agent."
 ---
 
-
 # Build Review / Reflection Agent
 
 ## Builder Purpose
 
-Build the **Review / Reflection Agent**, a required governance agent. It owns retrospectives, system improvement, weekly reviews, decision audits, AOS refinement, and the AOS User Guide (`/docs/aos-user-guide.html`), which it refreshes during the monthly review (Sections 7.4, 16.6, 17.4). Standardized purpose, short interview.
+Build the **Review / Reflection Agent**, a required governance agent. It owns retrospectives, system improvement, weekly reviews, decision audits, AOS refinement, the AOS User Guide (`/docs/aos-user-guide.html`), and the instance version (`aos_version`). It regenerates the guide during the monthly review and reconciles `aos_version` then (Sections 7.4, 14.3.1, 16.6, 17.4). Standardized purpose, short interview.
 
 ## When to Use This Builder
 
@@ -30,16 +29,18 @@ Short batch interview (Section 9.1).
 
 ## Recommended Defaults
 
-- Primary owner of the weekly review (Section 17.3) and the monthly review, including the AOS User Guide refresh (Section 17.4).
+- Primary owner of the weekly review (Section 17.3) and the monthly review, including the AOS User Guide regeneration (Section 17.4).
+- Owns and reconciles `aos_version` in `/aos-manifest.md`: reconciles against `/logs/change-log.md` at the monthly review and verifies it in the completeness audit; breaking/MAJOR bumps are applied at the time of change (Section 14.3.1). The triggering event is logged by the agent that made the change (Chief of Staff coordinating).
 - Supports the Memory Agent on the memory-review workflow (Section 17.9).
 - Audits generated files for completeness and consistency (Section 27).
+- Regenerates the AOS User Guide as a projection (Sections 14.8, 16.6) rather than hand-editing prose; per the drift invariant (Section 14.8) it does not modify framework-derived definition files.
 - Review questions follow Section 25 (weekly: "What needs follow-up soon?"; monthly: "What is stale, misplaced, or structurally messy?"; quarterly: "Is the whole system still aimed at the right goals?").
 
 ## Configuration Decisions
 
-- Confirm ownership of `/docs/aos-user-guide.html` and the monthly refresh cadence.
+- Confirm ownership of `/docs/aos-user-guide.html` (regenerated monthly as a projection) and of `aos_version` reconciliation.
 - Confirm audit scope (completeness and consistency) versus Security (permissions) and Memory (routing) audits.
-- Confirm the user guide skeleton (Section 16.6) is used when generating or refreshing the guide.
+- Confirm the user guide skeleton (Section 16.6) is used when regenerating the guide, and that its embedded Change Log is preserved as the data input.
 
 ## Files to Create
 
@@ -55,7 +56,7 @@ Short batch interview (Section 9.1).
 
 ## Agent Instruction Generation Rules
 
-Generate `review-agent.md` per Section 11 with `agent_instruction` frontmatter. Emphasize Non-Responsibilities (it reviews and refines; it does not own day-to-day domain work or coordination). Document ownership of weekly/monthly/quarterly reviews, completeness audits, and the AOS User Guide.
+Generate `review-agent.md` per Section 11 with `agent_instruction` frontmatter. Emphasize Non-Responsibilities (it reviews and refines; it does not own day-to-day domain work or coordination, and per Section 14.8 it does not modify framework-derived definition files). Document ownership of weekly/monthly/quarterly reviews, completeness audits, the AOS User Guide (regenerated as a projection), and `aos_version` reconciliation (Section 14.3.1).
 
 ## Workflow Generation Rules
 
@@ -78,8 +79,8 @@ Create `review-decision-log.md` (Section 16.5). Log review outcomes, audit findi
 ```text
 [ ] Standard seven-file set created.
 [ ] Instruction file follows Section 11 schema with strong Non-Responsibilities.
-[ ] Ownership of weekly/monthly/quarterly reviews and the AOS User Guide documented.
-[ ] Completeness/consistency audit scope defined.
+[ ] Ownership of weekly/monthly/quarterly reviews, the AOS User Guide (projection), and aos_version reconciliation documented.
+[ ] Completeness/consistency audit scope defined; drift invariant (Section 14.8) respected.
 [ ] Decision log present and append-only.
 [ ] Registry and map updated; build logged.
 ```

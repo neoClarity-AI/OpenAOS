@@ -1,10 +1,9 @@
 ---
 title: Factory Routing Decision Log
 file_type: decision_log
-schema_version: 1.0.0
-builder_version: 1.0.0
+spec_version: 1.0.5
 created_date: 2026-06-05
-last_updated: 2026-06-05
+last_updated: 2026-06-11
 status: active
 applies_to:
   - aos-factory

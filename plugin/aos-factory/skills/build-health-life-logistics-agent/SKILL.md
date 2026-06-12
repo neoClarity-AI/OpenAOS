@@ -1,8 +1,7 @@
 ---
 name: build-health-life-logistics-agent
-description: "Add a Health / Life Logistics Agent to an AOS instance — manages health, appointments, errands, and life logistics. Use when adding this optional agent during setup, installing it later, or rebuilding the health or life logistics agent."
+description: "Build the Health / Life Logistics Agent, an optional productive AOS agent that helps coordinate health logistics and everyday life admin like appointments, errands, and routines. Use when selected during AOS setup or later via 'Build the Health Life Logistics Agent'."
 ---
-
 
 # Build Health / Life Logistics Agent
 

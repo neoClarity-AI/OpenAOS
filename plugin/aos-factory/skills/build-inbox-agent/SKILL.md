@@ -1,8 +1,7 @@
 ---
 name: build-inbox-agent
-description: "Add an Inbox / Communications Agent to an AOS instance — triages email and messages, drafts replies, and runs the inbox-to-task workflow. Use when adding this optional agent during setup, installing it later, or rebuilding the inbox or communications agent."
+description: "Build the Inbox / Communications Agent, an optional productive AOS agent that triages incoming items and communications and drafts responses. Use when selected during AOS setup or later via 'Build the Inbox Agent'."
 ---
-
 
 # Build Inbox / Communications Agent
 

@@ -1,8 +1,7 @@
 ---
 name: build-research-agent
-description: "Add a Research Agent to an AOS instance — gathers, synthesizes, and cites information. Use when adding this optional agent during setup, installing it later, or rebuilding the research agent."
+description: "Build the Research Agent, an optional productive AOS agent that gathers, evaluates, and synthesizes information into cited outputs. Use when selected during AOS setup or later via 'Build the Research Agent'."
 ---
-
 
 # Build Research Agent
 

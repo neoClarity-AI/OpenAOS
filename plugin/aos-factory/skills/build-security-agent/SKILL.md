@@ -1,8 +1,7 @@
 ---
 name: build-security-agent
-description: "Build the Security / Permissions Agent, a required AOS governance agent that owns permission rules, approval requirements, access boundaries, the tool access matrix, and safety checks. Use during initial AOS setup or when restoring or rebuilding the security agent."
+description: "Build the Security / Permissions Agent, a required AOS governance agent that owns permission rules, approval requirements, access boundaries, the tool access matrix, and safety checks. Use during initial AOS setup or when restoring or rebuilding the security or permissions agent."
 ---
-
 
 # Build Security Agent
 

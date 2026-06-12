@@ -1,8 +1,7 @@
 ---
 name: build-automation-agent
-description: "Add an Automation / Tool-Use Agent to an AOS instance — wires up tools, integrations, and repeatable automations. Use when adding this optional agent during setup, installing it later, or rebuilding the automation or tool-use agent."
+description: "Build the Automation / Tool-Use Agent, an optional productive AOS agent that designs and runs automations and operates approved tools and integrations on the user's behalf. Use when selected during AOS setup or later via 'Build the Automation Agent'."
 ---
-
 
 # Build Automation / Tool-Use Agent
 

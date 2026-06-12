@@ -1,8 +1,7 @@
 ---
 name: build-writing-agent
-description: "Add a Writing / Content Agent to an AOS instance — drafts, edits, and refines written content. Use when adding this optional agent during setup, installing it later, or rebuilding the writing or content agent."
+description: "Build the Writing / Content Agent, an optional productive AOS agent that drafts, edits, and refines written content. Use when selected during AOS setup or later via 'Build the Writing Agent'."
 ---
-
 
 # Build Writing / Content Agent
 

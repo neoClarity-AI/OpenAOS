@@ -13,9 +13,9 @@ An Agentic Operating System is not a piece of software you install — it is a s
 Follow these steps to install the Open AOS Factory in Claude Cowork.
 
 1. Open Claude Cowork
-2. Create a new project called **AOS**.
+2. Create a new project called **AOS Workspace**.
    - Create a new folder for the project. A good location would be:
-     **For Windows:** `C:\Users\[account]\Claude\AOS`, where [account] is your current login account. 
+     **For Windows:** `C:\Users\[account]\Claude\AOS Workspace`, where [account] is your current login account. 
      **For Mac:** TBD
 
 3. Click on **Customize** button
@@ -27,8 +27,8 @@ Follow these steps to install the Open AOS Factory in Claude Cowork.
 9. Enter this URL: https://github.com/neoClarity-AI/claude-plugins
 10. Click on the **Sync** button
 11. Copy the templates to your AOS workspace root folder:
-    - `aos-factory/templates/aos-router.md` → `<workspace>/aos-router.md``
-    - ``aos-factory/templates/claude.md` → `<workspace>/claude.md`
+    - `aos-factory/templates/aos-router.md` → `<workspace>/aos-router.md`
+    - `aos-factory/templates/CLAUDE.md` → `<workspace>/CLAUDE.md`
 
 
 
@@ -46,9 +46,9 @@ After your AOS instance is created, refer to the user guide for that instance: `
 
 ## Workspace-root files
 
-`aos-router.md` (instance router) and `claude.md` (project / session-start
+`aos-router.md` (instance router) and `CLAUDE.md` (project / session-start
 instructions) govern selection across instances and the factory. They live at
-your workspace root, above any instance. Example copies are in `examples/`;
+your workspace root, above any instance. Example copies are in `templates/`;
 copy them to your workspace root after install and edit for your setup.
 
 See `builder-changelog.md` for version history.

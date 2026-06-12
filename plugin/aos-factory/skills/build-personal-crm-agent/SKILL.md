@@ -1,8 +1,7 @@
 ---
 name: build-personal-crm-agent
-description: "Add a Personal CRM Agent to an AOS instance — tracks people, relationships, interactions, and follow-ups. Use when adding this optional agent during setup, installing it later, or rebuilding the personal CRM agent."
+description: "Build the Personal CRM Agent, an optional productive AOS agent that helps maintain relationships by tracking people, context, and follow-ups. Use when selected during AOS setup or later via 'Build the Personal CRM Agent'."
 ---
-
 
 # Build Personal CRM Agent
 

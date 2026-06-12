@@ -3,7 +3,6 @@ name: build-memory-agent
 description: "Build the Memory Agent, a required AOS governance agent that owns shared memory structure, memory hygiene, preference capture, and cross-agent memory routing. Use during initial AOS setup or when restoring or rebuilding the memory agent."
 ---
 
-
 # Build Memory Agent
 
 ## Builder Purpose

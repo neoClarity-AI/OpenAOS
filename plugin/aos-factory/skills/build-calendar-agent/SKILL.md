@@ -1,8 +1,7 @@
 ---
 name: build-calendar-agent
-description: "Add a Calendar / Scheduling Agent to an AOS instance — manages scheduling, meetings, and time blocking. Use when adding this optional agent during setup, installing it later, or rebuilding the calendar or scheduling agent."
+description: "Build the Calendar / Scheduling Agent, an optional productive AOS agent that helps manage time, scheduling, and calendar logistics. Use when selected during AOS setup or later via 'Build the Calendar Agent'."
 ---
-
 
 # Build Calendar / Scheduling Agent
 

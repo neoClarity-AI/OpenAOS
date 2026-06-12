@@ -1,8 +1,7 @@
 ---
 name: build-document-librarian-agent
-description: "Add a Document Librarian Agent to an AOS instance — organizes, files, names, and retrieves documents. Use when adding this optional agent during setup, installing it later, or rebuilding the document librarian agent."
+description: "Build the Document Librarian Agent, an optional productive AOS agent that organizes, catalogs, and helps retrieve documents and files. Use when selected during AOS setup or later via 'Build the Document Librarian Agent'."
 ---
-
 
 # Build Document Librarian Agent
 

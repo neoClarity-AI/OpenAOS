@@ -1,8 +1,7 @@
 ---
 name: build-task-agent
-description: "Add a Task / Commitment Agent to an AOS instance — tracks tasks, commitments, deadlines, and follow-ups. Use when adding this optional agent during setup, installing it later, or rebuilding the task or commitment agent."
+description: "Build the Task / Commitment Agent, an optional productive AOS agent that captures, tracks, and surfaces tasks, commitments, and deadlines. Use when selected during AOS setup or later via 'Build the Task Agent'."
 ---
-
 
 # Build Task / Commitment Agent
 

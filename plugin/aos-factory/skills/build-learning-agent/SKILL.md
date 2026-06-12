@@ -1,8 +1,7 @@
 ---
 name: build-learning-agent
-description: "Add a Learning / Tutor Agent to an AOS instance — helps the user learn topics, builds study plans, and explains concepts. Use when adding this optional agent during setup, installing it later, or rebuilding the learning or tutor agent."
+description: "Build the Learning / Tutor Agent, an optional productive AOS agent that helps the user learn topics, build study plans, explain concepts, and track learning progress. Use when selected during AOS setup or later via 'Build the Learning Agent'."
 ---
-
 
 # Build Learning / Tutor Agent
 

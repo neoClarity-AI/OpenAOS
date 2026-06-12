@@ -4,8 +4,8 @@ file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
 last_updated: 2026-06-11
-spec_version: 1.0.3
-status: design_ready_for_generation_planning
+spec_version: 1.0.5
+status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
 
@@ -633,7 +633,8 @@ Owns orchestration, routing, prioritization, conflict resolution, and user-facin
 Also a joint owner of the AOS Workspace router (/aos-router.md): every AOS instance's Chief of Staff Agent is a joint owner of the router that resolves the active target before any workflow runs. Each must honor router resolution (ask-don't-guess; never silently pick or merge instances) and log instance-routing choices to its own /agents/chief-of-staff-agent/logs/chief-of-staff-decision-log.md.
 
 Review Agent
-Owns retrospectives, system improvement, weekly reviews, decision audits, AOS refinement, and the AOS User Guide (/docs/aos-user-guide.html), which it refreshes during the monthly review.
+Owns retrospectives, system improvement, weekly reviews, decision audits, AOS refinement, and the AOS User Guide (/docs/aos-user-guide.html), which it regenerates during the monthly review.
+Also owns and reconciles the instance version (aos_version in /aos-manifest.md): it reconciles the value against /logs/change-log.md during the monthly review and verifies it in its completeness audit, while breaking/MAJOR bumps are applied at the time of change (Section 14.3.1). It refines and regenerates only data files and projections; per the drift invariant (Section 14.8) it does not modify framework-derived definition files.
 ```
 
 ## 7.5 Agent Maker Agent Clarification
@@ -1051,34 +1052,44 @@ The Build Summary is a saved file (file_type `build_summary`; see Section 15.4),
 
 # 14. Versioning and Update Policy
 
-## 14.1 Builder Framework Version
+## 14.1 Framework Version Is the Spec Version
 
-The reusable AOS Factory should have a version number.
+The AOS Factory does not carry an independent version number. Because the factory is a pure rendering of this design specification (Section 1.6.1), its version *is* the `spec_version` of the spec it was generated from. There is no separate `builder_version` or `schema_version`: a change to the framework can only come from a change to the spec, and a change to the file schemas is itself a change to this spec (Sections 11, 12, 15, 16), so both would already be captured by a `spec_version` increment. Carrying separate numbers would only invite drift between them.
+
+When a human-facing framework version is needed (for example, the plugin version in Section 28), use the `spec_version`.
 
 Example:
 
 ```text
-AOS Factory Version: 1.0.0
+AOS Factory Version: 1.0.5   (= spec_version)
 ```
 
 ## 14.2 Per-File Version Metadata
 
-Each builder file should include metadata at the top in YAML frontmatter.
+Each builder file should record, in its YAML frontmatter, the `spec_version` it was rendered from.
 
 Example:
 
 ```yaml
 ---
 title: Build Research Agent
-builder_version: 1.0.0
-schema_version: 1.0.0
-last_updated: 2026-06-02
+spec_version: 1.0.5
+last_updated: 2026-06-11
 ---
 ```
 
 ## 14.3 Generated AOS Version
 
-Each generated AOS instance should track its own version separately from the builder version.
+Each generated AOS instance tracks **two independent version facts**, because an instance is not a frozen rendering of the spec — it accumulates user data and changes after it is built:
+
+```text
+spec_version  - The spec design the instance was generated from / last conformed
+                to. This is the provenance/compatibility axis, shared with the
+                factory. It changes only when the instance is regenerated or
+                migrated to a newer spec.
+aos_version   - The instance's own evolving version, on its own track. This is
+                the change axis: it reflects how the instance itself has grown.
+```
 
 `/aos-manifest.md` should include:
 
@@ -1089,9 +1100,7 @@ Each generated AOS instance should track its own version separately from the bui
 
 ## AOS Version
 
-## Builder Version Used
-
-## Schema Version Used
+## Spec Version
 
 ## Created Date
 
@@ -1105,6 +1114,35 @@ Each generated AOS instance should track its own version separately from the bui
 
 ## Retired Agents
 ```
+
+`Spec Version` records the `spec_version` the instance was generated from / last conformed to (provenance). `AOS Version` records the instance's own version (below). The authoritative *live* instance version lives only here in `/aos-manifest.md`; the per-file `spec_version` and `aos_version` in each generated file's frontmatter are **provenance stamps set at creation/regeneration**, not values re-stamped across every file on each bump.
+
+### 14.3.1 AOS Version Assignment and Increment
+
+```text
+- A new instance is created at aos_version 1.0.0.
+- PATCH (1.0.0 -> 1.0.1): content-level fixes (corrected memory entries,
+  template wording, guide refresh).
+- MINOR (1.0.x -> 1.1.0): additive, non-breaking changes (an agent built, a
+  workflow added).
+- MAJOR (1.x -> 2.0.0): breaking or structural changes (instance schema
+  migration, folder restructure, an agent retired in a contract-changing way).
+  This is the line that interacts with compatible_aos_versions (Section 15.1).
+```
+
+Ownership and triggers:
+
+```text
+- The Review Agent owns and reconciles aos_version. It updates /aos-manifest.md
+  during the monthly review, reconciling against /logs/change-log.md, and
+  verifies it during its completeness audit (Section 27).
+- The triggering event for a bump is logged to /logs/change-log.md by the agent
+  that made the change (the Chief of Staff coordinates).
+- A breaking/MAJOR bump is applied at the time of the change, not deferred to
+  the monthly review.
+```
+
+The factory-driven migration path that a MAJOR bump implies is defined later (the update/reconciliation workflow remains a deferred design item; Sections 14.4 and 28 hold its current scope).
 
 ## 14.4 Update Modes
 
@@ -1134,6 +1172,8 @@ The reusable builder framework should include:
 
 This changelog describes changes to the builder framework itself, not changes to a generated AOS instance.
 
+`/builder-changelog.md` and the design `aos-factory-revision-history.md` are both numbered by `spec_version` but are not duplicates: the revision history is the **design** audit trail and lives with the spec; the builder changelog tracks **framework-file and packaging** changes and ships *inside the plugin* (Section 28). Same number, different purpose and audience.
+
 Generated AOS instance changes belong in:
 
 ```text
@@ -1143,7 +1183,7 @@ Generated AOS instance changes belong in:
 
 ## 14.6 Compatibility Notes
 
-Builder files should include compatibility notes when schema changes could affect generated AOS instances.
+Builder files should include compatibility notes when a spec change could affect generated AOS instances. Note that `spec_version` is a coarser compatibility signal than a dedicated schema version: it increments for changes that do not affect file structure at all (for example a documentation restructure). Following Section 28, the system therefore **warns** on a `spec_version` mismatch and **blocks** only when compatibility is explicitly marked broken; the revision history indicates whether a given increment is structurally relevant.
 
 ## 14.7 Updating Existing Builder Files
 
@@ -1152,6 +1192,18 @@ Creating missing builder files is Level 1: Safe autonomous.
 Refreshing, replacing, or overwriting existing builder files is Level 2: Approval-required.
 
 Deleting builder files should generally be avoided and should require explicit approval.
+
+## 14.8 Definition Files, Data Files, and the Drift Invariant
+
+An AOS instance is a living system: its files change after it is built. To keep that change controllable — and to keep a future factory able to update an existing instance without destroying its accumulated state — every file in an instance is one of two kinds.
+
+**Definition file.** A file whose entire content is determined by the spec plus the instance's declared configuration (its name and selected agents). It is a rendering of the design and holds no information that originated inside the instance. *Test: the factory could regenerate this file from the spec plus the instance's configuration with zero loss of anything the user or agents rely on.* If true, it is a definition file. Definition files are **owned by the factory**: created and updated only by builders, never edited by an operating agent, and a factory update may overwrite them (with `Proceed`). Examples: every `[agent-name]-agent.md` instruction file, workflow definitions in `/workflows`, templates in `/templates`, and the builder files themselves.
+
+**Data file.** A file whose content accumulates from the instance's operation and the user's input, and is therefore not derivable from the spec. *Test: regenerating this file from the factory would destroy information the user or agents rely on.* If true, it is a data file. Data files are **owned by the operating agents**: the factory creates each one once (empty or seeded) and never overwrites it on update; agents append to and maintain it under the normal non-destructive and approval rules (Sections 2.4, 3). Examples: everything in `/memory`, `/logs`, `/projects`, `/inbox`, and `/archive`, and the instance-specific values in `/aos-manifest.md`.
+
+**Mixed and derived files.** Where a file combines a rendered structure with instance data (for example the rows of `/configs/agent-registry.md`, the values in `/aos-manifest.md`), apply the strict test: if the file contains *any* non-regenerable information it is treated as a **data file** for update purposes — updated by targeted, approval-gated merge, never wholesale overwrite — or it is split so each file is purely one kind. A **projection** (for example the AOS User Guide, Section 16.6) is a regenerable view built from definitions plus named data inputs; it is treated as a **definition file** for update purposes (safe to regenerate), with its data inputs stored separately as data files.
+
+**The drift invariant.** Agents write data files; the factory owns definition files; **no operating agent modifies a framework-derived definition file.** This bounds drift to data (which is supposed to grow) and keeps definition files pristine renderings, so a factory update is a clean overwrite of definitions with `Proceed` rather than a three-way merge.
 
 ---
 
@@ -1165,16 +1217,19 @@ Every builder file should use YAML frontmatter like this:
 ---
 title: Build Research Agent
 file_type: agent_builder
-builder_version: 1.0.0
-schema_version: 1.0.0
+spec_version: 1.0.5
 created_date: 2026-06-02
-last_updated: 2026-06-02
+last_updated: 2026-06-11
 status: active
 compatible_aos_versions:
   - 1.x
 requires_approval_for_overwrite: true
 ---
 ```
+
+`spec_version` records the spec the file was rendered from (Section 14.1–14.2). `compatible_aos_versions` is the separate compatibility axis: it declares which `aos_version` lines a builder may operate on, matched against the MAJOR line of an instance's `aos_version` (Section 14.3.1).
+
+**Stamping rule (mandatory).** Every file the factory generates — builder files, agent instruction files, and all other generated markdown — records, in its frontmatter, the `spec_version` it was rendered from. Generated instance files additionally carry `aos_version` (Sections 15.2–15.3).
 
 ## 15.2 Generated Agent File Frontmatter
 
@@ -1190,11 +1245,13 @@ agent_name: research-agent
 agent_status: active
 required: false
 aos_version: 1.0.0
-schema_version: 1.0.0
+spec_version: 1.0.5
 created_date: 2026-06-02
 last_updated: 2026-06-02
 ---
 ```
+
+Here `aos_version` is the instance's own version at the time the file was created/regenerated, and `spec_version` is the spec design the file was rendered from; both are provenance stamps (Section 14.3).
 
 ## 15.3 Other Generated Markdown File Frontmatter
 
@@ -1208,7 +1265,7 @@ title: Research Agent Primary Workflow
 file_type: workflow
 owner: research-agent
 aos_version: 1.0.0
-schema_version: 1.0.0
+spec_version: 1.0.5
 created_date: 2026-06-02
 last_updated: 2026-06-02
 ---
@@ -1305,7 +1362,7 @@ archived
 
 `active` is the only value valid for both fields. All other values belong to exactly one field.
 
-The controlled `status` values above govern factory-generated files. This design specification itself (file_type `design_spec`) is a source/design artifact, not a generated file, and its `status` field tracks design-phase lifecycle (for example, `design_ready_for_generation_planning`); it is exempt from the four controlled artifact-status values.
+The controlled `status` values above govern factory-generated files. This design specification itself (file_type `design_spec`) is a source/design artifact, not a generated file, and its `status` field tracks design-phase lifecycle (for example, `design_ready_for_factory_generation`); it is exempt from the four controlled artifact-status values.
 
 Important distinction:
 
@@ -1459,11 +1516,13 @@ Decision logs should be append-only, with newest entries at the top.
 
 ## 16.6 AOS User Guide Schema
 
-Per-folder README files have been retired in favor of a single consolidated user document, `/docs/aos-user-guide.html`, owned by the Review Agent and refreshed during the monthly review (Sections 6, 7.4, 17.4). The guide documents each folder's purpose and handling rules, provides plain-language orientation to the AOS structure, and includes an embedded change-log section so the user can see what is new in the guide itself.
+Per-folder README files have been retired in favor of a single consolidated user document, `/docs/aos-user-guide.html`, owned by the Review Agent and regenerated during the monthly review (Sections 6, 7.4, 17.4). The guide documents each folder's purpose and handling rules, provides plain-language orientation to the AOS structure, and includes an embedded change-log section so the user can see what is new in the guide itself.
 
-Because the guide is an HTML file, it carries its metadata via meta tags or an HTML comment (file_type `documentation`, AOS name, `aos_version`, `last_updated`) rather than YAML frontmatter.
+The guide is a **projection** in the sense of Section 14.8: a regenerable view assembled from definition files plus named data inputs. Almost all of its content is derived — Folder Orientation mirrors the Section 4 tree, Agents Overview and the Invocation Reference are projected from `/configs/agent-registry.md` and `/aos-map.md`, and Core Rules points at `/configs/global-permissions.md`. The only genuinely instance-unique content is the embedded Change Log, which is the guide's data input and is preserved across regenerations (sourced from a stored change-log fragment, or filtered from `/logs/change-log.md`). Because the guide is regenerable, the Review Agent **regenerates** it rather than hand-editing prose, and a newer factory may regenerate it wholesale without a merge. For update purposes the guide is therefore treated as a definition file (Section 14.8), with its Change Log entries treated as data.
 
-The guide has a defined **skeleton** so that `/builders/build-aos.md` can always generate a valid, useful file. The richer prose within each section is refined later by the Review Agent during the monthly review (Section 17.4). Every section below the Table of Contents carries a unique HTML bookmark (an `id` anchor), and every Table of Contents item is an in-page link to the corresponding bookmark. The skeleton is a minimal valid HTML document with these fixed top-level sections, in order:
+Because the guide is an HTML file, it carries its metadata via meta tags or an HTML comment (file_type `documentation`, AOS name, `aos_version`, `spec_version`, `last_updated`) rather than YAML frontmatter.
+
+The guide has a defined **skeleton** so that `/builders/build-aos.md` can always generate a valid, useful file. The Review Agent regenerates the guide from this skeleton plus current instance data during the monthly review (Section 17.4). Every section below the Table of Contents carries a unique HTML bookmark (an `id` anchor), and every Table of Contents item is an in-page link to the corresponding bookmark. The skeleton is a minimal valid HTML document with these fixed top-level sections, in order:
 
 ```text
 - Header metadata (meta tags / HTML comment: file_type documentation, AOS name, aos_version, last_updated)
@@ -1671,7 +1730,7 @@ Stale project review is part of monthly review.
 
 Memory hygiene receives lightweight weekly review and deeper monthly review.
 
-The Review Agent refreshes the AOS User Guide (`/docs/aos-user-guide.html`) as part of the monthly review.
+The Review Agent regenerates the AOS User Guide (`/docs/aos-user-guide.html`) as part of the monthly review, re-projecting it from current instance data and preserving its embedded Change Log (Section 16.6). It also reconciles the instance `aos_version` in `/aos-manifest.md` against `/logs/change-log.md` at this time (Section 14.3.1).
 
 Primary owner:
 
@@ -2211,7 +2270,7 @@ These are the user-facing steps to generate the reusable factory framework from 
 
 The workspace-root router (`/aos-router.md`, file_type `aos_router`) and project instructions (`/CLAUDE.md`, file_type `project_instructions`) govern target selection *across* instances and the factory; they live at the AOS Workspace root alongside the factory and instances and are not produced by the factory build.
 
-Framework generation, as scoped above and in Section 35, produces only the AOS Factory's own files: the root build entry (`/build-aos.md`), the `/builders/build-*.md` files, and `/builder-changelog.md`. The example workspace-root files referenced in Section 28.2 (`examples/aos-router.md`, `examples/CLAUDE.md`) are not part of this generation phase — they are authored separately during plugin packaging.
+Framework generation, as scoped above and in Section 35, produces only the AOS Factory's own files: the root build entry (`/build-aos.md`), the `/builders/build-*.md` files, and `/builder-changelog.md`. The example workspace-root files referenced in Section 28.2 (`templates/aos-router.md`, `templates/CLAUDE.md`) are not part of this generation phase — they are authored separately during plugin packaging.
 
 ## 28.2 Packaging the Factory as a Claude Plugin
 
@@ -2229,7 +2288,8 @@ my-aos-factory/                 (plugin root)
   agents/                       (optional)
   .mcp.json                     (optional: bundled MCP servers)
   builder-changelog.md          (framework/plugin changelog)
-  examples/                     (shipped example workspace-root files)
+  README.md                     (plugin install + usage instructions)
+  templates/                    (shipped example workspace-root files)
     aos-router.md               (example router; user copies to workspace root)
     CLAUDE.md                   (example project instructions; user copies to root)
 ```
@@ -2239,15 +2299,16 @@ Steps:
 ```text
 1. Create the plugin directory and add .claude-plugin/plugin.json with the
    plugin's name, version, description, and author. Keep the plugin version in
-   sync with the framework builder_version and /builder-changelog.md.
+   sync with the framework spec_version (Section 14.1) and /builder-changelog.md.
 2. Place the generated factory content at the plugin root: expose the builder
    files (build-aos.md and each /builders/build-*.md) as skills or slash
    commands so Claude can invoke them after install. Components must sit at the
    plugin root, never inside .claude-plugin/.
-3. Author the example workspace-root files under examples/ (aos-router.md,
-   CLAUDE.md). These are written during this packaging step, not during
-   framework generation (Section 35) — they are starting-point templates for
-   the AOS Workspace root files described below.
+3. Author the example workspace-root files under templates/ (aos-router.md,
+   CLAUDE.md), and author or refresh README.md with install and usage
+   instructions. These are written during this packaging step, not during
+   framework generation (Section 35) — the templates are starting-point copies
+   of the AOS Workspace root files described below.
 4. (Optional) Bundle MCP servers via .mcp.json at the plugin root.
 5. Test locally before publishing: load the plugin without installing using
    `claude --plugin-dir <path>`.
@@ -2262,7 +2323,7 @@ Steps:
    then re-package and re-publish.
 ```
 
-The router (`/aos-router.md`) and project instructions (`/CLAUDE.md`) are AOS Workspace root files, not factory components, but the plugin **ships example copies** of both under `examples/`, authored at packaging time per step 3 above. After installing the plugin and generating their first instance, the user copies these examples to their AOS Workspace root and edits them (default instance, routing signals, planning-mode rules) for their setup. Shipping them as examples — rather than writing them to the workspace automatically — keeps the plugin from overwriting a user's existing root files.
+The router (`/aos-router.md`) and project instructions (`/CLAUDE.md`) are AOS Workspace root files, not factory components, but the plugin **ships example copies** of both under `templates/`, authored at packaging time per step 3 above. After installing the plugin and generating their first instance, the user copies these examples to their AOS Workspace root and edits them (default instance, routing signals, planning-mode rules) for their setup. Shipping them as examples — rather than writing them to the workspace automatically — keeps the plugin from overwriting a user's existing root files.
 
 ---
 

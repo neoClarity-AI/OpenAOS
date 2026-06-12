@@ -1,8 +1,7 @@
 ---
 name: build-finance-agent
-description: "Add a Finance / Admin Agent to an AOS instance — handles finances, budgets, invoices, and administrative tasks. Use when adding this optional agent during setup, installing it later, or rebuilding the finance or admin agent."
+description: "Build the Finance / Admin Agent, an optional productive AOS agent that helps with budgeting, tracking, and administrative logistics. Use when selected during AOS setup or later via 'Build the Finance Agent'."
 ---
-
 
 # Build Finance / Admin Agent
 

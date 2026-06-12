@@ -1,8 +1,7 @@
 ---
 name: build-project-manager-agent
-description: "Add a Project Manager Agent to an AOS instance — runs projects, milestones, kickoffs, and status tracking. Use when adding this optional agent during setup, installing it later, or rebuilding the project manager agent."
+description: "Build the Project Manager Agent, an optional productive AOS agent that turns ideas into structured projects, owning project folders and the project lifecycle. Use when selected during AOS setup or later via 'Build the Project Manager Agent'."
 ---
-
 
 # Build Project Manager Agent
 

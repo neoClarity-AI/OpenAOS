@@ -1,10 +1,9 @@
 ---
 title: Build Chief of Staff Agent
 file_type: agent_builder
-builder_version: 1.0.0
-schema_version: 1.0.0
+spec_version: 1.0.5
 created_date: 2026-06-03
-last_updated: 2026-06-05
+last_updated: 2026-06-11
 status: active
 compatible_aos_versions:
   - 1.x

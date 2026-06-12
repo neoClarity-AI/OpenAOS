@@ -1,8 +1,7 @@
 ---
 name: build-chief-of-staff-agent
-description: "Build the Chief of Staff Agent, a required AOS governance agent that owns orchestration, routing, prioritization, conflict resolution, user-facing coordination, and joint ownership of the instance router. Use during initial AOS setup or when restoring or rebuilding the chief of staff agent."
+description: "Build the Chief of Staff Agent, a required AOS governance agent that owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination, and is a joint owner of the instance router. Use during initial AOS setup or when restoring or rebuilding the chief of staff agent."
 ---
-
 
 # Build Chief of Staff Agent
 

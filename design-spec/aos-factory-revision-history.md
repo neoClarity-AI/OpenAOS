@@ -2,10 +2,10 @@
 title: AOS Factory Design Specification — Revision History
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 1.0.3
+spec_version: 1.0.5
 created_date: 2026-06-02
 last_updated: 2026-06-11
-status: design_ready_for_generation_planning
+status: design_ready_for_factory_generation
 ---
 
 # AOS Factory Design Specification — Revision History
@@ -16,10 +16,60 @@ Entries below are in reverse chronological order (newest first).
 
 | spec_version | Date       | Change |
 |--------------|------------|--------|
+| 1.0.5        | 2026-06-11 | Version model simplified: `builder_version`/`schema_version` collapsed into `spec_version`; `aos_version` assignment/increment rule + Review-Agent ownership added; definition/data file definitions + drift invariant added; AOS User Guide reclassified as a regenerable projection |
+| 1.0.4        | 2026-06-11 | §36.3 Claude Plugin Generation workflow authored; §28.2 aligned to the shipped plugin (examples/ → templates/, README.md added) |
 | 1.0.3        | 2026-06-11 | §36.1 Design Readiness Review cycle — checklists verified; §34.2 item 1 dispositioned N/A; §28.1 step 3 citation corrected; no functionality-impacting inconsistencies found |
 | 1.0.2        | 2026-06-10 | Document restructure — light split into the 3-file set |
 | 1.0.1        | 2026-06-10 | Design consistency resolution cycle — 16 items, surfaced across 5 re-read iterations of the §36.1 loop |
 | 1.0.0        | 2026-06-02 | Baseline design accepted; initial consistency resolution (4 items) |
+
+## Review Log (no-version entries)
+
+These entries record completed activities that did not change the design content and therefore did not increment `spec_version` (per the content-only versioning principle, §1.6.1).
+
+- **2026-06-11 — §36.1 Design Readiness Review against spec_version 1.0.5.** All §34.1 (20) and §34.2 (5) checklist items were reset, independently re-verified, and re-marked Done; the canonical design (Sections 1–32) was reviewed for logical consistency. No functionality-impacting inconsistencies were found and no design content changed, so no version increment was made. One non-blocking observation was noted and dispositioned "leave as-is" by the user: §27's enumerated agent-completeness list does not name the per-agent Build Summary (§13/§15.4), which is still produced via the §12 Handoff Summary step.
+
+## 1.0.5 — Version Model Simplification and Drift Control (2026-06-11)
+
+The versioning and update policy (§14) and the frontmatter standards (§15) were simplified, and the supporting drift-control and instance-versioning rules were made explicit. No agent roster, workflow, template, or path convention changed.
+
+1. **`builder_version` and `schema_version` collapsed into `spec_version`** — because the factory is a pure rendering of the spec (§1.6.1), a framework change can only come from a spec change, and a file-schema change is itself a spec change. The two derived numbers carried no independent information and invited drift, so they were removed. §14.1 now states the framework version *is* the `spec_version`; §14.2 and the §15.1–15.3 frontmatter examples were updated; a mandatory stamping rule was added (every generated file records the `spec_version` it was rendered from). `compatible_aos_versions` is retained as the separate builder→instance compatibility axis.
+
+2. **Instance versioning made explicit** — §14.3 now defines two independent instance axes: `spec_version` (provenance / last-conformed design) and `aos_version` (the instance's own evolving version). §14.3.1 adds the previously-missing assignment and increment rule (start at 1.0.0; PATCH/MINOR/MAJOR semantics, with MAJOR as the line that interacts with `compatible_aos_versions`). The `/aos-manifest.md` schema replaced "Builder Version Used / Schema Version Used" with "Spec Version." Per-file version fields are clarified as creation/regeneration provenance stamps; the live instance version lives only in the manifest.
+
+3. **`aos_version` ownership assigned** — the Review Agent owns and reconciles `aos_version` (monthly reconciliation against `/logs/change-log.md`, plus verification in its completeness audit); the triggering event is logged by the agent that made the change (Chief of Staff coordinating); breaking/MAJOR bumps are applied at the time of change. Recorded in §7.4 and §14.3.1.
+
+4. **Definition/data file definitions and the drift invariant added** — new §14.8 defines a *definition file* (fully determined by spec + instance configuration; factory-owned; regenerable) and a *data file* (accumulates from operation/user input; agent-owned; never overwritten by the factory), with an operational test for each and a rule for mixed/derived files. The invariant: agents write data files, the factory owns definition files, and no operating agent modifies a framework-derived definition file. This bounds drift to data and keeps factory updates a clean overwrite rather than a three-way merge.
+
+5. **AOS User Guide reclassified as a regenerable projection** — §16.6 and §17.4 now describe the guide as a projection (§14.8): a regenerable view assembled from definition files plus its embedded Change Log as the sole data input. The Review Agent regenerates it rather than hand-editing prose, so a newer factory can regenerate it wholesale without a merge.
+
+6. **Compatibility-note and plugin-sync wording updated** — §14.6 reframes compatibility detection around `spec_version` (a coarser signal: warn on mismatch, block only when explicitly broken). §28.2 and runbook §36.3 now sync the plugin version to `spec_version`. §14.5 adds a note distinguishing `/builder-changelog.md` (framework/packaging changes, ships in the plugin) from this revision history (design audit trail), now that both are numbered by `spec_version`.
+
+Deferred (noted, not yet authored): the factory→instance migration/reconciliation workflow that a MAJOR `aos_version` bump implies (§14.4, §28 hold its current scope).
+
+## 1.0.4 — Plugin Generation Workflow (2026-06-11)
+
+The §36.3 Claude Plugin Generation workflow was authored in the generation
+runbook, completing the third of the three gated build workflows in §36
+(alongside §36.1 Design Readiness Review and §36.2 AOS Factory Generation).
+
+1. **§36.3 workflow authored** — the `Insert workflow here.` placeholder was
+   replaced with an eight-step, `Proceed`-gated workflow. It packages the
+   already-generated framework files (§35.2 output) into the Claude plugin
+   layout of §28.2: a precondition check that the framework exists, a dry-run
+   preview, the global file-safety/overwrite-approval model when refreshing the
+   canonical `plugin/aos-factory/`, the exact-string `Proceed` gate (scoped to
+   writing the plugin directory only — not zipping, local-load testing, or
+   marketplace publishing), and a closing validation step against §§27–28.2 and
+   §34. Builders map to `skills/build-*/SKILL.md`; the root `/build-aos.md`
+   entry pointer is not packaged separately.
+2. **§28.2 aligned to the shipped plugin** — the canonical plugin layout and
+   packaging steps were reconciled with the real `plugin/aos-factory/`: the
+   shipped example workspace-root files now live under `templates/` (was
+   `examples/`), and `README.md` (plugin install + usage instructions) was added
+   to the layout diagram and packaging step 3. The `CLAUDE.md` filename is
+   unchanged (already uppercase per 1.0.1 item 12). The plugin `README.md` copy
+   instructions were corrected to `CLAUDE.md` to match.
 
 ## 1.0.3 — Design Readiness Review (2026-06-11)
 
