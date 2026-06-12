@@ -8,50 +8,107 @@ An Agentic Operating System is not a piece of software you install — it is a s
 
 ## Setup
 
-### Claude Cowork
+### Create Claude Cowork Project
 
-Follow these steps to install the Open AOS Factory in Claude Cowork.
+Follow these steps to create a new in **Claude Cowork** project. You will use this project to interact with all your AOS instances.
 
-1. Open Claude Cowork
-2. Create a new project called **AOS Workspace**.
-   - Create a new folder for the project. A good location would be:
-     **For Windows:** `C:\Users\[account]\Claude\AOS Workspace`, where [account] is your current login account. 
-     **For Mac:** TBD
+#### Useful resources
 
-3. Click on **Customize** button
-4. Click on **Browse plugins** button
-5. Click on **Personal** button
-6. Click on Plus sign (**+**) to add new plugin
-7. Click on **Add Marketplace** button
-8. Click on **Add from a repository** button
-9. Enter this URL: https://github.com/neoClarity-AI/claude-plugins
-10. Click on the **Sync** button
-11. Copy the templates to your AOS workspace root folder:
-    - `aos-factory/templates/aos-router.md` → `<workspace>/aos-router.md`
-    - `aos-factory/templates/CLAUDE.md` → `<workspace>/CLAUDE.md`
+- [Getting Started with Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork)
+- [Getting Started with Claude Cowork projects](https://support.claude.com/en/articles/14116274-organize-your-tasks-with-projects-in-claude-cowork)
 
 
+
+1. Create a new folder called **AOS Workspace** on your computer. This will be the home for your AOS instances. 
+
+   - **For Windows:**
+     - Open the **Command Prompt** window. ([help](https://learn.microsoft.com/en-us/answers/questions/4197900/how-to-access-command-prompt))
+     - Type the command: `mkdir %USERPROFILE%"\Claude\AOS Workspace"` ([help](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/mkdir))
+     - Verify the directory exists: `chdir %USERPROFILE%"\Claude\AOS Workspace"` 
+   - **For Mac:** 
+     - TBD
+2. Open **Claude Desktop**. Using **Claude Desktop**:
+  
+    - Click on the **Cowork** tab at the top of the lefthand navigation pane.
+  
+    - Click on **Projects** in the nav menu.
+  
+    - Click on the **New project** button.
+  
+    - Click on **Use an existing folder** option.
+  
+    - Click on **Select a folder...**
+  
+    - Double-click on the **Claude** folder, double-click on the **AOS Workspace** folder, then click on the **Select Folder** button.
+  
+    - Change the **Name** to **AOS Workspace**.
+      No instructions or add
+  
+    - Click on the **Create** button.
+  
+
+
+You now have a workspace for your AOS. Before you can create your AOS, you first need to install the **AOS Factory** plugin.
+
+### Install AOS Factory plugin
+
+1. Using **Claude Desktop**:
+   
+   - Click on the **Cowork** tab at the top of the lefthand navigation pane.
+   - Click on **Customize** button
+   - Click on **Browse plugins** button
+   - Click on **Personal** button
+   - Click on Plus sign (**+**) to add new plugin
+   - Click on **Add Marketplace** button
+   - Click on **Add from a repository** button
+   - Enter this URL: [https://github.com/neoClarity-AI/neoClarity-Plugins](https://github.com/neoClarity-AI/neoClarity-Plugins)
+   - Click on the **Sync** button
+   - Click on the **Aos factory** plugin.
+   - Click on the **Install** button.
+   - Verify that the **Install** button had changed to a **Manage** button.
+     The plugin is now installed!
+   - Click the back arrow ()
+   
+2. To complete the setup, copy the template files into your AOS workspace root folder. Here's how:
+
+   - Click on the **Cowork** tab at the top of the lefthand navigation pane.
+
+   - Click on **Projects** in the nav menu.
+
+   - Click on the **AOS Workspace** project.
+
+   - Set the model to **Sonnet Medium**. This model works well for most **AOS** tasks.
+
+   - Type this prompt into the message box:
+
+     **Copy the template files from the AOS Factory into the project root folder.**
+
+You're now ready to create your first AOS instance!
 
 
 ## Usage
 
 To create your first AOS instance, invoke the build process as follows. The factory will walk you through the steps.
 
-- **In Claude Cowork:** Open the **AOS** project, then type the prompt "Build an AOS"
+- **In Claude Cowork:** Open the **AOS Workspace** project, then type the prompt "Build an AOS"
 - **In Claude Code:** Type the command "/build-aos"
 
 After your AOS instance is created, refer to the user guide for that instance: `/[aos-instance-folder]/docs/aos-user-guide.html`. The [aos-instance-folder] is the name of your AOS instance in kebab format (ex. `Personal AOS` would be `personal-aos`).
 
 
 
-## Workspace-root files
+## Workspace root files
 
-`aos-router.md` (instance router) and `CLAUDE.md` (project / session-start
-instructions) govern selection across instances and the factory. They live at
-your workspace root, above any instance. Example copies are in `templates/`;
-copy them to your workspace root after install and edit for your setup.
+The AOS Factory plugin contains two template files (**CLAUDE.md** and **aos-router.md**) that must be in your workspace root folder. Both of these files are required for your AOS to work correctly.
 
-See `builder-changelog.md` for version history.
+These two files contain important instructions that include:
+
+- How to operate in **Planning Mode**.
+- Which AOS instance to use when you start a new conversation in the **AOS Workspace**.
+
+## Planning Mode
+
+If you start any conversation with the words, "Planning mode" or "P mode" or "pmode", Claude will not create, edit, or delete any file until you give it the instruction to "Proceed" (using that exact word). Planning mode means the session is for discussing and designing changes — not implementing them. Instead, Claude will display proposed changes and ask you to proceed. You can either continue the conversation or type "Proceed" to implement the proposed changes. It's a great way to collaborate with Claude without creating unintended changes.
 
 ## Skills
 
