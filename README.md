@@ -6,15 +6,15 @@ The **Open AOS Factory** builds and maintains one or more **Agentic Operating Sy
 
 **What is an Agentic Operating System?**
 
-An Agentic Operating System is not a piece of software you install — it is a structured workspace that gives your LLM a persistent identity, a memory, and a set of specialized agents, each with clear responsibilities, boundaries, and escalation rules. The AOS runs inside your Claude project folder. Once built, Claude reads the agent files at the start of every session and behaves consistently across conversations, routing tasks to the right agent, remembering context, and following the rules you approved when the system was set up.
+An Agentic Operating System is not a piece of software you install. It is a structured workspace that gives your LLM a persistent identity, a memory, and a set of specialized agents, each with clear responsibilities, boundaries, and escalation rules. The AOS runs inside your Claude project folder. Once built, Claude reads the agent files at the start of every session and behaves consistently across conversations, routing tasks to the right agent, remembering context, and following the rules you approved when the system was set up.
 
 ---
 
 ## Prerequisites
 
 - **Claude Cowork** (recommended for non-technical users) or **Claude Code** (v2.1.128 or later, required for zip-based plugin install)
-- A workspace folder that Claude can read and write — Cowork will ask you to select one during setup
-- No coding required; the factory is entirely conversational
+- A workspace folder that Claude can read and write to.
+- No coding required. The factory is entirely conversational
 
 ---
 
@@ -22,9 +22,9 @@ An Agentic Operating System is not a piece of software you install — it is a s
 
 You can adopt the factory at whatever depth suits you:
 
-- **A Claude plugin** — easy install, no clutter.
-- **A prebuilt factory** — fork the full repo to run it directly (built with Claude Opus 4.8, and can be rebuilt with newer models as they ship).
-- **The design spec** — this is the best way to modify the factory itself and contribute to the open source project. Only pull requests for the design spec will be considered.
+- **A Claude plugin:** easy install, no clutter.
+- **A prebuilt factory:** fork the full repo to run it directly (built with Claude Opus 4.8, and can be rebuilt with newer models as they ship).
+- **The design spec:** this is the best way to modify the factory itself and contribute to the open source project. Only pull requests for the design spec will be considered.
 
 ### Quick Start with the Claude Plugin
 
@@ -32,7 +32,7 @@ These steps are written for Claude Cowork users. Claude Code users can follow th
 
 1. **Install the plugin.** Go to the plugin repo and follow the instructions there: [https://github.com/neoClarity-AI/neoClarity-Plugins/tree/main/aos-factory](https://github.com/neoClarity-AI/neoClarity-Plugins/tree/main/aos-factory). 
 2. **Open a new session** in your **AOS Workspace** project, then issue the prompt: Build an AOS.
-3. **Start the build.** Type: `Build my AOS` — Claude will open the master builder and begin the setup interview.
+3. **Start the build.** Type: `Build my AOS`. Claude will open the master builder and begin the setup interview.
 4. **Answer the interview questions.** The builder acts as an executive coach and collaborator, asking about your work style, the agents you want, and how you want the system to behave. It recommends sensible defaults and documents decisions as it goes.
 5. **Review the proposed files.** Before anything is created, Claude shows you exactly what it plans to write.
 6. **Type `Proceed`** to authorize file creation. Nothing is written until you do.
@@ -43,31 +43,31 @@ These steps are written for Claude Cowork users. Claude Code users can follow th
 
 ## Key Features
 
-**Governance-first architecture.** Every AOS includes four required governance agents that must be set up before any productive agents are added. These agents own the system's safety, memory, coordination, and quality — not any one task domain.
+**Governance-first architecture.** Every AOS includes four required governance agents that must be set up before any productive agents are added. These agents own the system's safety, memory, coordination, and quality, not any one task domain.
 
-**Non-destructive by default.** No agent may delete, overwrite, rename, move, or bulk-modify files without explicit user approval. When in doubt, agents create a new file, append to a log, or ask for clarification rather than modify something that already exists.
+**Non-destructive by default.** No agent may delete, overwrite, rename, move, or bulk-modify files without explicit user approval. When in doubt, agents create a new file, append to a log, or ask for clarification rather than modify something that already exists. Every Level 2 action requires the user to type exactly `Proceed`. A summarized description of the action is not enough. Anything short of that exact word is treated as a hold. This applies to the factory builders and to agents in a running AOS instance alike.
 
-**Three-level permission model.** Actions are classified as Level 1 (safe autonomous — the agent may act without asking), Level 2 (approval-required — the agent must describe the action and ask the user to type `Proceed`), or Level 3 (prohibited — the agent must not do this at all). The global tool-access matrix is the authoritative source for permissions and overrides any agent-level setting in the event of a conflict.
+**Three-level permission model.** Actions are classified as Level 1 (safe autonomous: the agent may act without asking), Level 2 (approval-required: the agent must describe the action and ask the user to type `Proceed`), or Level 3 (prohibited: the agent must not do this at all). The global tool-access matrix is the authoritative source for permissions and overrides any agent-level setting in the event of a conflict.
 
-**`Proceed` gate.** Every Level 2 action requires the user to type exactly `Proceed`. A summarized description of the action is not enough; anything short of that exact word is treated as a hold. This applies to the factory builders and to agents in a running AOS instance alike.
+**Single Responsibility Principle.** Each agent has a defined purpose, a list of explicit non-responsibilities, and clear escalation rules. The Chief of Staff coordinates and routes. It does not absorb work that belongs to a specialized agent.
 
-**Single Responsibility Principle.** Each agent has a defined purpose, a list of explicit non-responsibilities, and clear escalation rules. The Chief of Staff coordinates and routes; it does not absorb work that belongs to a specialized agent.
+**Works for personal and professional use.** The factory is designed as a reusable template. A user can build a personal AOS, a work AOS, or both, as sibling instances in the same workspace (see Repository Structure below). The user can build as many AOS instances as they need, with each specialized for a specific purpose. A routing mechanism activates the appropriate AOS and agents for a specific task.
 
-**Works for personal and professional use.** The factory is designed as a reusable template. A user can build a personal AOS, a work AOS, or both — as sibling instances in the same workspace (see Repository Structure below). The user can build as many AOS instances as they need, with each specialized for a specific purpose. A routing mechanism activates the appropriate AOS and agents for a specific task.
+**Scheduled, recurring work.** Agents don't only act when prompted. They run on a cadence. Each AOS includes daily, weekly, monthly, and quarterly operating rhythms: a daily start-of-day briefing and inbox pass driven by the Chief of Staff, plus a weekly review, a monthly health check and user-guide refresh, and a quarterly retrospective owned by the Review Agent. You approve the schedule once. The system maintains the rhythm so routine work happens on its own.
 
 ## Key Benefits
 
-**You can trust it with real work.** Governance comes first, not as an afterthought. Before any productive agent is added, four governance agents — security, memory, coordination, and quality review — are already in place. The system never deletes, overwrites, or moves your files on its own; anything consequential waits for you to type one word: `Proceed`.
+**You can trust it with real work.** Governance comes first, not as an afterthought. Before any productive agent is added, four governance agents (security, memory, coordination, and quality review) are already in place. The system never deletes, overwrites, or moves your files on its own. Anything consequential waits for you to type one word: `Proceed`.
 
-**It's built for non-technical people.** Setup is an interview, not a config file. You talk; it builds. There's no command grammar to memorize — you trigger things by plain intent ("Start my day," "Process my inbox").
+**It's built for non-technical people.** Setup is an interview, not a config file. You talk. It builds. There's no command grammar to memorize. You trigger things by plain intent ("Start my day," "Process my inbox").
 
 **It documents and improves itself.** Every system generates its own plain-language user guide, and a built-in review agent keeps it clean daily, healthy monthly, and aligned with your goals quarterly. It gets better on a schedule instead of rotting.
 
-**It grows with you.** Run one AOS or many — work, personal, a client project — side by side, with smart routing that always picks the right one and never mixes their memories. Add new agents anytime without redesigning anything.
+**It grows with you.** Run one AOS or many (work, personal, a client project) side by side, with smart routing that always picks the right one and never mixes their memories. Add new agents anytime without redesigning anything.
 
 **It's designed to be forked and extended.** Everything is plain markdown built from standardized schemas. The whole system is generated from one canonical design spec, so the design, the docs, and even this pitch can't quietly drift apart. That same discipline is what makes outside contribution easy.
 
-**It's portable.** Tuned for Claude Cowork, it runs in Claude Code today and adapts to other LLMs, because it avoids platform lock-in wherever a portable approach exists.
+**It's portable.** Tuned for Claude Cowork, it runs in Claude Code today and adapts to other LLMs, because the design spec is generic in nature.
 
 ---
 
@@ -75,7 +75,7 @@ These steps are written for Claude Cowork users. Claude Code users can follow th
 
 | Agent | Role |
 |---|---|
-| **Chief of Staff Agent** *(required)* | Owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination; joint owner of the instance router |
+| **Chief of Staff Agent** *(required)* | Owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination. Joint owner of the instance router |
 | **Security / Permissions Agent** *(required)* | Owns the global permission rules, tool-access matrix, approval requirements, and safety checks |
 | **Memory Agent** *(required)* | Owns shared memory structure, memory hygiene, preference capture, and cross-agent memory routing |
 | **Review / Reflection Agent** *(required)* | Owns completeness audits, consistency checks, retrospectives, and quality review |
@@ -99,30 +99,37 @@ At least one optional productive agent must be added before initial AOS setup is
 ## Repository Structure
 
 ```
-AOS/                             ← project root
+Open AOS Factory/                ← project root
 │
-├── claude.md                    ← session-start instructions for Claude
+├── CLAUDE.md                    ← session-start instructions for Claude
 ├── aos-router.md                ← instance router (read first every session)
+├── README.md
+├── CONTRIBUTING.md
+├── LICENSE
 │
 ├── design-spec/                 ← canonical design specification document set
-│   └── aos-factory-design-specification.md  ← canonical design spec
+│   ├── aos-factory-design-specification.md  ← canonical design spec
+│   ├── aos-factory-generation-runbook.md    ← build/regeneration runbook
+│   └── aos-factory-revision-history.md      ← spec revision history
 │
 ├── aos-factory/                 ← factory source (not an AOS instance)
 │   ├── build-aos.md             ← entry-point pointer to the master builder
-│   ├── builders/                ← one builder file per agent + master build-aos
+│   ├── builder-changelog.md
+│   ├── builders/                ← 17 builder files (one per agent + master build-aos)
 │   └── logs/
 │       └── factory-routing-decision-log.md
 │
-└── dist/                        ← packaged plugin (what gets distributed)
+└── plugin/                      ← packaged plugin (what gets distributed)
     └── aos-factory/
         ├── .claude-plugin/
         │   └── plugin.json      ← plugin manifest
+        ├── README.md
+        ├── builder-changelog.md
         ├── skills/              ← 17 SKILL.md files, one per builder
-        ├── examples/            ← starter aos-router.md and claude.md to copy
-        └── builder-changelog.md
+        └── templates/           ← starter CLAUDE.md and aos-router.md to copy to workspace root
 ```
 
-AOS instances are created as **sibling folders** at the project root alongside `aos-factory/` — for example, `work-aos/` or `personal-aos/`. The factory never writes into an instance except through an authorized build.
+AOS instances are created as **sibling folders** at the project root alongside `aos-factory/`. For example: `work-aos/` or `personal-aos/`. The factory never writes into an instance except through an authorized build.
 
 ---
 
@@ -130,7 +137,7 @@ AOS instances are created as **sibling folders** at the project root alongside `
 
 **Design philosophy.** The **Open AOS Factory** applies the **Single Responsibility Principle** at every level: each agent owns exactly one domain, and coordination is the Chief of Staff's job rather than being absorbed into a catch-all central agent. The governance layer (the four required agents) is mandatory because safety, memory, coordination, and quality review must exist before any productive work happens. Optional productive agents are additive and replaceable.
 
-**`claude.md` and `aos-router.md`.** These two files are the load-bearing wiring of the system. `claude.md` is read by Claude at the start of every session; it sets Planning mode behavior and instructs Claude to resolve the active instance before doing anything else. `aos-router.md` is that resolution mechanism — it classifies each incoming request as targeting the factory, a specific AOS instance, or a cross-instance query, using a priority-ordered resolution chain (explicit user override → framework vs. instance → session pin → signal match → ask). Example copies of both files ship under `dist/aos-factory/examples/` and should be copied to the workspace root after install.
+**`CLAUDE.md` and `aos-router.md`.** These two files are the load-bearing wiring of the system. `CLAUDE.md` is read by Claude at the start of every session. It sets Planning mode behavior and instructs Claude to resolve the active instance before doing anything else. `aos-router.md` is that resolution mechanism: it classifies each incoming request as targeting the factory, a specific AOS instance, or a cross-instance query, using a priority-ordered resolution chain (explicit user override → framework vs. instance → session pin → signal match → ask). Example copies of both files ship under `plugin/aos-factory/templates/` and should be copied to the workspace root after install.
 
 **Builder schema.** Each builder file in `builders/` follows a standardized YAML front matter schema (`title`, `file_type`, `builder_version`, `schema_version`, `created_date`, `last_updated`, `status`, `compatible_aos_versions`, `requires_approval_for_overwrite`) and a common markdown section structure: Builder Purpose, When to Use, Builder Operating Mode, Interview Flow, Discovery Questions, Recommended Defaults, Configuration Decisions, and Output Files. This consistency allows the factory to be extended with new agent builders without redesigning the document format.
 
@@ -151,7 +158,7 @@ AOS instances are created as **sibling folders** at the project root alongside `
   archive/
 ```
 
-**Versioning.** Builder and plugin versions are tracked in `dist/aos-factory/builder-changelog.md`. Instance-level changes belong in each instance's own `/logs/change-log.md`.
+**Versioning.** Builder and plugin versions are tracked in `plugin/aos-factory/builder-changelog.md`. Instance-level changes belong in each instance's own `/logs/change-log.md`.
 
 ---
 
