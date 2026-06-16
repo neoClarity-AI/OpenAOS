@@ -8,47 +8,13 @@ An Agentic Operating System is not a piece of software you install — it is a s
 
 ## Setup
 
-### Create Claude Cowork Project
+Follow these steps to create and use the Open AOS Factory in **Claude Cowork**.
 
-Follow these steps to create a new in **Claude Cowork** project. You will use this project to interact with all your AOS instances.
+### Install the Claude Cowork on your computer
 
-#### Useful resources
+**Claude Cowork** is a feature within the **Claude Desktop** application. Follow the instructions in this link to install it on your computer
 
 - [Getting Started with Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork)
-- [Getting Started with Claude Cowork projects](https://support.claude.com/en/articles/14116274-organize-your-tasks-with-projects-in-claude-cowork)
-
-
-
-1. Create a new folder called **AOS Workspace** on your computer. This will be the home for your AOS instances. 
-
-   - **For Windows:**
-     - Open the **Command Prompt** window. ([help](https://learn.microsoft.com/en-us/answers/questions/4197900/how-to-access-command-prompt))
-     - Type the command: `mkdir %USERPROFILE%"\Claude\AOS Workspace"` ([help](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/mkdir))
-     - Verify the directory exists: `chdir %USERPROFILE%"\Claude\AOS Workspace"` 
-   - **For Mac:** 
-     - TBD
-2. Open **Claude Desktop**. Using **Claude Desktop**:
-
-    - Click on the **Cowork** tab at the top of the lefthand navigation pane.
-      
-    - Click on **Projects** in the nav menu.
-      
-    - Click on the **New project** button.
-      
-    - Click on **Use an existing folder** option.
-      
-    - Click on **Select a folder...**
-      
-    - Double-click on the **Claude** folder, double-click on the **AOS Workspace** folder, then click on the **Select Folder** button.
-      
-    - Change the **Name** to **AOS Workspace**.
-      No instructions or add
-      
-    - Click on the **Create** button.
-
-
-
-You now have a workspace for your AOS. Before you can create your AOS, you first need to install the **AOS Factory** plugin.
 
 ### Install AOS Factory plugin
 
@@ -68,33 +34,63 @@ You now have a workspace for your AOS. Before you can create your AOS, you first
    - Verify that the **Install** button had changed to a **Manage** button.
      The plugin is now installed!
    - Click the back arrow ()
-   
 2. To complete the setup, copy the template files into your AOS workspace root folder. Here's how:
+
+   - Click on the **Cowork** tab at the top of the lefthand navigation pane.
+   - Click on **Projects** in the nav menu.
+   - Click on the **AOS Workspace** project.
+   - Set the model to **Sonnet Medium**. This model works well for most **AOS** tasks.
+   - Type this prompt into the message box: 
+     `Copy the template files from the AOS Factory into the project root folder.` 
+     Note: you need do this only once when setting up your **AOS Workspace**.
+
+### Create the AOS Workspace project
+
+The **AOS Factory** operates in the context of a **Claude Cowork Project** - a dedicated workspace within the **Claude Desktop** app that allow you to group related files, instructions, and tasks for a specific purpose. We will create a project called the **AOS Workspace**.  
+
+1. Create a new folder called **AOS Workspace** on your computer. This will be the home for your AOS instances. 
+
+   - **For Windows:**
+     - Open the **Command Prompt** window. ([help](https://learn.microsoft.com/en-us/answers/questions/4197900/how-to-access-command-prompt))
+     - Type the command: `mkdir %USERPROFILE%"\Claude\AOS Workspace"` ([help](https://learn.microsoft.com/en-us/windows-server/administration/windows-commands/mkdir))
+     - Verify the directory exists: `chdir %USERPROFILE%"\Claude\AOS Workspace"` 
+   - **For Mac:** 
+     - TBD
+2. Open **Claude Desktop**. Using **Claude Desktop**:
 
    - Click on the **Cowork** tab at the top of the lefthand navigation pane.
 
    - Click on **Projects** in the nav menu.
 
-   - Click on the **AOS Workspace** project.
+   - Click on the **New project** button.
 
-   - Set the model to **Sonnet Medium**. This model works well for most **AOS** tasks.
+   - Click on **Use an existing folder** option.
 
-   - Type this prompt into the message box:
+   - Click on **Select a folder...**
 
-     **Copy the template files from the AOS Factory into the project root folder.**
+   - Double-click on the **Claude** folder, double-click on the **AOS Workspace** folder, then click on the **Select Folder** button.
+
+   - Change the **Name** to **AOS Workspace**. 
+     No instructions or additional files are required.
+
+   - Click on the **Create** button.
 
 You're now ready to create your first AOS instance!
 
 
-## Create your first AOS Instance
+## Create your first AOS instance
 
 To create your first AOS instance, invoke the build process as follows. The factory will walk you through the steps.
 
-1. **Open a new session** in your **AOS Workspace** project, then issue the prompt: Build an AOS.
-2. **Start the build.** Type: `Build my AOS` — Claude will open the master builder and begin the setup interview.
-3. **Answer the interview questions.** The builder acts as an executive coach and collaborator, asking about your work style, the agents you want, and how you want the system to behave. It recommends sensible defaults and documents decisions as it goes. Recommended first agents to install: 
-4. **Review the proposed files.** Before anything is created, Claude shows you exactly what it plans to write.
-5. **Type `Proceed`** to authorize file creation. Nothing is written until you do.
+1. **Start a new session.** Using  Claude Desktop:
+   - Select the **Cowork** tab
+   - Click on Projects.
+   - Select the **AOS Workspace** project.
+   - **Start a new build.** Type this prompt into the message box: `Build an AOS.`
+
+2. **Answer the interview questions.** The builder acts as an executive coach and collaborator, asking about your work style, the agents you want, and how you want the system to behave. It recommends sensible defaults and documents decisions as it goes. Recommended first agents to install: 
+3. **Review the proposed files.** Before anything is created, Claude shows you exactly what it plans to write.
+4. **Authorize file creation.** Nothing is written until you do.
 
 After your AOS instance is created, start a new conversation in the AOS Workspace. Here are some prompts to get you started.
 

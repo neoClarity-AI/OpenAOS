@@ -159,30 +159,10 @@ AOS instances are created as **sibling folders** at the project root alongside `
 
 The canonical source of truth for the factory is `design-spec/aos-factory-design-specification.md`. It records every design decision made during the factory's development: the governance model, the permission levels, the folder schema, the builder section structure, agent responsibilities and boundaries, workflow definitions, escalation rules, and the framework-vs-instance layout. If the spec and a builder file ever disagree, the spec wins.
 
-The spec is also the correct starting point for any change to the factory itself. The workflow is: propose a change in the spec → review with the user → receive explicit approval → regenerate the affected builder file(s) → rebuild and repackage `dist/`. Direct edits to builder files in `builders/` or skill files in `dist/` without a corresponding spec update are discouraged; they create drift between the design record and the implementation.
-
-The spec uses the same `Proceed` gate as the rest of the system. No regeneration of factory files happens without that explicit authorization.
+The spec is also the correct starting point for any change to the factory itself. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contribution workflow.
 
 ---
 
 ## Contributing
 
-Contributions to the **Open AOS Factory** follow the same governance model the factory enforces for its own users: every change flows through the design specification first. Use this guide to learn how to contribute to this Github project: [Contributing to a project](https://docs.github.com/en/get-started/exploring-projects-on-github/contributing-to-a-project)
-
-**To propose a change:**
-
-1. Open `design-spec/aos-factory-design-specification.md` and identify the section(s) your change affects.
-2. Draft the proposed revision and discuss it in a Planning mode session (`pmode` at the start of your Claude session). Claude will not create or modify any files in this mode.
-3. Once the revision is agreed, type `Proceed` to authorize the spec update.
-4. Test your changes with these commands:
-
-   Rebuild the factory
-
-   Create a new AOS
-5. When ready, submit your design spec via a pull request. Only pull requests for the design spec will be considered.
-
-**What not to do:** Do not edit builder files in `builders/` or skill files in `dist/aos-factory/skills/` directly without first updating the spec. The spec is the design record; a builder that diverges from it is a bug.
-
-**Adding a new agent builder** follows the same sequence plus one additional step: add the new agent to the available-agent roster in the spec (Section 2.3 or equivalent), define its full section schema, then generate the builder file and SKILL.md together.
-
-For questions or to discuss larger architectural changes before drafting spec language, open an issue 
+Contributions follow the same governance model the factory enforces for its own users: every change flows through the design specification first, and **only pull requests for the design spec will be considered.** See **[CONTRIBUTING.md](CONTRIBUTING.md)** for the full workflow, including how to propose a change, add a new agent builder, and what not to edit directly.
