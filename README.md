@@ -8,13 +8,27 @@ The **Open AOS Factory** builds and maintains one or more **Agentic Operating Sy
 
 An Agentic Operating System is not a piece of software you install. It is a structured workspace that gives your LLM a persistent identity, a memory, and a set of specialized agents, each with clear responsibilities, boundaries, and escalation rules. The AOS runs inside your Claude project folder. Once built, Claude reads the agent files at the start of every session and behaves consistently across conversations, routing tasks to the right agent, remembering context, and following the rules you approved when the system was set up.
 
----
+### What Makes the Open AOS Factory Unique?
+
+The **Open AOS Factory** sits in three active areas of agent design and contributes a distinct combination rather than a single from-scratch invention.
+
+**1. A factory that builds operating systems, not just agents.** "Agent factory" tooling already exists (Microsoft's Agent Factory, Mozilla's "agent-factory", Oracle's Private Agent Factory, research like MetaGPT and Automated Design of Agentic Systems). All of them generate *individual agents* or *multi-agent workflows*. The **Open AOS Factory** instead generates a complete, governed **Agentic Operating System** (workspace, persistent identity, shared memory, governance layer, router, and a coordinated agent team) and it builds and maintains a **fleet** of these systems, not just one. Factory-of-systems, not factory-of-agents, is the difference.
+
+**2. A router that resolves across whole system instances.** Routing a request to the right *agent* is well-established. What's less common is a router that resolves across **separate, memory-isolated AOS instances** (for example, a personal AOS, a work AOS, a client AOS) using a priority-ordered resolution chain (explicit override → framework vs. instance → session pin → signal match → ask) where the router is itself a generated, spec-defined artifact that a non-technical user configures by talking, never by editing code.
+
+**3. Governance reified as mandatory agents that bootstrap the system.** "Governance-first" is now an emerging, named paradigm, but the literature treats governance as a *layer* or *control plane* bolted around the agents. This project makes governance **four required agents** (security/permissions, memory, coordination, and review/reflection) that *must* be instantiated before any productive agent exists. Governance isn't a wrapper; it's the founding membership of every system the factory builds.
+
+Individually, each idea has neighbors in the field. The **combination** (a factory that generates governed AOS instances as a fleet, a cross-instance router, governance reified as required agents, all regenerated from a single canonical spec, and aimed at non-technical users) is one we have not found assembled in any single existing project. That combination is the contribution.
+
+------
 
 ## Prerequisites
 
-- **Claude Cowork** (recommended for non-technical users) or **Claude Code** (v2.1.128 or later, required for zip-based plugin install)
-- A workspace folder that Claude can read and write to.
-- No coding required. The factory is entirely conversational
+The factory implementation included in this repo requires:
+
+- **A Claude subscription:** Claude Pro is the minimum subscription level, and it's sufficient for most uses of the **Open AOS Factory**. See the [Claude plans page](https://claude.com/pricing) for the available options.
+- **The Claude Desktop application:** Required to run [Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork).
+- **An active Internet connection:** Required by the Claude Desktop application.
 
 ---
 
