@@ -24,10 +24,10 @@ Individually, each idea has neighbors in the field. The **combination** (a facto
 
 ## Prerequisites
 
-The factory implementation included in this repo requires:
+The factory implementation included with this repo requires:
 
-- **A Claude subscription:** Claude Pro is the minimum subscription level, and it's sufficient for most uses of the **Open AOS Factory**. See the [Claude plans page](https://claude.com/pricing) for the available options.
 - **The Claude Desktop application:** Required to run [Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork).
+- **A Claude subscription:** Also required to run Claude Cowork. Claude Pro is the minimum subscription level, and it's sufficient for most uses of the **Open AOS Factory**. See the [Claude plans page](https://claude.com/pricing) for the available options.
 - **An active Internet connection:** Required by the Claude Desktop application.
 
 ---
