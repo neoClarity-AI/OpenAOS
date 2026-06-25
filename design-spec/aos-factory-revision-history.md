@@ -4,7 +4,7 @@ file_type: design_spec
 project: Script to Build Agentic OS Factory
 spec_version: 1.0.5
 created_date: 2026-06-02
-last_updated: 2026-06-11
+last_updated: 2026-06-25
 status: design_ready_for_factory_generation
 ---
 
@@ -26,6 +26,8 @@ Entries below are in reverse chronological order (newest first).
 ## Review Log (no-version entries)
 
 These entries record completed activities that did not change the design content and therefore did not increment `spec_version` (per the content-only versioning principle, §1.6.1).
+
+- **2026-06-25 — §36.1 Design Readiness Review against spec_version 1.0.5.** All three design-spec files were set to `in_review` and the §34.1 (20) and §34.2 (5) checklist items were reset, then independently re-verified and re-marked Done. The canonical design (Sections 1–32) was reviewed for logical consistency; roster/builder/workflow/template cross-counts were re-confirmed (4 required + 12 optional = 16 agent builders per §35.2/§7.3/§8.2; 9 workflows §17 and 6 templates §18 match the §6 list). No functionality-impacting inconsistencies were found and no design content changed, so no version increment was made. Noted: §34.2 item 1 ("No user-specific AOS instance will be generated yet") verifies cleanly under its current wording and no longer requires the N/A disposition applied to its older "no builder files" phrasing in the 1.0.3 cycle. The previously-dispositioned non-blocking observation (§27's agent-completeness list does not enumerate the §13/§15.4 Build Summary) remains "leave as-is." Statuses returned to `design_ready_for_factory_generation`.
 
 - **2026-06-11 — §36.1 Design Readiness Review against spec_version 1.0.5.** All §34.1 (20) and §34.2 (5) checklist items were reset, independently re-verified, and re-marked Done; the canonical design (Sections 1–32) was reviewed for logical consistency. No functionality-impacting inconsistencies were found and no design content changed, so no version increment was made. One non-blocking observation was noted and dispositioned "leave as-is" by the user: §27's enumerated agent-completeness list does not name the per-agent Build Summary (§13/§15.4), which is still produced via the §12 Handoff Summary step.
 

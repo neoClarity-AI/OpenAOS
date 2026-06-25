@@ -3,7 +3,7 @@ title: Builder Changelog
 file_type: builder_changelog
 spec_version: 1.0.5
 created_date: 2026-06-11
-last_updated: 2026-06-11
+last_updated: 2026-06-25
 status: active
 ---
 
@@ -49,6 +49,16 @@ tracks framework-file and packaging changes and ships inside the plugin
   `## Handoff Summary`). The remaining 16 framework files were verified
   byte-clean and schema-conformant and left unchanged. No spec change; no version
   bump.
+- **Conformance rebuild (2026-06-25, Section 36.2 pass).** A `Rebuild the
+  factory` pass re-verified all 19 framework files against the design spec at
+  `spec_version` 1.0.5 — the root entry `/build-aos.md`, the framework
+  `/builder-changelog.md`, the master `/builders/build-aos.md`, and all 16
+  agent builders. Every file was confirmed byte-clean (no NUL or control-byte
+  damage), free of the retired `builder_version`/`schema_version` fields,
+  correctly stamped `file_type` and `spec_version: 1.0.5`, and complete against
+  its required-heading schema (design spec Sections 12, 12.1). No file required
+  regeneration; the framework was already a faithful 1.0.5 rendering. No spec
+  change; no version bump (Section 14.1).
 - Source: design spec / runbook at `spec_version` 1.0.5.
 
 ### 1.0.4 — 2026-06-11
