@@ -2,15 +2,15 @@
 
 ## Why This Exists
 
-The Claude Code and Cowork ecosystem has no shortage of tooling. What it lacks is a governance-first reference implementation: a safe-by-default way for a non-technical person to assemble and actually trust a team of AI agents. The Open AOS Factory is built around that gap. Governance comes first, not as an afterthought. Every consequential action waits on a one-word human approval (`Proceed`), and the entire system is generated from a single canonical specification, so the design, the docs, and the shipped code cannot quietly drift apart.
+The Claude Code and Cowork ecosystem has no shortage of tooling. What it lacks is a governance-first reference implementation of a trustworthy, coordinated team of AI agents. What it needs is a safe-by-default way for a non-technical person to assemble and use such a team of agents. The **Open AOS Factory** is built to close that gap. Governance comes first, not as an afterthought. Every consequential action waits on a one-word human approval (`Proceed`), and the entire system is generated from a single canonical specification, so the design, the docs, and the shipped code cannot quietly drift apart.
 
 ## Overview
 
-The **Open AOS Factory** builds and maintains one or more **Agentic Operating System (AOS)** instances. Each AOS is a personal or professional AI standardized operating environment composed of specialized agents, workflows, memory files, templates, and configuration files that work together to create a complete agentic system. The factory guides both technical and non-technical users through setup via a conversational interview, produces all files automatically once approved, and can add or rebuild individual agents at any time. Although this particular implementation is configured to run on Claude Cowork (for non-technical users) or Claude Code (for developers), it can be easily ported to work with Codex and possibly other platforms.
+The **Open AOS Factory** builds and maintains one or more **Agentic Operating System (AOS)** instances. Each AOS is a personal or professional AI standardized operating environment composed of specialized agents, workflows, memory files, templates, and configuration files that work together to create a complete agentic system. The factory guides both technical and non-technical users through setup via a conversational interview, produces all files automatically once approved, and can add or rebuild individual agents at any time. Although this particular implementation is configured to run on Claude Cowork (for non-technical users) or Claude Code (for developers), the design spec is a portable artifact. it can be rendered on Codex or any similar agentic platform.
 
 **What is an Agentic Operating System?**
 
-An Agentic Operating System is not a piece of software you install. It is a structured workspace that gives your LLM a persistent identity, a memory, and a set of specialized agents, each with clear responsibilities, boundaries, and escalation rules. The AOS runs inside your Claude project folder. Once built, Claude reads the agent files at the start of every session and behaves consistently across conversations, routing tasks to the right agent, remembering context, and following the rules you approved when the system was set up.
+An Agentic Operating System is not a piece of software you install. It's a structured workspace that gives your LLM a persistent identity, a memory, and a set of specialized agents, each with clear responsibilities, boundaries, and escalation rules. The AOS runs inside your Claude project folder. Once built, Claude reads the agent files at the start of every session and behaves consistently across conversations, routing tasks to the right agent, remembering context, and following the rules you approved when the system was set up.
 
 ### What Makes the Open AOS Factory Unique?
 
@@ -97,7 +97,7 @@ If you're using VS Code with Claude Code, follow these instructions:
 
 **It's designed to be forked and extended.** Everything is plain markdown built from standardized schemas. The whole system is generated from one canonical design spec, so the design, the docs, and even this pitch can't quietly drift apart. That same discipline is what makes outside contribution easy.
 
-**It's portable.** Tuned for Claude Cowork, it runs in Claude Code today and adapts to other LLMs, because the design spec is generic in nature.
+**It's portable.** Tuned for Claude, it easily adapts to other LLMs
 
 ---
 
