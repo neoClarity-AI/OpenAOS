@@ -1,9 +1,9 @@
 ---
 title: Build Research Agent
 file_type: agent_builder
-spec_version: 1.0.5
+spec_version: 1.1.0
 created_date: 2026-06-03
-last_updated: 2026-06-11
+last_updated: 2026-06-25
 status: active
 compatible_aos_versions:
   - 1.x
@@ -46,7 +46,7 @@ Fuller optional-agent interview (Section 26): goals, scope, tools, output prefer
 
 - Confirm web-search access level in the matrix (Section 22).
 - Confirm output templates and citation conventions.
-- Confirm collaboration with Writing, Learning, and Document Librarian agents.
+- Confirm collaboration with Writing, Learning, and Document agents.
 
 ## Files to Create
 

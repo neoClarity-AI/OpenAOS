@@ -7,7 +7,7 @@
   "plugins": [
     {
       "name": "aos-factory",
-      "source": "./plugin/aos-factory",
+      "source": "./claude-plugin/aos-factory",
       "description": "Agentic Operating System (AOS) Factory — builders that stand up a complete AOS instance (four required governance agents, optional productive agents, workflows, templates, configs, logs, and a User Guide) and add or rebuild individual agents."
     }
   ]

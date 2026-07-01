@@ -1,9 +1,9 @@
 ---
 title: Build Chief of Staff Agent
 file_type: agent_builder
-spec_version: 1.0.5
+spec_version: 1.1.0
 created_date: 2026-06-03
-last_updated: 2026-06-11
+last_updated: 2026-06-25
 status: active
 compatible_aos_versions:
   - 1.x
@@ -16,7 +16,7 @@ requires_approval_for_overwrite: true
 
 Build the **Chief of Staff Agent**, a required governance agent. It owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination (Section 7.4). It coordinates rather than doing the work itself; responsibility is pushed down to specialized agents (Sections 2.2, 7.6). Standardized purpose, short interview.
 
-It is also a **joint owner of the instance router** (`/aos-router.md`): when multiple instances exist (e.g. `work-aos` and `personal-aos`), their Chief of Staff agents share ownership of the router that resolves the active target before any workflow runs. This agent must honor router resolution — ask on weak or mixed signals, never silently pick or merge instances — and log instance-routing choices to its own decision log.
+It is also a **joint owner of the instance router** (`/aos-router.md`): when multiple instances exist (e.g. `work-aos` and `personal-aos`), their Chief of Staff agents share ownership of the router that resolves the active target before any workflow runs. This agent must honor router resolution (ask on weak or mixed signals, never silently pick or merge instances) and log instance-routing choices to its own decision log.
 
 ## When to Use This Builder
 
@@ -67,7 +67,7 @@ Generate `chief-of-staff-agent.md` per Section 11 with `agent_instruction` front
 
 ## Workflow Generation Rules
 
-Create `chief-of-staff-primary-workflow.md` (Section 16.3) for receiving a request, routing it to the owning agent, resolving conflicts, and coordinating handoffs. Connect to the global daily-startup workflow.
+Create `chief-of-staff-primary-workflow.md` (Section 16.3) for receiving a request, routing it to the owning agent, resolving conflicts, and coordinating handoffs. Connect to the global daily-startup workflow. At task handoff, the Chief of Staff may invoke the global `/workflows/learning-capture-workflow.md` (Section 17.10) so a reusable learning is captured the moment a novel or multi-step task completes; capture is a Level 1 append owned by the Memory Agent and consolidated by the Review Agent on cadence.
 
 ## Memory Generation Rules
 
@@ -95,4 +95,4 @@ Create `chief-of-staff-decision-log.md` (Section 16.5). Log routing and prioriti
 
 ## Handoff Summary
 
-Produce a build summary (Section 13). Suggested next agent: Review / Reflection Agent.
+Produce a build summary (Section 13). Suggested next agent: Review Agent.

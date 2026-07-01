@@ -1,24 +1,24 @@
 ---
-title: Build Review / Reflection Agent
+title: Build Review Agent
 file_type: agent_builder
-spec_version: 1.0.5
+spec_version: 1.1.0
 created_date: 2026-06-03
-last_updated: 2026-06-11
+last_updated: 2026-06-25
 status: active
 compatible_aos_versions:
   - 1.x
 requires_approval_for_overwrite: true
 ---
 
-# Build Review / Reflection Agent
+# Build Review Agent
 
 ## Builder Purpose
 
-Build the **Review / Reflection Agent**, a required governance agent. It owns retrospectives, system improvement, weekly reviews, decision audits, AOS refinement, the AOS User Guide (`/docs/aos-user-guide.html`), and the instance version (`aos_version`). It regenerates the guide during the monthly review and reconciles `aos_version` then (Sections 7.4, 14.3.1, 16.6, 17.4). Standardized purpose, short interview.
+Build the **Review Agent**, a required governance agent. It owns retrospectives, system improvement, weekly reviews, decision audits, AOS refinement, the AOS User Guide (`/docs/aos-user-guide.html`), and the instance version (`aos_version`). It regenerates the guide during the monthly review and reconciles `aos_version` then (Sections 7.4, 14.3.1, 16.6, 17.4). It also owns **learning consolidation** (Section 17.10): during the weekly review it consolidates candidate learnings (merge, prune, promote to confirmed), and during the monthly review it performs deeper consolidation and may propose reusable templates from confirmed learnings, subject to `Proceed`. Standardized purpose, short interview.
 
 ## When to Use This Builder
 
-During initial AOS setup (via `/builders/build-aos.md`) or when restoring or rebuilding the Review / Reflection Agent.
+During initial AOS setup (via `/builders/build-aos.md`) or when restoring or rebuilding the Review Agent.
 
 ## Builder Operating Mode
 
@@ -39,6 +39,7 @@ Short batch interview (Section 9.1).
 - Primary owner of the weekly review (Section 17.3) and the monthly review, including the AOS User Guide regeneration (Section 17.4).
 - Owns and reconciles `aos_version` in `/aos-manifest.md`: reconciles against `/logs/change-log.md` at the monthly review and verifies it in the completeness audit; breaking/MAJOR bumps are applied at the time of change (Section 14.3.1). The triggering event is logged by the agent that made the change (Chief of Staff coordinating).
 - Supports the Memory Agent on the memory-review workflow (Section 17.9).
+- Owns learning consolidation (Section 17.10): in the weekly review, merge, prune, and promote candidate learnings to `## Confirmed Learnings` and update `/memory/agent-learnings-index.md` (status candidate to confirmed); in the monthly review, perform deeper consolidation and may propose reusable `/templates/` artifacts from confirmed learnings. Promotion that creates a template or changes behavior is Level 2 and requires `Proceed` (Sections 3.2, 17.10); per the drift invariant (Section 14.8) consolidation produces data-file artifacts only and never modifies framework-derived definition files.
 - Audits generated files for completeness and consistency (Section 27).
 - Regenerates the AOS User Guide as a projection (Sections 14.8, 16.6) rather than hand-editing prose; per the drift invariant (Section 14.8) it does not modify framework-derived definition files.
 - Review questions follow Section 25 (weekly: "What needs follow-up soon?"; monthly: "What is stale, misplaced, or structurally messy?"; quarterly: "Is the whole system still aimed at the right goals?").
@@ -67,7 +68,7 @@ Generate `review-agent.md` per Section 11 with `agent_instruction` frontmatter. 
 
 ## Workflow Generation Rules
 
-Create `review-primary-workflow.md` (Section 16.3) covering how a review is run, findings captured, and improvements proposed (each gated by `Proceed` where it would change files). Connect to the global weekly, monthly, and quarterly review workflows.
+Create `review-primary-workflow.md` (Section 16.3) covering how a review is run, findings captured, and improvements proposed (each gated by `Proceed` where it would change files). Connect to the global weekly, monthly, and quarterly review workflows, including candidate-learning consolidation in the weekly review and deeper consolidation plus template proposals in the monthly review (Sections 17.3-17.4, 17.10).
 
 ## Memory Generation Rules
 
@@ -88,6 +89,7 @@ Create `review-decision-log.md` (Section 16.5). Log review outcomes, audit findi
 [ ] Instruction file follows Section 11 schema with strong Non-Responsibilities.
 [ ] Ownership of weekly/monthly/quarterly reviews, the AOS User Guide (projection), and aos_version reconciliation documented.
 [ ] Completeness/consistency audit scope defined; drift invariant (Section 14.8) respected.
+[ ] Learning consolidation documented: weekly merge/prune/promote and monthly deeper consolidation + `Proceed`-gated template proposals (Sections 17.3-17.4, 17.10).
 [ ] Decision log present and append-only.
 [ ] Registry and map updated; build logged.
 ```

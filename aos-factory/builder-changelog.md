@@ -1,7 +1,7 @@
 ---
 title: Builder Changelog
 file_type: builder_changelog
-spec_version: 1.0.5
+spec_version: 1.1.0
 created_date: 2026-06-11
 last_updated: 2026-06-25
 status: active
@@ -9,7 +9,7 @@ status: active
 
 # Builder Changelog
 
-Tracks changes to the reusable AOS Factory framework itself — the root build
+Tracks changes to the reusable AOS Factory framework itself - the root build
 entry, the `/builders/build-*.md` files, and this changelog. Instance-level
 changes belong in each generated instance's `/logs/change-log.md` and
 `/logs/aos-decision-log.md`, not here (design spec Sections 14.5, 15.4).
@@ -25,12 +25,69 @@ tracks framework-file and packaging changes and ships inside the plugin
 
 ## Entries
 
+### 2026-06-30 — Document Librarian Agent renamed to Document Agent
+
+- **Manual rename, no spec_version bump.** Renamed `Document Librarian Agent` to
+  `Document Agent` across the framework (slug `document-librarian-agent` ->
+  `document-agent`) to match the corresponding design-spec rename:
+  - `/builders/build-document-librarian-agent.md` renamed to
+    `/builders/build-document-agent.md`; title, headings, file paths, and
+    generated-file names updated throughout (bare stem `document-librarian` ->
+    `document`).
+  - `agent-catalog.yaml` - updated the agent's `slug`, `display_name`, and
+    `artifacts_owned` path, plus cross-references from `writing-agent`'s
+    `collaborates_with` and `non_responsibilities`.
+  - `/builders/build-project-manager-agent.md` and
+    `/builders/build-research-agent.md` - updated collaboration mentions.
+  - Companion plugin files updated to match (see plugin changelog).
+- This is a hand-applied patch, not a full Section 36.2 regeneration; the
+  framework's `spec_version` stamp is unchanged. A future full rebuild from the
+  design spec will re-derive the same result.
+
+### 1.1.0 — 2026-06-25
+
+- **Full framework rebuild from the design spec at `spec_version` 1.1.0** under
+  the Section 36.2 generation workflow (`Rebuild the factory`). All 19 framework
+  files were regenerated and re-stamped from `spec_version` 1.0.5 to 1.1.0: the
+  root entry `/build-aos.md`, this `/builder-changelog.md`, the master
+  `/builders/build-aos.md`, and all 16 agent builders.
+- **Continuous Learning Loop wired into the affected builders** (the 1.1.0 spec
+  change; revision-history "Continuous Learning Loop", Sections 6.1, 7.4,
+  17.3-17.4, 17.10, 25):
+  - `/builders/build-aos.md` - added `/workflows/learning-capture-workflow.md`
+    to the Global Files to Create list and noted its Section 17.10 generation
+    (Memory owns intake, Chief of Staff invokes at handoff, Review consolidates).
+  - `/builders/build-memory-agent.md` - Memory Agent now owns the
+    learning-capture loop: candidate intake, the agent-learnings index,
+    candidate hygiene, the candidate-to-confirmed lifecycle, and primary
+    ownership of `/workflows/learning-capture-workflow.md` (capture is Level 1
+    append-only).
+  - `/builders/build-review-agent.md` - Review Agent now owns learning
+    consolidation: weekly merge/prune/promote to confirmed and monthly deeper
+    consolidation with `Proceed`-gated template proposals; consolidation is
+    data-file-only per the Section 14.8 drift invariant.
+  - `/builders/build-chief-of-staff-agent.md` - Chief of Staff may invoke the
+    learning-capture workflow at task handoff (Section 17.10).
+- **Display-name conformance.** Corrected the lingering "Review / Reflection
+  Agent" display name to "Review Agent" in `/builders/build-review-agent.md`
+  (title + headings) and in the Chief of Staff builder's suggested-next-agent
+  line, matching the shortened naming adopted spec-wide (revision history 1.0.1
+  item 13). Slugs (`review-agent`) were already short and are unchanged.
+- **The remaining 13 builders** (security, learning, inbox, calendar, task,
+  project-manager, research, writing, document-librarian, personal-crm, finance,
+  health-life-logistics, automation) and the root entry required no content
+  change beyond the `spec_version` re-stamp; the learning loop is additive and
+  does not touch their domains. All files remain free of the retired
+  `builder_version`/`schema_version` fields and conformant to their
+  required-heading schemas (Sections 12, 12.1).
+- Source: design spec / runbook at `spec_version` 1.1.0.
+
 ### 1.0.5 — 2026-06-11
 
 - Version model simplified across the framework files. Removed `builder_version`
   and `schema_version` from every builder file's frontmatter; added
   `spec_version` (= the spec the file was rendered from). `compatible_aos_versions`
-  retained as the separate builder→instance compatibility axis.
+  retained as the separate builder->instance compatibility axis.
 - Updated `/builders/build-aos.md`: stamps generated files with `spec_version`
   (instance files also `aos_version`), sets the initial instance `aos_version`
   to 1.0.0 and `Spec Version` in `/aos-manifest.md`, and generates the AOS User
@@ -51,7 +108,7 @@ tracks framework-file and packaging changes and ships inside the plugin
   bump.
 - **Conformance rebuild (2026-06-25, Section 36.2 pass).** A `Rebuild the
   factory` pass re-verified all 19 framework files against the design spec at
-  `spec_version` 1.0.5 — the root entry `/build-aos.md`, the framework
+  `spec_version` 1.0.5 - the root entry `/build-aos.md`, the framework
   `/builder-changelog.md`, the master `/builders/build-aos.md`, and all 16
   agent builders. Every file was confirmed byte-clean (no NUL or control-byte
   damage), free of the retired `builder_version`/`schema_version` fields,

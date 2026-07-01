@@ -19,7 +19,7 @@ Because everything is generated from this one canonical spec, the design, the do
 1. Open `design-spec/aos-factory-design-specification.md` and identify the section(s) your change affects.
 2. Draft the proposed revision and discuss it in a **Planning mode** session (`pmode` at the start of your Claude session). Claude will not create or modify any files in this mode.
 3. Once the revision is agreed, type `Proceed` to authorize the spec update. No regeneration of factory files happens without that explicit authorization.
-4. Regenerate the affected builder file(s), then rebuild and repackage `plugin/`. Test your changes with:
+4. Regenerate the affected builder file(s), then rebuild and repackage `claude-plugin/`. Test your changes with:
 
    - `Rebuild the factory`
    - `Create a new AOS`
@@ -36,7 +36,7 @@ Adding a new agent builder follows the same sequence above, plus one additional 
 
 ## What not to do
 
-Do not edit builder files in `builders/` or skill files in `plugin/aos-factory/skills/` directly without first updating the spec. The spec is the design record; a builder that diverges from it is a bug.
+Do not edit builder files in `builders/` or skill files in `claude-plugin/aos-factory/skills/` directly without first updating the spec. The spec is the design record; a builder that diverges from it is a bug.
 
 ---
 

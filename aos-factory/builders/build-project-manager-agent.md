@@ -1,9 +1,9 @@
 ---
 title: Build Project Manager Agent
 file_type: agent_builder
-spec_version: 1.0.5
+spec_version: 1.1.0
 created_date: 2026-06-03
-last_updated: 2026-06-11
+last_updated: 2026-06-25
 status: active
 compatible_aos_versions:
   - 1.x
@@ -47,7 +47,7 @@ Fuller optional-agent interview (Section 26): goals, scope, tools, output prefer
 
 - Confirm project naming uses file-safe slugs (Section 29).
 - Confirm review cadence and status conventions.
-- Confirm collaboration with Task, Calendar, and Document Librarian agents.
+- Confirm collaboration with Task, Calendar, and Document agents.
 
 ## Files to Create
 

@@ -468,7 +468,7 @@ The AOS Factory never writes files inside an AOS instance except through `/build
 
 # 5. Per-Agent Folder Structure
 
-In this document, the placeholder `[agent-name]` means the agent's **bare domain stem** in lowercase kebab-case, without the `-agent` suffix (for example `research`, `chief-of-staff`, `health-life-logistics`). The full agent folder/file slug is therefore `[agent-name]-agent` (for example `research-agent`). The names listed in Section 7.3 are these full folder slugs, not the bare `[agent-name]` value.
+In this document, the placeholder `[agent-name]` means the agent's **bare domain stem** in lowercase kebab-case, without the `-agent` suffix (for example `research`, `chief-of-staff`, `project-manager`). The full agent folder/file slug is therefore `[agent-name]-agent` (for example `research-agent`). The names listed in Section 7.3 are these full folder slugs, not the bare `[agent-name]` value.
 
 Each generated agent should use this structure:
 
@@ -582,18 +582,16 @@ The user must select at least one optional productive agent.
 Approved optional agents, in the desired order:
 
 ```text
-1. Learning / Tutor Agent
-2. Inbox / Communications Agent
-3. Calendar / Scheduling Agent
-4. Task / Commitment Agent
+1. Tutor Agent
+2. Inbox Agent
+3. Calendar Agent
+4. Task Agent
 5. Project Manager Agent
 6. Research Agent
-7. Writing / Content Agent
-8. Document Librarian Agent
+7. Writing Agent
+8. Document Agent
 9. Personal CRM Agent
-10. Finance / Admin Agent
-11. Health / Life Logistics Agent
-12. Automation / Tool-Use Agent
+10. Automation Agent
 ```
 
 ## 7.3 File-Safe Agent Names
@@ -605,17 +603,15 @@ security-agent
 memory-agent
 chief-of-staff-agent
 review-agent
-learning-agent
+tutor-agent
 inbox-agent
 calendar-agent
 task-agent
 project-manager-agent
 research-agent
 writing-agent
-document-librarian-agent
+document-agent
 personal-crm-agent
-finance-agent
-health-life-logistics-agent
 automation-agent
 ```
 
@@ -686,17 +682,15 @@ Approved structure:
   build-memory-agent.md
   build-chief-of-staff-agent.md
   build-review-agent.md
-  build-learning-agent.md
+  build-tutor-agent.md
   build-inbox-agent.md
   build-calendar-agent.md
   build-task-agent.md
   build-project-manager-agent.md
   build-research-agent.md
   build-writing-agent.md
-  build-document-librarian-agent.md
+  build-document-agent.md
   build-personal-crm-agent.md
-  build-finance-agent.md
-  build-health-life-logistics-agent.md
   build-automation-agent.md
 ```
 
@@ -1789,7 +1783,7 @@ Moving an item to `/inbox/processed` is treated as part of normal inbox processi
 Primary owner:
 
 ```text
-Chief of Staff Agent, with Inbox / Communications Agent support when installed.
+Chief of Staff Agent, with Inbox Agent support when installed.
 ```
 
 ## 17.7 Project Kickoff Workflow

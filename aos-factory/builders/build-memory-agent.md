@@ -1,9 +1,9 @@
 ---
 title: Build Memory Agent
 file_type: agent_builder
-spec_version: 1.0.5
+spec_version: 1.1.0
 created_date: 2026-06-03
-last_updated: 2026-06-11
+last_updated: 2026-06-25
 status: active
 compatible_aos_versions:
   - 1.x
@@ -14,7 +14,7 @@ requires_approval_for_overwrite: true
 
 ## Builder Purpose
 
-Build the **Memory Agent**, a required governance agent. It owns shared memory structure, memory hygiene, preference capture, and cross-agent memory routing (Section 7.4). Standardized purpose, so a short interview (Section 26).
+Build the **Memory Agent**, a required governance agent. It owns shared memory structure, memory hygiene, preference capture, and cross-agent memory routing (Section 7.4). It also owns the **learning-capture loop** (Section 17.10): intake of candidate learnings, the agent-learnings index (`/memory/agent-learnings-index.md`), and candidate-learning hygiene. Standardized purpose, so a short interview (Section 26).
 
 ## When to Use This Builder
 
@@ -38,6 +38,7 @@ Short batch interview (Section 9.1): confirm responsibilities, ask the questions
 
 - Use the six required global memory files and their boundaries (Section 20).
 - Apply the agent-learnings index model: a routing map, not a central dump (Section 6.1).
+- Apply the candidate to confirmed learning lifecycle (Sections 6.1, 17.10): candidate learnings are appended in-the-moment to each agent's `[agent-name]-learnings.md` under `## Candidate Learnings` (Level 1 safe autonomous append, never overwriting, Section 3.3) and registered in the index with status `candidate`; the Review Agent later promotes worthwhile candidates to `## Confirmed Learnings`. The index records, per learning, the owning agent, a one-line summary, status (candidate | confirmed | retired), and a link to the source entry.
 - Memory-worthy only if durable, useful, relevant, and likely to improve future assistance (Section 20.3).
 - Lightweight weekly review, deeper monthly review; never silently delete stale memory.
 
@@ -65,7 +66,7 @@ Generate `memory-agent.md` per Section 11 with `agent_instruction` frontmatter. 
 
 ## Workflow Generation Rules
 
-Create `memory-primary-workflow.md` (Section 16.3) for capturing, classifying, routing, and reviewing memory entries. The Memory Agent is primary owner of `/workflows/memory-review-workflow.md` at the global level.
+Create `memory-primary-workflow.md` (Section 16.3) for capturing, classifying, routing, and reviewing memory entries. The Memory Agent is primary owner of `/workflows/memory-review-workflow.md` and of `/workflows/learning-capture-workflow.md` (Section 17.10) at the global level: the latter is event-triggered (novel/multi-step task done, user correction or recovered failure, recurring pattern, or explicit user cue), with the Chief of Staff invoking it at task handoff and the Review Agent consolidating on cadence. Capture appends a candidate entry plus an index row only; any promotion, template creation, or behavior change is deferred to the Review Agent and is `Proceed`-gated (Sections 3.2, 17.10).
 
 ## Memory Generation Rules
 
@@ -86,6 +87,7 @@ Create `memory-decision-log.md` (Section 16.5). Log memory-routing decisions, se
 [ ] Instruction file follows Section 11 schema with strong Non-Responsibilities.
 [ ] Memory boundaries and governance rules documented.
 [ ] Sensitive-entry approval path defined with Security Agent.
+[ ] Learning-capture loop documented: candidate intake, the agent-learnings index, and candidate hygiene (Sections 6.1, 17.10).
 [ ] Decision log present and append-only.
 [ ] Registry and map updated; build logged.
 ```

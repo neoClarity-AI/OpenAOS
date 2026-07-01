@@ -105,17 +105,15 @@ No AOS instance should be generated in this first generation phase unless the us
 /builders/build-memory-agent.md
 /builders/build-chief-of-staff-agent.md
 /builders/build-review-agent.md
-/builders/build-learning-agent.md
+/builders/build-tutor-agent.md
 /builders/build-inbox-agent.md
 /builders/build-calendar-agent.md
 /builders/build-task-agent.md
 /builders/build-project-manager-agent.md
 /builders/build-research-agent.md
 /builders/build-writing-agent.md
-/builders/build-document-librarian-agent.md
+/builders/build-document-agent.md
 /builders/build-personal-crm-agent.md
-/builders/build-finance-agent.md
-/builders/build-health-life-logistics-agent.md
 /builders/build-automation-agent.md
 ```
 
@@ -174,41 +172,9 @@ Read the source file `design-spec/aos-factory-design-specification.md` (Section 
    3.5 `README.md` — author or refresh the plugin install and usage instructions.
 4. Apply the global file-safety and overwrite-approval model: for every existing file the preview would overwrite (e.g. when refreshing `plugin/aos-factory/`), list it explicitly and flag it as an overwrite. Never silently overwrite (Section 28).
 5. Present the full preview (files to create, files to overwrite, manifest version) and answer any user questions.
-6. Wait for the user to type exactly: Proceed — to authorize plugin generation. This gate authorizes only writing the plugin directory; it does not authorize the local-load test (Section 36.4), zip packaging (step 10), or marketplace publishing (step 11). Each of those is a separate, action-specific approval (Section 2.5).
-7. Only after that exact instruction, write the plugin files. If the framework changed since the last packaging, set `plugin.json` version to the framework `spec_version` it was generated from (never an independent bump; design spec Section 14.1) and add a `/builder-changelog.md` entry.
+6. Wait for the user to type exactly: Proceed — to authorize plugin generation. This gate authorizes only writing the plugin directory; it does not authorize zipping, local-load testing, or marketplace publishing (those remain manual — Section 28.2 steps 5-8).
+7. Only after that exact instruction, write the plugin files. If the framework changed since the last packaging, bump `plugin.json` version and add a `/builder-changelog.md` entry.
 8. Validate the generated plugin against Section 28.2 and the QA checks in Sections 27 and 34: confirm `.claude-plugin/plugin.json` is present and well-formed, every builder maps to a `skills/build-*/SKILL.md`, each `SKILL.md` frontmatter has `name` and `description`, and any in-skill file references resolve.
-9. Local-load test (verification gate). Before any packaging or publishing, run the local-load test in Section 36.4 against the written plugin directory. If it does not load cleanly or a builder skill is not invocable, fix the plugin and re-run; do not proceed to packaging until it passes. The local-load test is read-only and creates no files, so it needs no Proceed.
-10. Zip packaging (separate gate). Only after the local-load test passes:
-   10.1 Confirm the toolchain prerequisite: Claude Code v2.1.128 or later is required to load a plugin from a .zip (Section 28.2 step 6).
-   10.2 Present the exact archive command and output path, writing nothing — create `aos-factory-<version>.zip` (where `<version>` is the `plugin.json` version, i.e. the framework `spec_version`) as a zip of the `plugin/aos-factory/` directory so that `.claude-plugin/plugin.json` sits at the archive's expected root.
-   10.3 Wait for the user to type exactly: Proceed — to authorize writing the archive. This approval is specific to creating this one archive and does not authorize publishing.
-   10.4 After Proceed, create the .zip and report its path and size. Overwriting an existing same-named archive requires a fresh Proceed, flagged as an overwrite (Section 3.2).
-11. Marketplace publishing (separate gate). Publishing is a Section 3.2 approval-required action ("Publish content") and pushes to an external host, so it always requires its own Proceed and is never bundled with the steps above:
-   11.1 Sync the version: the plugin version always equals the `spec_version` of the design specification the framework was generated from (design spec Sections 14.1, 14.2; step 3.1) — it is never assigned independently. A framework change can only originate in a `spec_version` increment, so set `plugin.json` to that `spec_version` and add a matching `/builder-changelog.md` entry (step 7; Section 28.2 step 8), keeping the plugin-root changelog in sync with the framework changelog.
-   11.2 Create or update `.claude-plugin/marketplace.json` listing the plugin (at minimum a name and source). URL-based marketplaces must reference external sources (GitHub, npm, or git URLs); use a Git-based marketplace for plugins referenced by relative path (Section 28.2 step 7).
-   11.3 Notify the user that the project is ready to be published to Github. Instructed the user to tag, stage, commit, merge and push the changes to Github.
 
-Do not add, modify, or delete any plugin files, write any distribution archive, or publish to any marketplace unless the user types exactly: Proceed — for that specific action. Each gate (plugin write, zip packaging, marketplace publish) is approved separately (Section 2.5); the local-load test in Section 36.4 is read-only and ungated.
+Do not add, modify, or delete any plugin files unless the user types exactly: Proceed.
 ```
-
-### 36.4 Plugin Local-Load Test
-
-When the user requests to "Test the plugin" or "Local-load test the plugin", or as the verification gate in Section 36.3 step 9. This is a manual, read-only check that the packaged plugin loads and its builders are invocable before any zip packaging (Section 36.3 step 10) or marketplace publishing (Section 36.3 step 11). It creates, modifies, deletes, and publishes nothing, so it requires no Proceed.
-
-```
-Precondition: the plugin directory exists at the target path (default `plugin/aos-factory/`), written under Section 36.3. Claude Code must be installed (v2.1.128 or later if loading from a .zip; Section 28.2 step 6).
-
-1. Load the plugin without installing it, pointing Claude Code at the plugin directory:
-   claude --plugin-dir plugin/aos-factory
-   (To test the packaged archive instead, unzip `aos-factory-<version>.zip` and load its contents; loading a .zip requires Claude Code v2.1.128+.)
-2. Confirm the plugin is recognized: it loads with no manifest errors and its builder skills are listed — one `build-aos` skill plus one `build-[agent]-agent` skill per roster agent (17 total).
-3. Smoke-test invocation in a scratch AOS Workspace (not a real instance):
-   3.1 Trigger the master builder (e.g. ask to "set up my AOS") and confirm `build-aos` activates and begins its interview without writing files.
-   3.2 Trigger one agent builder (e.g. "Build the Research Agent") and confirm `build-research-agent` activates and produces its dry-run / pre-build preview.
-   3.3 Confirm no files are created — every builder must stop at the Proceed gate (design spec Sections 9.1, 28).
-4. Confirm the shipped example workspace-root templates resolve: `templates/aos-router.md` and `templates/CLAUDE.md` exist, and `CLAUDE.md` imports `AGENTS.md` as intended.
-5. Record the result. On success, the plugin is cleared for packaging (Section 36.3 step 10). On failure, report the error, fix the plugin under Section 36.3 (re-running its Proceed-gated write if files must change), and re-run this test.
-
-This test does not add, modify, delete, or publish any files; no Proceed is required to run it.
-```
-

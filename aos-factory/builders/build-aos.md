@@ -1,9 +1,9 @@
 ---
 title: Build AOS
 file_type: aos_builder
-spec_version: 1.0.5
+spec_version: 1.1.0
 created_date: 2026-06-03
-last_updated: 2026-06-11
+last_updated: 2026-06-25
 status: active
 compatible_aos_versions:
   - 1.x
@@ -22,7 +22,7 @@ It produces a working AOS the user can operate immediately. It does not modify t
 
 Use this builder when the user wants to create their AOS for the first time, or to stand up an additional AOS instance. The user typically reaches it through the root entry `/build-aos.md`.
 
-Do not use it to add a single agent to an existing AOS — route that to the relevant `/builders/build-[agent-name]-agent.md`.
+Do not use it to add a single agent to an existing AOS - route that to the relevant `/builders/build-[agent-name]-agent.md`.
 
 ## Builder Operating Mode
 
@@ -50,13 +50,13 @@ The step-5 preview is shown before any files are created; it is distinct from th
 
 Ask in small batches:
 
-- What is this AOS for — personal, professional, or both? What outcomes matter most?
+- What is this AOS for - personal, professional, or both? What outcomes matter most?
 - What domains of work or life should it cover (for example: communications, scheduling, projects, research, writing, finance, health)?
 - What should the AOS be named? (Propose a default; the name sets the instance root folder.)
-- Which optional productive agents do you want first? (At least one is required — see Optional Agent Selection.)
+- Which optional productive agents do you want first? (At least one is required - see Optional Agent Selection.)
 - What are your communication and approval preferences (how cautious, how much autonomy)?
 - Are there tools the AOS should know it can or cannot use yet?
-- If this instance will run alongside another that shares an input channel (e.g. a single inbox feeding both `work-aos` and `personal-aos`), what **routing signals** distinguish it — its email aliases, sender domains, and project names? Capture these so `/aos-router.md` can differentiate instances rather than falling back to ASK.
+- If this instance will run alongside another that shares an input channel (e.g. a single inbox feeding both `work-aos` and `personal-aos`), what **routing signals** distinguish it - its email aliases, sender domains, and project names? Capture these so `/aos-router.md` can differentiate instances rather than falling back to ASK.
 
 ## Recommended Defaults
 
@@ -134,6 +134,7 @@ Create these global files at the instance root (Section 6):
 /workflows/project-kickoff-workflow.md
 /workflows/decision-capture-workflow.md
 /workflows/memory-review-workflow.md
+/workflows/learning-capture-workflow.md
 /templates/status-report-template.md
 /templates/project-brief-template.md
 /templates/decision-entry-template.md
@@ -143,11 +144,11 @@ Create these global files at the instance root (Section 6):
 /docs/aos-user-guide.html
 ```
 
-Generate each markdown file with the file-type schema from Section 16 and lightweight YAML frontmatter (Section 15), stamping `spec_version` (and `aos_version` on instance files) per the Section 15 stamping rule. Generate `/docs/aos-user-guide.html` as a **projection** (Sections 14.8, 16.6): assemble it from the skeleton plus current instance data (registry, map, permissions), including a mandatory Table of Contents (with in-page anchors), a seeded Change Log immediately after the TOC, and an Invocation Reference table scoped to the agents actually installed; carry metadata via meta tags / an HTML comment rather than YAML. The guide is regenerable, so it is treated as a definition file with its Change Log entries as the data input. Run the Section 16.6 consistency checks before finishing.
+Generate each markdown file with the file-type schema from Section 16 and lightweight YAML frontmatter (Section 15), stamping `spec_version` (and `aos_version` on instance files) per the Section 15 stamping rule. Generate `/workflows/learning-capture-workflow.md` per the Section 17.10 schema so the AOS captures candidate learnings in-the-moment (Memory Agent owns intake; the Chief of Staff invokes it at task handoff; the Review Agent consolidates candidates to confirmed on the weekly/monthly cadence - Sections 6.1, 7.4). Generate `/docs/aos-user-guide.html` as a **projection** (Sections 14.8, 16.6): assemble it from the skeleton plus current instance data (registry, map, permissions), including a mandatory Table of Contents (with in-page anchors), a seeded Change Log immediately after the TOC, and an Invocation Reference table scoped to the agents actually installed; carry metadata via meta tags / an HTML comment rather than YAML. The guide is regenerable, so it is treated as a definition file with its Change Log entries as the data input. Run the Section 16.6 consistency checks before finishing.
 
 ## Required Agent Orchestration
 
-Build all four governance agents by invoking their builders in order (governance before productivity — Section 1.6.2):
+Build all four governance agents by invoking their builders in order (governance before productivity - Section 1.6.2):
 
 ```text
 /builders/build-security-agent.md
@@ -177,11 +178,11 @@ Each builder creates that agent's standard file set (Section 5.1). Required-agen
 
 When this instance shares an input channel with another (e.g. one inbox feeds both `work-aos` and `personal-aos`), routing only produces different results once the instances' signals diverge. During the build, populate the instance-specific signals the router relies on so it can resolve automatically instead of asking every time:
 
-- Email aliases and sender domains tied to this instance → capture in `/memory/user-profile.md` and `/memory/people.md`.
-- This instance's project names → ensure `/memory/projects.md` is populated (the router matches `[instance]/projects` names).
+- Email aliases and sender domains tied to this instance: capture in `/memory/user-profile.md` and `/memory/people.md`.
+- This instance's project names: ensure `/memory/projects.md` is populated (the router matches `[instance]/projects` names).
 - Add the manifest pointer blockquote under `# AOS Manifest`: "Instance selection is governed by `/aos-router.md`. Do not assume this instance is active."
 
-Without these, the router correctly falls back to ASK rather than guessing — functional but noisier than necessary.
+Without these, the router correctly falls back to ASK rather than guessing - functional but noisier than necessary.
 
 ## Validation Checklist
 

@@ -2,9 +2,9 @@
 title: AOS Factory Design Specification — Revision History
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 1.0.5
+spec_version: 1.1.0
 created_date: 2026-06-02
-last_updated: 2026-06-25
+last_updated: 2026-06-30
 status: design_ready_for_factory_generation
 ---
 
@@ -16,6 +16,7 @@ Entries below are in reverse chronological order (newest first).
 
 | spec_version | Date       | Change |
 |--------------|------------|--------|
+| 1.1.0        | 2026-06-30 | Agent Catalog (extensibility, Phase 1 of v2.0): new §7A defines a framework-level, machine-checked agent identity/ownership catalog; `agent-catalog.yaml` authored for the full 16-agent §7.3 roster; §7.4 demoted to a generated view; §11/§12 made catalog projections; §10.3 gains the instance-scope overlap check (§10.3.1); §7.5 gains the Phase A/Phase B design-vs-build split; §14.8 and §15.4 updated for the new `agent_catalog` file type |
 | 1.0.5        | 2026-06-11 | Version model simplified: `builder_version`/`schema_version` collapsed into `spec_version`; `aos_version` assignment/increment rule + Review-Agent ownership added; definition/data file definitions + drift invariant added; AOS User Guide reclassified as a regenerable projection |
 | 1.0.4        | 2026-06-11 | §36.3 Claude Plugin Generation workflow authored; §28.2 aligned to the shipped plugin (examples/ → templates/, README.md added) |
 | 1.0.3        | 2026-06-11 | §36.1 Design Readiness Review cycle — checklists verified; §34.2 item 1 dispositioned N/A; §28.1 step 3 citation corrected; no functionality-impacting inconsistencies found |
@@ -27,9 +28,29 @@ Entries below are in reverse chronological order (newest first).
 
 These entries record completed activities that did not change the design content and therefore did not increment `spec_version` (per the content-only versioning principle, §1.6.1).
 
-- **2026-06-25 — §36.1 Design Readiness Review against spec_version 1.0.5.** All three design-spec files were set to `in_review` and the §34.1 (20) and §34.2 (5) checklist items were reset, then independently re-verified and re-marked Done. The canonical design (Sections 1–32) was reviewed for logical consistency; roster/builder/workflow/template cross-counts were re-confirmed (4 required + 12 optional = 16 agent builders per §35.2/§7.3/§8.2; 9 workflows §17 and 6 templates §18 match the §6 list). No functionality-impacting inconsistencies were found and no design content changed, so no version increment was made. Noted: §34.2 item 1 ("No user-specific AOS instance will be generated yet") verifies cleanly under its current wording and no longer requires the N/A disposition applied to its older "no builder files" phrasing in the 1.0.3 cycle. The previously-dispositioned non-blocking observation (§27's agent-completeness list does not enumerate the §13/§15.4 Build Summary) remains "leave as-is." Statuses returned to `design_ready_for_factory_generation`.
-
 - **2026-06-11 — §36.1 Design Readiness Review against spec_version 1.0.5.** All §34.1 (20) and §34.2 (5) checklist items were reset, independently re-verified, and re-marked Done; the canonical design (Sections 1–32) was reviewed for logical consistency. No functionality-impacting inconsistencies were found and no design content changed, so no version increment was made. One non-blocking observation was noted and dispositioned "leave as-is" by the user: §27's enumerated agent-completeness list does not name the per-agent Build Summary (§13/§15.4), which is still produced via the §12 Handoff Summary step.
+
+## 1.1.0 — Agent Catalog (Extensibility) (2026-06-30)
+
+Phase 1 of the v2.0 release (internal-only/v2.0-phased-plan.md): moved each agent's identity and ownership out of prose buried in `build-*-agent.md` builders and into a structured, machine-checkable, framework-level catalog. Single-responsibility and non-overlap are now verified, not merely asserted. Five open design decisions (O1–O5, from the catalog proposal / GitHub issue #4) were resolved with the user before any edit, all accepting the recommended default: pre_authorized_actions stays in the catalog (O1); the controlled-vocabulary rule stays in the spec while the vocabulary list lives in the catalog (O2); §7.4 is demoted to a generated view (O3); the instance-scope overlap check is specified in §10.3 (O4); agent creation is split into a Phase A design step and a Phase B build step (O5).
+
+1. **New §7A "Agent Catalog" section authored** — defines the catalog's intent and three-layer model (spec = rules, catalog = data, §11 instruction file = projection), the normative controlled-vocabulary rule, the per-agent entry schema, the catalog file's location/format/ownership (`/agent-catalog.yaml` at the AOS Factory root, YAML, framework-owned), and the Review Agent's eight validation procedures (V1–V8).
+
+2. **`agent-catalog.yaml` authored for the full §7.3 roster** — all 16 agents (4 governance, 12 productive) given validated entries: disjoint `domains_owned` drawn from the controlled vocabulary, disjoint `artifacts_owned`, reciprocal `collaborates_with` edges, and derived `non_responsibilities`. The three governance-pattern worked entries from the proposal (`inbox-agent`, `calendar-agent`, `security-agent`) were carried over verbatim; the remaining 13 were authored to the same schema and cross-checked against V3–V5.
+
+3. **§7.4 demoted to a generated view** — the required-agent responsibilities are now framed as a rendering of the catalog's `kind: governance` entries, reconciled to the catalog whenever a governance entry changes, per O3. §2.1 (Single Responsibility Principle) now points at catalog validation (§7A.5, §27) as its enforcement surface.
+
+4. **§11 and §12 made catalog projections** — §11's Purpose / Responsibilities / Non-Responsibilities / Inputs / Outputs / Collaboration Rules / Approval Requirements sections are now projected from the agent's catalog entry rather than hand-written; the remaining sections stay authored narrative. §12 gained a rendering rule for builders; §16.1 gained a one-line cross-reference note for `pre_authorized_actions` so agent configs don't restate the catalog (per O1).
+
+5. **§10.3 gains the instance-scope overlap check (new §10.3.1)** — per O4, the instance Agent Registry absorbs the catalog's ownership fields, and a new instance agent (including contributor/user-created agents) is validated against both the framework catalog's reserved domains and other agents already registered in that instance.
+
+6. **§7.5 rewritten for the Phase A / Phase B design-vs-build split** — per O5, agent creation remains a builder-framework capability (not a runtime Agent Maker Agent), now front-ended by a Phase A design-and-validate step ahead of the existing Phase B build interview.
+
+7. **§14.8 and §15.4 updated** — `agent-catalog.yaml` is classified as a definition file (framework-owned, read-only in instances); the instance registry's absorbed ownership fields are classified as data (targeted, approval-gated merge only). A new controlled `file_type` token, `agent_catalog`, was added to the §15.4 vocabulary and file-type-by-file table. §15.1/§15.2 note that the catalog's `catalog_version` + `spec_version` header keys satisfy the existing mandatory stamping rule.
+
+8. **§27 (Validation and QA) gained a checklist bullet** requiring catalog validation (§7A.5, V1–V8) to pass before an AOS or an agent build is considered complete.
+
+Deferred (explicitly out of scope for this release, per user instruction): the continuous learning-capture loop is not reintroduced. The public plugin is not re-packaged in this phase — that happens once, at the end of Phase 2 (platform portability), as v2.0.0 per the phased plan.
 
 ## 1.0.5 — Version Model Simplification and Drift Control (2026-06-11)
 

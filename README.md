@@ -2,7 +2,7 @@
 
 ## Why This Exists
 
-The Claude Code and Cowork ecosystem has no shortage of tooling. What it lacks is a governance-first reference implementation of a trustworthy, coordinated team of AI agents. What it needs is a safe-by-default way for a non-technical person to assemble and use such a team of agents. The **Open AOS Factory** is built to close that gap. Governance comes first, not as an afterthought. Every consequential action waits on a one-word human approval (`Proceed`), and the entire system is generated from a single canonical specification, so the design, the docs, and the shipped code cannot quietly drift apart.
+Claude Cowork and Claude Code give you a powerful general-purpose platform: project memory, skills, subagents, plugins, scheduled tasks, and a permission system. What they deliberately don't give you is framework for assembling those primitives into a trustworthy, coordinated team of agents. A non-technical person has no straightforward path from the generic platform to agents built for their own specific needs. The **Open AOS Factory** closes that gap. It lets anyone turn the general-purpose platform into purpose-built, governed agents through an interview-style conversation.  No config, no code. Governance comes first, not as an afterthought. Every consequential action waits on a one-word human approval (`Proceed`), and the entire system is generated from a single canonical specification, so the design, the docs, and the shipped code cannot quietly drift apart.
 
 ## Overview
 
@@ -20,9 +20,15 @@ The **Open AOS Factory** sits in three active areas of agent design and contribu
 
 **2. A router that resolves across whole system instances.** Routing a request to the right *agent* is well-established. What's less common is a router that resolves across **separate, memory-isolated AOS instances** (for example, a personal AOS, a work AOS, a client AOS) using a priority-ordered resolution chain (explicit override → framework vs. instance → session pin → signal match → ask) where the router is itself a generated, spec-defined artifact that a non-technical user configures by talking, never by editing code.
 
-**3. Governance reified as mandatory agents that bootstrap the system.** "Governance-first" is now an emerging, named paradigm, but the literature treats governance as a *layer* or *control plane* bolted around the agents. This project makes governance **four required agents** (security/permissions, memory, coordination, and review/reflection) that *must* be instantiated before any productive agent exists. Governance isn't a wrapper; it's the founding membership of every system the factory builds.
+**3. Mandatory governance agents that bootstrap the system.** "Governance-first" is now an emerging, named paradigm, but the literature treats governance as a *layer* or *control plane* bolted around the agents. This project makes governance **four required agents** (security/permissions, memory, coordination, and review/reflection) that *must* be instantiated before any productive agent exists. Governance isn't a wrapper; it's the founding membership of every system the factory builds.
 
-Individually, each idea has neighbors in the field. The **combination** (a factory that generates governed AOS instances as a fleet, a cross-instance router, governance reified as required agents, all regenerated from a single canonical spec, and aimed at non-technical users) is one we have not found assembled in any single existing project. That combination is the contribution.
+Individually, each idea has neighbors in the field. The **combination** of a factory that generates governed AOS instances as a fleet, a cross-instance router, governance reified as required agents, all regenerated from a single canonical spec, and aimed at non-technical users, is one we have not found assembled in any single existing project. That combination is the contribution.
+
+### How the Factory Relates to Claude Cowork and Claude Code
+
+The Factory is not a replacement for the Claude Cowork and Code. Rather, the Factory is complements and extends them. These platforms provide the primitives and stays general-purpose by design. The Factory turns those primitives into a specific, governed system shaped to a user's needs.
+
+Some of what the Factory adds is genuinely new ground: cross-instance routing with memory isolation, governance reified as required agents, and spec-driven regeneration of the whole system. Some of it deliberately overlaps the platform — most notably the `Proceed` gate (see below).
 
 ------
 
@@ -75,11 +81,11 @@ If you're using VS Code with Claude Code, follow these instructions:
 
 **Governance-first architecture.** Every AOS includes four required governance agents that must be set up before any productive agents are added. These agents own the system's safety, memory, coordination, and quality, not any one task domain.
 
-**Non-destructive by default.** No agent may delete, overwrite, rename, move, or bulk-modify files without explicit user approval. When in doubt, agents create a new file, append to a log, or ask for clarification rather than modify something that already exists. Every Level 2 action requires the user to type exactly `Proceed`. A summarized description of the action is not enough. Anything short of that exact word is treated as a hold. This applies to the factory builders and to agents in a running AOS instance alike.
-
 **Three-level permission model.** Actions are classified as Level 1 (safe autonomous: the agent may act without asking), Level 2 (approval-required: the agent must describe the action and ask the user to type `Proceed`), or Level 3 (prohibited: the agent must not do this at all). The global tool-access matrix is the authoritative source for permissions and overrides any agent-level setting in the event of a conflict.
 
-**Single Responsibility Principle.** Each agent has a defined purpose, a list of explicit non-responsibilities, and clear escalation rules. The Chief of Staff coordinates and routes. It does not absorb work that belongs to a specialized agent.
+**Non-destructive by default.** No agent deletes, overwrites, renames, moves, or bulk-modifies files without explicit approval — when in doubt it creates a new file, appends to a log, or asks. Every Level 2 action requires the user to type exactly `Proceed`; anything short of that exact word is a hold. This sits on top of the platform's own safeguards by design: Cowork and Code already gate consequential actions, but both will sometimes edit files before you're ready, so the `Proceed` gate guarantees nothing changes until you're satisfied and gives you a clean point to abandon a direction before anything is committed.
+
+**Single Responsibility Principle.** Each agent has a well-defined purpose and set of responsibilities. The Factory ensures that responsibilities don't overlap. For instance, the Chief of Staff agent coordinates and routes without taking on any other responsibilities.
 
 **Works for personal and professional use.** The factory is designed as a reusable template. A user can build a personal AOS, a work AOS, or both, as sibling instances in the same workspace (see Repository Structure below). The user can build as many AOS instances as they need, with each specialized for a specific purpose. A routing mechanism activates the appropriate AOS and agents for a specific task.
 
@@ -119,7 +125,7 @@ If you're using VS Code with Claude Code, follow these instructions:
 | Health / Life Logistics Agent | Manages health appointments, errands, and life logistics |
 | Learning / Tutor Agent | Builds study plans, explains concepts, and tracks learning goals |
 | Personal CRM Agent | Tracks people, relationships, interactions, and follow-ups |
-| Document Librarian Agent | Organizes, files, names, and retrieves documents |
+| Document Agent | Organizes, files, names, and retrieves documents |
 | Automation / Tool-Use Agent | Wires up tools, integrations, and repeatable automations |
 
 At least one optional productive agent must be added before initial AOS setup is considered complete.
@@ -149,7 +155,7 @@ Open AOS Factory/                ← project root
 │   └── logs/
 │       └── factory-routing-decision-log.md
 │
-└── plugin/                      ← packaged plugin (for Claude Cowork users)
+└── claude-plugin/               ← packaged plugin (for Claude Cowork users)
     └── aos-factory/
         ├── .claude-plugin/
         │   └── plugin.json      ← plugin manifest
@@ -167,7 +173,7 @@ AOS instances are created as **sibling folders** at the project root alongside `
 
 **Design philosophy.** The **Open AOS Factory** applies the **Single Responsibility Principle** at every level: each agent owns exactly one domain, and coordination is the Chief of Staff's job rather than being absorbed into a catch-all central agent. The governance layer (the four required agents) is mandatory because safety, memory, coordination, and quality review must exist before any productive work happens. Optional productive agents are additive and replaceable.
 
-**`CLAUDE.md` and `aos-router.md`.** These two files are the load-bearing wiring of the system. `CLAUDE.md` is read by Claude at the start of every session. It sets Planning mode behavior and instructs Claude to resolve the active instance before doing anything else. `aos-router.md` is that resolution mechanism: it classifies each incoming request as targeting the factory, a specific AOS instance, or a cross-instance query, using a priority-ordered resolution chain (explicit user override → framework vs. instance → session pin → signal match → ask). Example copies of both files ship under `plugin/aos-factory/templates/` and should be copied to the workspace root after install.
+**`CLAUDE.md` and `aos-router.md`.** These two files are the load-bearing wiring of the system. `CLAUDE.md` is read by Claude at the start of every session. It sets Planning mode behavior and instructs Claude to resolve the active instance before doing anything else. `aos-router.md` is that resolution mechanism: it classifies each incoming request as targeting the factory, a specific AOS instance, or a cross-instance query, using a priority-ordered resolution chain (explicit user override → framework vs. instance → session pin → signal match → ask). Example copies of both files ship under `claude-plugin/aos-factory/templates/` and should be copied to the workspace root after install.
 
 **Builder schema.** Each builder file in `builders/` follows a standardized YAML front matter schema (`title`, `file_type`, `builder_version`, `schema_version`, `created_date`, `last_updated`, `status`, `compatible_aos_versions`, `requires_approval_for_overwrite`) and a common markdown section structure: Builder Purpose, When to Use, Builder Operating Mode, Interview Flow, Discovery Questions, Recommended Defaults, Configuration Decisions, and Output Files. This consistency allows the factory to be extended with new agent builders without redesigning the document format.
 
@@ -188,7 +194,7 @@ AOS instances are created as **sibling folders** at the project root alongside `
   archive/
 ```
 
-**Versioning.** Builder and plugin versions are tracked in `plugin/aos-factory/builder-changelog.md`. Instance-level changes belong in each instance's own `/logs/change-log.md`.
+**Versioning.** Builder and plugin versions are tracked in `claude-plugin/aos-factory/builder-changelog.md`. Instance-level changes belong in each instance's own `/logs/change-log.md`.
 
 ---
 
