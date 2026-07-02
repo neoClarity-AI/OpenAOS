@@ -1,9 +1,9 @@
 ---
 title: Build Security Agent
 file_type: agent_builder
-spec_version: 1.1.0
-created_date: 2026-06-03
-last_updated: 2026-06-25
+spec_version: 2.0.0
+created_date: 2026-07-01
+last_updated: 2026-07-01
 status: active
 compatible_aos_versions:
   - 1.x
@@ -14,40 +14,51 @@ requires_approval_for_overwrite: true
 
 ## Builder Purpose
 
-Build the **Security / Permissions Agent**, a required governance agent. It owns permission rules, approval requirements, access boundaries, the tool access matrix, and safety checks (Section 7.4). This is a required core agent with a mostly standardized purpose, so its interview is short (Section 26).
+Build the Security Agent, the required governance agent that owns permission
+rules, approval requirements, access boundaries, the tool access matrix, and
+safety checks (catalog: `security-agent`).
 
 ## When to Use This Builder
 
-Use during initial AOS setup (invoked by `/builders/build-aos.md`) or when restoring or rebuilding the Security Agent. The AOS may not be considered complete without it.
+Invoked by `/builders/build-aos.md` while building the required governance layer
+(built before any productive agent, Section 1.6.2), or directly to (re)build the
+Security Agent in an existing instance. Refreshing an existing agent requires a
+separate `Proceed` (Section 3.2).
 
 ## Builder Operating Mode
 
-Coach + collaborator; default to dry-run / preview; create no files until the user types exactly `Proceed`. Apply the global file-safety rule throughout.
+Coach + collaborator (Section 1.5); dry-run / preview by default; create nothing
+until the user types `Proceed` (Section 3.1). Required-agent interview is short
+because the role is standardized (Section 26).
 
 ## Interview Flow
 
-Short batch interview (Section 9.1): confirm the standardized responsibilities, ask the few questions below, summarize, recommend defaults, then request `Proceed`.
+Batch pattern (Section 9.1). Keep it brief: confirm the instance's privacy
+sensitivity and any tools already known, preview the file set, then wait for
+`Proceed`.
 
 ## Discovery Questions
 
-- Are there any tools, data sources, or actions the user wants prohibited outright from the start?
-- Are there actions the user wants to pre-authorize beyond the global defaults (kept minimal)?
-- How sensitive is the user about privacy and external communication (affects escalation thresholds)?
+- How privacy-sensitive is this AOS? (scales escalation thresholds)
+- Which tools/integrations are already in use, and at what access level?
+- Any actions that must always require approval beyond the Section 3 defaults?
 
 ## Recommended Defaults
 
-- Adopt the global three-level permission model unchanged (Section 3.4).
-- Treat the global tool access matrix as the single source of truth (Section 22).
-- Default new tools to `Not configured` until access is explicitly granted.
-- Escalate all permission, privacy, and prohibited-action questions to this agent.
+- Adopt the Section 3 three-level permission model unchanged as the baseline.
+- Seed `/configs/tool-access-matrix.md` with every known tool defaulted to
+  `Not configured` until access is explicitly granted (Section 22).
+- Sensitive-memory approvals handled jointly with the Memory Agent (Section 20.3).
 
 ## Configuration Decisions
 
-- Confirm that agent configs reference global permissions and the tool access matrix rather than duplicating or overriding them (Sections 3.5, 16.1, 22).
-- Decide initial access levels for any tools the user has named.
-- Confirm sensitive-memory questions route here in partnership with the Memory Agent.
+- Default privacy sensitivity (standard vs. high).
+- Initial tool-access rows and their levels (Allowed / Read-only /
+  Approval-required / Prohibited / Not configured).
 
 ## Files to Create
+
+Standard agent file set (Section 5.1):
 
 ```text
 /agents/security-agent/security-agent.md
@@ -59,37 +70,72 @@ Short batch interview (Section 9.1): confirm the standardized responsibilities, 
 /agents/security-agent/logs/security-decision-log.md
 ```
 
+The Security Agent also owns `/configs/tool-access-matrix.md`, created by
+`build-aos.md` and maintained by this agent (Section 22).
+
 ## Agent Instruction Generation Rules
 
-Generate `security-agent.md` using the Section 11 agent schema with `file_type: agent_instruction` frontmatter (Section 15.2). Emphasize the **Non-Responsibilities** section (this agent governs, it does not do productive domain work). Document its ownership of the tool access matrix, approval gating, and safety audits, and its role as the escalation target for permission, privacy, and prohibited-action questions (Section 24).
+Render `security-agent.md` to the Section 11 schema. Project the **identity**
+sections from the `security-agent` entry in `agent-catalog.yaml` (§7A) — do not
+hand-author them:
+
+- Purpose ← `one_line`: owns permission rules, approval requirements, access
+  boundaries, the tool access matrix, and safety checks; escalation target for all
+  permission, access, and privacy questions.
+- Responsibilities ← `domains_owned`: `security.permissions`.
+- Non-Responsibilities ← derived: does not orchestrate/route (chief-of-staff), own
+  memory governance (memory), or run retrospectives (review).
+- Inputs ← none; Outputs ← `security.permissions`.
+- Collaboration Rules ← `collaborates_with`: receives matrix-change
+  recommendations from Chief of Staff and Review (Section 22); is the escalation
+  target for all other agents on permission/access/privacy conflicts (Section 24).
+- Approval Requirements ← `approval_required_actions` (grant/change/revoke any
+  tool-access entry) + `pre_authorized_actions` (read-only audits of permissions
+  and tool access).
+
+Project the **narrative** sections (Workflows, Autonomy Rules, Escalation Rules,
+Operating Procedure, Quality Standards, Failure Modes, Example Requests,
+Maintenance Notes) from `agent-profiles/security-agent.md` (§7B), tailored with
+instance choices. Use direct imperative language and include examples (Section 32).
 
 ## Workflow Generation Rules
 
-Create `security-primary-workflow.md` (Section 16.3) covering how the agent reviews a proposed action, classifies it by permission level, and approves, gates with a `Proceed` request, or refuses. Create agent-specific workflows only when useful.
+Create `security-primary-workflow.md` (Section 16.3): review a proposed action →
+classify by the three-level model (Section 3.4) → approve (Level 1) / gate with a
+`Proceed` request (Level 2) / refuse (Level 3). Add domain workflows only when
+useful (Section 26).
 
 ## Memory Generation Rules
 
-Create `security-memory.md` and `security-learnings.md` (Section 16.2). Store durable security and permission patterns; route sensitive entries through the explicit-approval rule (Section 20.3).
+Seed `security-memory.md` and `security-learnings.md` per Section 16.2, empty of
+fabricated content. Record permission decisions and effective safety patterns;
+route sensitive items through approval (Section 20.3).
 
 ## Config Generation Rules
 
-Create `security-config.md` (Section 16.1). `Inherited Rules` references global permissions; `Tool Access` references the authoritative matrix and lists only agent-specific notes (Sections 3.5, 16.1, 22).
+Write `security-config.md` (Section 16.1). `Inherited Rules` references
+`/configs/global-permissions.md` rather than duplicating it; `Tool Access`
+references `/configs/tool-access-matrix.md` as authoritative and lists only
+agent-specific notes (Sections 3.5, 22).
 
 ## Logging Rules
 
-Create `security-decision-log.md` (Section 16.5), newest entries on top. Log permission changes, tool-access decisions, and refused/escalated actions (Section 19.3).
+Append-only `security-decision-log.md` (Section 16.5), newest on top. Log
+permission changes, refusals, escalations, and matrix edits (Section 19.3).
 
 ## Validation Checklist
 
-```text
-[ ] Standard seven-file set created.
-[ ] Instruction file follows Section 11 schema with strong Non-Responsibilities.
-[ ] Config references global permissions and the tool access matrix (no duplication/override).
-[ ] Primary workflow covers classify / approve / gate / refuse.
-[ ] Decision log present and append-only.
-[ ] Registry and map updated; build logged.
-```
+- Full Section 5.1 file set present; frontmatter stamped `spec_version: 2.0.0` +
+  `aos_version`.
+- Identity rendered from the catalog entry; narrative from the profile; nothing
+  restated by hand.
+- Tool access matrix present and authoritative; no tool left usable while
+  `Not configured`.
+- Catalog validation V1–V8 passes for this entry (Section 7A.5).
 
 ## Handoff Summary
 
-Produce a build summary (Section 13): Files Created, Key Decisions, User Preferences Captured, Permissions and Boundaries, Open Questions, Suggested Next Agent (recommend Memory Agent next).
+Emit the Section 13 Build Summary to
+`/agents/security-agent/logs/security-build-summary.md` (file_type
+`build_summary`): files created, key decisions, preferences captured, permissions
+and boundaries, open questions, and suggested next agent (typically Memory Agent).

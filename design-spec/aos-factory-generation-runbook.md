@@ -2,9 +2,9 @@
 title: AOS Factory Generation Runbook
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 1.0.5
+spec_version: 2.0.0
 created_date: 2026-06-02
-last_updated: 2026-06-11
+last_updated: 2026-07-01
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -31,6 +31,15 @@ interpreted and maintained going forward.
 - The revision history and spec_version follow the format and increment rule
   in the specification's "Revision History" section: one increment and one
   consolidated entry per completed maintenance action.
+- No user-specific AOS instance may be generated during the framework build
+  phase; instance generation happens only if the user separately requests it
+  after the Builder framework exists.
+- No existing file may be overwritten without explicit user approval.
+- Any actual generation action requires the user to type exactly `Proceed`.
+- Refreshing, replacing, or overwriting existing builder files requires a
+  separate `Proceed` approval.
+- Deleting, renaming, moving, archiving, publishing, sending, spending, or
+  sharing private information requires explicit user approval.
 ```
 
 Operational gates derived from these rules — the contradiction/gap check,
@@ -39,9 +48,7 @@ and the exact `Proceed` approval — are enforced in Sections 34 and 35.
 
 ---
 
-# 34. AOS Factory Design Checklists
-
-## 34.1 Design Completion Checklist
+# 34. Design Completion Checklist
 
 ```text
 [x] Required governance agents are defined.
@@ -66,15 +73,6 @@ and the exact `Proceed` approval — are enforced in Sections 34 and 35.
 [x] Agent Maker Agent ambiguity has a recommended default.
 ```
 
-## 34.2 Safety Confirmation Checklist
-
-```text
-[x] No user-specific AOS instance will be generated yet.
-[x] No existing files will be overwritten without explicit approval.
-[x] Any actual generation action requires the user to type exactly: Proceed.
-[x] Refreshing, replacing, or overwriting existing builder files requires a separate Proceed approval.
-[x] Deleting, renaming, moving, archiving, publishing, sending, spending, or sharing private information requires explicit approval.
-```
 # 35. AOS Factory Generation
 
 ## 35.1 Generation Rules
@@ -89,6 +87,7 @@ When generating an AOS Factory instance, you must follow these rules.
 - Include all approved agent builder files.
 - Include dry-run / preview mode in all builders.
 - Include approval gates before any file overwrite or refresh.
+- Render factory-root copies of `agent-catalog.yaml` and `agent-profiles/[agent-name]-agent.md` from the design-spec sources (design spec Sections 7A.4, 7B.2); they are read-only inside instances.
 - Stamp every generated file's frontmatter with the `spec_version` it was rendered from (design spec Sections 14.1–14.2, 15.1). Do not emit `builder_version` or `schema_version`; those have been collapsed into `spec_version`.
 
 ## 35.2 Generation Scope
@@ -100,6 +99,8 @@ No AOS instance should be generated in this first generation phase unless the us
 ```text
 /build-aos.md
 /builder-changelog.md
+/agent-catalog.yaml
+/agent-profiles/[agent-name]-agent.md   (one per Section 7.3 agent — 14 files)
 /builders/build-aos.md
 /builders/build-security-agent.md
 /builders/build-memory-agent.md
@@ -131,9 +132,9 @@ When the user requests a "Design Readiness Review", using this workflow.
 Read the source file `design-spec/aos-factory-design-specification.md`.
 1. Verify with the user that we are entering a Design Readiness Review. When the user types "Proceed", do the following:
    1.1 Update all design specs with the status of "in_review".
-   1.2 In Section "34. AOS Factory Design Checklists", mark every checklist item as Not Done. (Replace [ ] with [ ]).
-2. Conduct a completeness check by verifying each item in the "34.1 Design Completion Checklist". When an item has been verified, mark it as Done (Replace [ ] with [x]). Report any missing items and recommended actions. Repeat this step until you have marked all items Done.
-3. Conduct a safety check by verifying each item in the "34.2 Safety Confirmation Checklist". Report any safety issues and recommended actions. Repeat this step until you have marked all items Done.
+   1.2 In Section "34. Design Completion Checklist", mark every checklist item as Not Done. (Replace [ ] with [ ]).
+2. Conduct a completeness check by verifying each item in the "34. Design Completion Checklist". When an item has been verified, mark it as Done (Replace [ ] with [x]). Report any missing items and recommended actions. Repeat this step until you have marked all items Done.
+3. Conduct a safety check by verifying the design complies with each safety-related governance rule in Section 33. Report any safety issues and recommended actions.
 4. Review the design in "aos-factory-design-specification.md" for logical consistency. Report any inconsistencies to the user. Include only inconsistencies that impact the functionality of the factory it generates. If no such inconsistencies exist then inform the user. Otherwise, work with the user to resolve each issue one at a time. For each issue, offer the user options and a recommendation.
 5. When all inconsistencies are resolved, present the consolidated resolutions and wait for the user to type exactly: Proceed — to finalize the consistency review. This gate authorizes only finalization of the review and update of the spec, not the generation of AOS Factory files.
 6. Repeat steps 1 and 2 until no more issues are surfaced.
@@ -146,8 +147,8 @@ When the user requests to "Build the factory" or "Rebuild the factory" or "Gener
 
 ```
 Read the source file `design-spec/aos-factory-design-specification.md`.
-1. Verify that all items in the "34.1 Design Completion Checklist" are marked Done ([x]). If any items are not Done, notify the user and stop this workflow.
-2. Verify that all items in the "34.2 Safety Confirmation Checklist" are marked Done ([x]). If any items are not Done, notify the user and stop this workflow.
+1. Verify that all items in the "34. Design Completion Checklist" are marked Done ([x]). If any items are not Done, notify the user and stop this workflow.
+2. Verify the design complies with the safety-related governance rules in Section 33. If any are not satisfied, notify the user and stop this workflow.
 3. Review the proposed Builder generation scope (Section 35) and plan with the user.
 4. Answer any additional user questions about the design or generation plan.
 5. Wait for the user to type exactly: Proceed — to authorize generation.
@@ -163,14 +164,14 @@ When the user requests to "Build the plugin" or "Generate the plugin", using thi
 ```
 Read the source file `design-spec/aos-factory-design-specification.md` (Section 28) and the generated framework files from Section 36.2.
 1. Verify the precondition: the generated AOS Factory framework files from Section 35.2 exist — the root entry `/build-aos.md`, all `/builders/build-*.md`, and `/builder-changelog.md`. If any are missing, notify the user that the factory must be generated first (Section 36.2) and stop this workflow.
-2. Set the target plugin directory (default: refresh the canonical `plugin/aos-factory/`). Read Section 28.2 for the required plugin layout and packaging steps.
+2. Set the target plugin directory (default: refresh the canonical `claude-plugin/aos-factory/`, the path the repo's `.claude-plugin/marketplace.json` publishes as its `source`). Read Section 28.2 for the required plugin layout and packaging steps.
 3. Build a dry-run preview — list every file to be created or overwritten, writing nothing:
    3.1 `.claude-plugin/plugin.json` — manifest: name `aos-factory`, version synced to the framework `spec_version` (design spec Section 14.1) and `/builder-changelog.md`, plus description, author, keywords.
    3.2 `skills/build-*/SKILL.md` — one skill per builder. Convert each `/builders/build-*.md` into a `SKILL.md` whose frontmatter carries `name` and an invocation-oriented `description` (when-to-use triggers), with the builder body as the skill content. Map `/builders/build-aos.md` → `skills/build-aos/SKILL.md` and each `/builders/build-[agent]-agent.md` → `skills/build-[agent]-agent/SKILL.md`. The root `/build-aos.md` entry pointer is a framework-root convenience and is not packaged separately; the `build-aos` skill replaces it in plugin context.
    3.3 `builder-changelog.md` — copy the framework `/builder-changelog.md` to the plugin root.
    3.4 `templates/aos-router.md` and `templates/CLAUDE.md` — author the example workspace-root files the user copies to their AOS Workspace root after install (Section 28.2).
    3.5 `README.md` — author or refresh the plugin install and usage instructions.
-4. Apply the global file-safety and overwrite-approval model: for every existing file the preview would overwrite (e.g. when refreshing `plugin/aos-factory/`), list it explicitly and flag it as an overwrite. Never silently overwrite (Section 28).
+4. Apply the global file-safety and overwrite-approval model: for every existing file the preview would overwrite (e.g. when refreshing `claude-plugin/aos-factory/`), list it explicitly and flag it as an overwrite. Never silently overwrite (Section 28).
 5. Present the full preview (files to create, files to overwrite, manifest version) and answer any user questions.
 6. Wait for the user to type exactly: Proceed — to authorize plugin generation. This gate authorizes only writing the plugin directory; it does not authorize zipping, local-load testing, or marketplace publishing (those remain manual — Section 28.2 steps 5-8).
 7. Only after that exact instruction, write the plugin files. If the framework changed since the last packaging, bump `plugin.json` version and add a `/builder-changelog.md` entry.

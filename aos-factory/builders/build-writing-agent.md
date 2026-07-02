@@ -1,53 +1,58 @@
 ---
-title: Build Writing / Content Agent
+title: Build Writing Agent
 file_type: agent_builder
-spec_version: 1.1.0
-created_date: 2026-06-03
-last_updated: 2026-06-25
+spec_version: 2.0.0
+created_date: 2026-07-01
+last_updated: 2026-07-01
 status: active
 compatible_aos_versions:
   - 1.x
 requires_approval_for_overwrite: true
 ---
 
-# Build Writing / Content Agent
+# Build Writing Agent
 
 ## Builder Purpose
 
-Build the **Writing / Content Agent**, an optional productive agent that drafts, edits, and refines written content. A specialized worker, not a coordinator (Section 7.6).
+Build the Writing Agent, an optional productive agent that owns long-form content
+and drafting: documents, posts, and written deliverables distinct from message
+replies (catalog: `writing-agent`).
 
 ## When to Use This Builder
 
-When selected during setup, or later via "Build the Writing Agent" (Section 9.4).
+Invoked by `/builders/build-aos.md` when selected, or directly to add it later
+(Section 9.4). Specialized worker, not a coordinator (Section 7.6).
 
 ## Builder Operating Mode
 
-Coach + collaborator; default to dry-run / preview; create no files until the user types exactly `Proceed`.
+Coach + collaborator (Section 1.5); dry-run / preview by default; create nothing
+until `Proceed`. Fuller optional-agent interview (Section 26).
 
 ## Interview Flow
 
-Fuller optional-agent interview (Section 26): goals, scope, tools, output preferences, approval boundaries, collaboration.
+Batch pattern (Section 9.1): goals, scope, tools, voice/format preferences,
+approval boundaries, collaboration; summarize; recommend defaults; preview; wait
+for `Proceed`.
 
 ## Discovery Questions
 
-- What kinds of content will the agent produce, and for which audiences?
-- Voice, tone, and formatting preferences?
-- Where do drafts live, and what is the review process?
-- What publishing or sending requires approval?
+- What kinds of content, and for what audiences?
+- What voice, tone, and formatting conventions should drafts follow?
+- Should research come from the Research Agent when installed (Section 23)?
 
 ## Recommended Defaults
 
-- Drafting and editing are Level 1 safe; **publishing or sending content is approval-required** (`Proceed`) per Sections 3.2 and 22.
-- Capture durable voice/style preferences in memory (and in `/memory/preferences.md` when global).
-- Take research input from the Research Agent; do not collect sources itself when Research is installed (Section 23).
+- Brief intake → draft → revision → approval gate before any publish/send.
+- Take research input from Research rather than collecting sources itself.
+- Hand finished content to the Document Agent for filing.
 
 ## Configuration Decisions
 
-- Confirm publish/send tools are `Approval-required` in the matrix (Section 22).
-- Confirm voice/tone/format conventions and output templates.
-- Confirm collaboration with Research, Learning, and Inbox agents.
+- Content types; voice/tone/format; publish-approval rules.
 
 ## Files to Create
+
+Standard agent file set (Section 5.1):
 
 ```text
 /agents/writing-agent/writing-agent.md
@@ -61,35 +66,53 @@ Fuller optional-agent interview (Section 26): goals, scope, tools, output prefer
 
 ## Agent Instruction Generation Rules
 
-Generate `writing-agent.md` per Section 11 with `agent_instruction` frontmatter. Non-Responsibilities must state it drafts but does not publish/send without approval and does not collect primary research. Include example requests.
+Render `writing-agent.md` to the Section 11 schema. Project **identity** from the
+`writing-agent` catalog entry (§7A):
+
+- Purpose ← `one_line`: owns long-form content and drafting — documents, posts, and
+  written deliverables distinct from message replies.
+- Responsibilities ← `domains_owned`: `writing`.
+- Non-Responsibilities ← derived: does not conduct primary research (research),
+  triage/draft message replies (inbox), or file/archive finished documents
+  (document).
+- Inputs ← `research`; Outputs ← `writing`.
+- Collaboration Rules ← `collaborates_with`: receives research from Research; hands
+  off finished content to Document; escalates priority conflicts to Chief of Staff.
+- Approval Requirements ← `approval_required_actions` (publish or send finished
+  content externally); no pre-authorized exceptions.
+
+Project **narrative** sections from `agent-profiles/writing-agent.md` (§7B).
+Imperative language; include examples (Section 32).
 
 ## Workflow Generation Rules
 
-Create `writing-primary-workflow.md` (Section 16.3) for brief intake, drafting, revision, and an approval gate before any publish/send.
+Create `writing-primary-workflow.md` (Section 16.3): brief intake → drafting →
+revision → an approval gate before any publish or send.
 
 ## Memory Generation Rules
 
-Create `writing-memory.md` and `writing-learnings.md` (Section 16.2). Store voice/style preferences and reusable patterns.
+Seed `writing-memory.md` and `writing-learnings.md` per Section 16.2. Keep
+voice/style preferences and reusable patterns current; put global style in
+`/memory/preferences.md`.
 
 ## Config Generation Rules
 
-Create `writing-config.md` (Section 16.1) referencing global permissions; `Tool Access` references the matrix (publish/send = approval-required).
+Write `writing-config.md` (Section 16.1). `Tool Access` references the matrix:
+drafting = Allowed; external publishing = Approval-required (Section 22).
 
 ## Logging Rules
 
-Create `writing-decision-log.md` (Section 16.5). Log style decisions and approved publications.
+Append-only `writing-decision-log.md` (Section 16.5). Log publish approvals and
+important assumptions (Section 19.3).
 
 ## Validation Checklist
 
-```text
-[ ] Standard seven-file set created.
-[ ] Publishing/sending gated behind Proceed; drafting allowed.
-[ ] Voice/style conventions captured.
-[ ] Tool access references the global matrix.
-[ ] Decision log present and append-only.
-[ ] Registry and map updated; build logged.
-```
+- Full Section 5.1 file set present; frontmatter stamped.
+- Identity from catalog, narrative from profile.
+- No unapproved publish/send path; research and document handoffs wired in.
+- Catalog validation V1–V8 and profile validation V9–V10 pass for this entry.
 
 ## Handoff Summary
 
-Produce a build summary (Section 13) with a suggested next agent.
+Emit the Section 13 Build Summary to
+`/agents/writing-agent/logs/writing-build-summary.md` (file_type `build_summary`).

@@ -1,53 +1,60 @@
 ---
-title: Build Calendar / Scheduling Agent
+title: Build Calendar Agent
 file_type: agent_builder
-spec_version: 1.1.0
-created_date: 2026-06-03
-last_updated: 2026-06-25
+spec_version: 2.0.0
+created_date: 2026-07-01
+last_updated: 2026-07-01
 status: active
 compatible_aos_versions:
   - 1.x
 requires_approval_for_overwrite: true
 ---
 
-# Build Calendar / Scheduling Agent
+# Build Calendar Agent
 
 ## Builder Purpose
 
-Build the **Calendar / Scheduling Agent**, an optional productive agent that helps the user manage time, scheduling, and calendar logistics. A specialized worker, not a coordinator (Section 7.6).
+Build the Calendar Agent, an optional productive agent that owns scheduling:
+reading availability, proposing times, and creating or changing calendar events
+under approval (catalog: `calendar-agent`).
 
 ## When to Use This Builder
 
-When selected during setup, or later via "Build the Calendar Agent" (Section 9.4).
+Invoked by `/builders/build-aos.md` when selected, or directly to add it later
+(Section 9.4). Specialized worker, not a coordinator (Section 7.6).
 
 ## Builder Operating Mode
 
-Coach + collaborator; default to dry-run / preview; create no files until the user types exactly `Proceed`.
+Coach + collaborator (Section 1.5); dry-run / preview by default; create nothing
+until `Proceed`. Fuller optional-agent interview (Section 26).
 
 ## Interview Flow
 
-Fuller optional-agent interview (Section 26): goals, scope, tools, output preferences, approval boundaries, collaboration.
+Batch pattern (Section 9.1): goals, scope, calendar tools, approval boundaries,
+collaboration; summarize; recommend defaults; preview; wait for `Proceed`.
 
 ## Discovery Questions
 
-- Which calendars should the agent read and help manage?
-- Default working hours, focus blocks, and scheduling preferences?
+- Which calendar(s), and what read scope is approved?
+- Scheduling preferences (working hours, focus blocks, buffers)?
 - How should conflicts and double-bookings be handled?
-- What requires approval before changing (especially events involving other people)?
+- Confirm: all calendar modifications and any change involving other people
+  require `Proceed`.
 
 ## Recommended Defaults
 
-- Calendar read is allowed within approved scope; **calendar modify is approval-required**, especially when other people are involved (Sections 3.2, 22).
-- Propose schedules and focus blocks autonomously; apply changes only after `Proceed`.
+- Read within approved scope; propose times and focus blocks autonomously; apply
+  create/move/delete only after `Proceed`, with extra care for events involving
+  other people (Section 3.2).
 - Surface upcoming commitments in the daily startup brief (Section 17.1).
 
 ## Configuration Decisions
 
-- Confirm calendar read/modify access levels in the matrix (Section 22).
-- Confirm rules for events involving other people (Section 3.2).
-- Confirm collaboration with Inbox and Task agents.
+- Calendar sources and read scope; scheduling preferences; conflict rules.
 
 ## Files to Create
+
+Standard agent file set (Section 5.1):
 
 ```text
 /agents/calendar-agent/calendar-agent.md
@@ -61,35 +68,54 @@ Fuller optional-agent interview (Section 26): goals, scope, tools, output prefer
 
 ## Agent Instruction Generation Rules
 
-Generate `calendar-agent.md` per Section 11 with `agent_instruction` frontmatter. Non-Responsibilities must state it does not modify others' calendars or send invitations without approval. Include example requests.
+Render `calendar-agent.md` to the Section 11 schema. Project **identity** from the
+`calendar-agent` catalog entry (§7A):
+
+- Purpose ← `one_line`: owns scheduling — reading availability, proposing times,
+  and creating/changing events under approval.
+- Responsibilities ← `domains_owned`: `scheduling`.
+- Non-Responsibilities ← derived: does not triage/draft communications (inbox) or
+  own task tracking (task).
+- Inputs ← `communications.triage`, `task-tracking`; Outputs ← `scheduling`.
+- Collaboration Rules ← `collaborates_with`: receives event/booking handoffs from
+  Inbox and time-blocking handoffs from Task; escalates competing time demands to
+  Chief of Staff.
+- Approval Requirements ← `approval_required_actions` (create/move/delete an event;
+  any change involving other people); no pre-authorized exceptions.
+
+Project **narrative** sections from `agent-profiles/calendar-agent.md` (§7B).
+Imperative language; include examples (Section 32).
 
 ## Workflow Generation Rules
 
-Create `calendar-primary-workflow.md` (Section 16.3) for reviewing the calendar, proposing scheduling, and applying approved changes (modify gated by `Proceed`).
+Create `calendar-primary-workflow.md` (Section 16.3): review the calendar → propose
+scheduling → apply approved changes (modify gated by `Proceed`).
 
 ## Memory Generation Rules
 
-Create `calendar-memory.md` and `calendar-learnings.md` (Section 16.2). Store scheduling preferences and recurring commitments.
+Seed `calendar-memory.md` and `calendar-learnings.md` per Section 16.2. Track
+scheduling preferences and recurring commitments.
 
 ## Config Generation Rules
 
-Create `calendar-config.md` (Section 16.1) referencing global permissions; `Tool Access` references the matrix (modify = approval-required).
+Write `calendar-config.md` (Section 16.1). `Tool Access` references the matrix:
+calendar read = Allowed; calendar modify = Approval-required, especially with
+other people (Section 22).
 
 ## Logging Rules
 
-Create `calendar-decision-log.md` (Section 16.5). Log approved calendar changes and scheduling-rule decisions.
+Append-only `calendar-decision-log.md` (Section 16.5). Log approved calendar
+changes and escalations (Section 19.3).
 
 ## Validation Checklist
 
-```text
-[ ] Standard seven-file set created.
-[ ] Calendar modify gated behind Proceed; read allowed within scope.
-[ ] Other-people rule documented.
-[ ] Tool access references the global matrix.
-[ ] Decision log present and append-only.
-[ ] Registry and map updated; build logged.
-```
+- Full Section 5.1 file set present; frontmatter stamped.
+- Identity from catalog, narrative from profile.
+- No unapproved calendar-modify path; other-people rule honored.
+- Catalog validation V1–V8 and profile validation V9–V10 pass for this entry.
 
 ## Handoff Summary
 
-Produce a build summary (Section 13) with a suggested next agent.
+Emit the Section 13 Build Summary to
+`/agents/calendar-agent/logs/calendar-build-summary.md` (file_type
+`build_summary`).

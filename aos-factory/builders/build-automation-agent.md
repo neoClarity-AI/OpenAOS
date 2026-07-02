@@ -1,54 +1,64 @@
 ---
-title: Build Automation / Tool-Use Agent
+title: Build Automation Agent
 file_type: agent_builder
-spec_version: 1.1.0
-created_date: 2026-06-03
-last_updated: 2026-06-25
+spec_version: 2.0.0
+created_date: 2026-07-01
+last_updated: 2026-07-01
 status: active
 compatible_aos_versions:
   - 1.x
 requires_approval_for_overwrite: true
 ---
 
-# Build Automation / Tool-Use Agent
+# Build Automation Agent
 
 ## Builder Purpose
 
-Build the **Automation / Tool-Use Agent**, an optional productive agent that designs and runs automations and operates approved tools and integrations on the user's behalf. A specialized worker, not a coordinator (Section 7.6).
+Build the Automation Agent, an optional productive agent that owns automation and
+tool-use: scripting, integrations, and recurring automated actions on behalf of
+other agents (catalog: `automation-agent`).
 
 ## When to Use This Builder
 
-When selected during setup, or later via "Build the Automation Agent" (Section 9.4).
+Invoked by `/builders/build-aos.md` when selected, or directly to add it later
+(Section 9.4). Specialized worker, not a coordinator (Section 7.6).
 
 ## Builder Operating Mode
 
-Coach + collaborator; default to dry-run / preview; create no files until the user types exactly `Proceed`.
+Coach + collaborator (Section 1.5); dry-run / preview by default; create nothing
+until `Proceed`. Fuller optional-agent interview (Section 26). Because this agent
+operates tools, coordinate closely with Security, which owns the matrix
+(Section 22).
 
 ## Interview Flow
 
-Fuller optional-agent interview (Section 26): goals, scope, tools, output preferences, approval boundaries, collaboration.
+Batch pattern (Section 9.1): goals, scope, tools/integrations, approval
+boundaries, collaboration; summarize; recommend defaults; preview; wait for
+`Proceed`.
 
 ## Discovery Questions
 
-- What repetitive tasks does the user want automated?
-- Which tools/integrations are available, and which are off-limits?
-- How much should run autonomously versus with confirmation?
-- How should failures be reported?
+- What recurring actions or integrations should be automated?
+- Which tools are involved, and what is their matrix status?
+- Confirm: side-effecting runs (send/publish/spend/share/affect others) require
+  `Proceed`.
 
 ## Recommended Defaults
 
-- **New tools default to `Not configured`** and may not be used until access is explicitly granted in the matrix (Section 22).
-- Designing and documenting automations is Level 1 safe; running actions that send, publish, spend, share private info, or affect others is approval-required (Sections 3.2, 22).
-- Coordinate with the Security Agent, which owns the tool access matrix; this agent may request changes but does not grant access itself.
-- Report failed actions to the user and log those affecting future behavior (Section 24).
+- Design → validate tool access against the matrix → run approved steps → report
+  results and failures.
+- New tools default to `Not configured` and may not be used until access is
+  explicitly granted (Section 22); request changes from Security, never grant.
+- Accept recurring-task handoffs from the Task Agent.
 
 ## Configuration Decisions
 
-- Confirm initial tool access levels with the Security Agent (Section 22).
-- Confirm which automations may run autonomously versus gated.
-- Confirm failure-reporting and logging conventions.
+- Automations in scope; tools/integrations and their matrix status; approval
+  boundaries.
 
 ## Files to Create
+
+Standard agent file set (Section 5.1):
 
 ```text
 /agents/automation-agent/automation-agent.md
@@ -62,35 +72,54 @@ Fuller optional-agent interview (Section 26): goals, scope, tools, output prefer
 
 ## Agent Instruction Generation Rules
 
-Generate `automation-agent.md` per Section 11 with `agent_instruction` frontmatter. Non-Responsibilities must stress it does not grant its own tool access, does not use `Not configured` tools, and gates any send/publish/spend/share action behind approval. Include example requests.
+Render `automation-agent.md` to the Section 11 schema. Project **identity** from
+the `automation-agent` catalog entry (§7A):
+
+- Purpose ← `one_line`: owns automation and tool-use — scripting, integrations, and
+  recurring automated actions on behalf of other agents.
+- Responsibilities ← `domains_owned`: `automation`.
+- Non-Responsibilities ← derived: does not track tasks or commitments (task).
+- Inputs ← `task-tracking`; Outputs ← `automation`.
+- Collaboration Rules ← `collaborates_with`: receives recurring-task handoffs from
+  Task; escalates elevated/unclear tool access to Security and priority conflicts
+  to Chief of Staff.
+- Approval Requirements ← `approval_required_actions` (run an automation that
+  modifies files outside its own domain); no pre-authorized exceptions.
+
+Project **narrative** sections from `agent-profiles/automation-agent.md` (§7B).
+Imperative language; include examples (Section 32).
 
 ## Workflow Generation Rules
 
-Create `automation-primary-workflow.md` (Section 16.3) for designing an automation, validating tool access against the matrix, running approved steps, and reporting results/failures.
+Create `automation-primary-workflow.md` (Section 16.3): design an automation →
+validate tool access against the matrix → run approved steps → report results and
+failures.
 
 ## Memory Generation Rules
 
-Create `automation-memory.md` and `automation-learnings.md` (Section 16.2). Store automation definitions and reliability notes.
+Seed `automation-memory.md` and `automation-learnings.md` per Section 16.2. Keep
+automation definitions and reliability notes current.
 
 ## Config Generation Rules
 
-Create `automation-config.md` (Section 16.1) referencing global permissions; `Tool Access` references the authoritative matrix and lists only requests/notes (Section 22).
+Write `automation-config.md` (Section 16.1). `Tool Access` references the matrix:
+elevated/scripted access = Approval-required; never restates or overrides matrix
+grants (Section 22).
 
 ## Logging Rules
 
-Create `automation-decision-log.md` (Section 16.5). Log automation changes, approved runs of gated actions, and failures affecting future behavior.
+Append-only `automation-decision-log.md` (Section 16.5). Log tool-access requests,
+approved runs, and failed actions affecting future behavior (Sections 19.3, 24).
 
 ## Validation Checklist
 
-```text
-[ ] Standard seven-file set created.
-[ ] New tools default to Not configured; no use without granted access.
-[ ] Send/publish/spend/share actions gated behind Proceed.
-[ ] Tool access references the global matrix; Security owns grants.
-[ ] Decision log present and append-only.
-[ ] Registry and map updated; build logged.
-```
+- Full Section 5.1 file set present; frontmatter stamped.
+- Identity from catalog, narrative from profile.
+- No use of `Not configured` tools; side-effecting runs gated by `Proceed`.
+- Catalog validation V1–V8 and profile validation V9–V10 pass for this entry.
 
 ## Handoff Summary
 
-Produce a build summary (Section 13) with a suggested next agent.
+Emit the Section 13 Build Summary to
+`/agents/automation-agent/logs/automation-build-summary.md` (file_type
+`build_summary`).

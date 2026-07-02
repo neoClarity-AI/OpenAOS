@@ -1,9 +1,9 @@
 ---
 title: Build Review Agent
 file_type: agent_builder
-spec_version: 1.1.0
-created_date: 2026-06-03
-last_updated: 2026-06-25
+spec_version: 2.0.0
+created_date: 2026-07-01
+last_updated: 2026-07-01
 status: active
 compatible_aos_versions:
   - 1.x
@@ -14,43 +14,46 @@ requires_approval_for_overwrite: true
 
 ## Builder Purpose
 
-Build the **Review Agent**, a required governance agent. It owns retrospectives, system improvement, weekly reviews, decision audits, AOS refinement, the AOS User Guide (`/docs/aos-user-guide.html`), and the instance version (`aos_version`). It regenerates the guide during the monthly review and reconciles `aos_version` then (Sections 7.4, 14.3.1, 16.6, 17.4). It also owns **learning consolidation** (Section 17.10): during the weekly review it consolidates candidate learnings (merge, prune, promote to confirmed), and during the monthly review it performs deeper consolidation and may propose reusable templates from confirmed learnings, subject to `Proceed`. Standardized purpose, short interview.
+Build the Review Agent, the required governance agent that owns retrospectives,
+system improvement, the review cadence, decision audits, AOS refinement, the AOS
+User Guide, and `aos_version` reconciliation (catalog: `review-agent`).
 
 ## When to Use This Builder
 
-During initial AOS setup (via `/builders/build-aos.md`) or when restoring or rebuilding the Review Agent.
+Invoked by `/builders/build-aos.md` while building the required governance layer,
+or directly to (re)build the agent. Refreshing an existing agent requires a
+separate `Proceed` (Section 3.2).
 
 ## Builder Operating Mode
 
-Coach + collaborator; default to dry-run / preview; create no files until the user types exactly `Proceed`.
+Coach + collaborator (Section 1.5); dry-run / preview by default; create nothing
+until `Proceed`. Short required-agent interview (Section 26).
 
 ## Interview Flow
 
-Short batch interview (Section 9.1).
+Batch pattern (Section 9.1): confirm review cadence preferences, preview the file
+set, then wait for `Proceed`.
 
 ## Discovery Questions
 
-- Preferred depth and timing for weekly, monthly, and quarterly reviews?
-- What signals matter most to the user (stale projects, loose ends, memory hygiene, misalignment)?
-- Any reporting format preferences for review outputs?
+- Preferred timing for weekly / monthly / quarterly reviews?
+- Any areas the user especially wants audited (memory, permissions, structure)?
 
 ## Recommended Defaults
 
-- Primary owner of the weekly review (Section 17.3) and the monthly review, including the AOS User Guide regeneration (Section 17.4).
-- Owns and reconciles `aos_version` in `/aos-manifest.md`: reconciles against `/logs/change-log.md` at the monthly review and verifies it in the completeness audit; breaking/MAJOR bumps are applied at the time of change (Section 14.3.1). The triggering event is logged by the agent that made the change (Chief of Staff coordinating).
-- Supports the Memory Agent on the memory-review workflow (Section 17.9).
-- Owns learning consolidation (Section 17.10): in the weekly review, merge, prune, and promote candidate learnings to `## Confirmed Learnings` and update `/memory/agent-learnings-index.md` (status candidate to confirmed); in the monthly review, perform deeper consolidation and may propose reusable `/templates/` artifacts from confirmed learnings. Promotion that creates a template or changes behavior is Level 2 and requires `Proceed` (Sections 3.2, 17.10); per the drift invariant (Section 14.8) consolidation produces data-file artifacts only and never modifies framework-derived definition files.
-- Audits generated files for completeness and consistency (Section 27).
-- Regenerates the AOS User Guide as a projection (Sections 14.8, 16.6) rather than hand-editing prose; per the drift invariant (Section 14.8) it does not modify framework-derived definition files.
-- Review questions follow Section 25 (weekly: "What needs follow-up soon?"; monthly: "What is stale, misplaced, or structurally messy?"; quarterly: "Is the whole system still aimed at the right goals?").
+- Run the standard cadence and review questions (Section 25).
+- Regenerate `/docs/aos-user-guide.html` during the monthly review, preserving its
+  embedded Change Log (Sections 16.6, 17.4).
+- Reconcile `aos_version` against `/logs/change-log.md` monthly (Section 14.3.1).
 
 ## Configuration Decisions
 
-- Confirm ownership of `/docs/aos-user-guide.html` (regenerated monthly as a projection) and of `aos_version` reconciliation.
-- Confirm audit scope (completeness and consistency) versus Security (permissions) and Memory (routing) audits.
-- Confirm the user guide skeleton (Section 16.6) is used when regenerating the guide, and that its embedded Change Log is preserved as the data input.
+- Review scheduling.
+- Audit emphasis areas.
 
 ## Files to Create
+
+Standard agent file set (Section 5.1):
 
 ```text
 /agents/review-agent/review-agent.md
@@ -62,38 +65,63 @@ Short batch interview (Section 9.1).
 /agents/review-agent/logs/review-decision-log.md
 ```
 
+The Review Agent owns `/docs/aos-user-guide.html` (created by `build-aos.md`,
+regenerated monthly).
+
 ## Agent Instruction Generation Rules
 
-Generate `review-agent.md` per Section 11 with `agent_instruction` frontmatter. Emphasize Non-Responsibilities (it reviews and refines; it does not own day-to-day domain work or coordination, and per Section 14.8 it does not modify framework-derived definition files). Document ownership of weekly/monthly/quarterly reviews, completeness audits, the AOS User Guide (regenerated as a projection), and `aos_version` reconciliation (Section 14.3.1).
+Render `review-agent.md` to the Section 11 schema. Project **identity** from the
+`review-agent` catalog entry (§7A):
+
+- Purpose ← `one_line`: owns retrospectives, system improvement, the review
+  cadence, decision audits, AOS refinement, and the AOS User Guide.
+- Responsibilities ← `domains_owned`: `review.retrospective`.
+- Non-Responsibilities ← derived: does not orchestrate (chief-of-staff), own
+  permissions/tool access (security), or own memory governance (memory).
+- Inputs ← none; Outputs ← `review.retrospective`.
+- Collaboration Rules ← `collaborates_with`: may recommend matrix changes to
+  Security (Section 22); supports Memory on deeper monthly hygiene (Section 17.9).
+- Approval Requirements ← none required beyond globals; `pre_authorized_actions`:
+  regenerate the user guide during monthly review (Sections 16.6, 17.4). Per the
+  drift invariant (Section 14.8) it refines only data files and projections, never
+  framework-derived definition files.
+
+Project **narrative** sections from `agent-profiles/review-agent.md` (§7B).
+Imperative language; include examples (Section 32).
 
 ## Workflow Generation Rules
 
-Create `review-primary-workflow.md` (Section 16.3) covering how a review is run, findings captured, and improvements proposed (each gated by `Proceed` where it would change files). Connect to the global weekly, monthly, and quarterly review workflows, including candidate-learning consolidation in the weekly review and deeper consolidation plus template proposals in the monthly review (Sections 17.3-17.4, 17.10).
+Create `review-primary-workflow.md` (Section 16.3): run a review → capture findings
+→ propose improvements (`Proceed`-gated where they change files). The Review Agent
+is primary owner of the weekly, monthly, and quarterly review workflows
+(Sections 17.3–17.5) and supports the memory-review workflow (Section 17.9).
 
 ## Memory Generation Rules
 
-Create `review-memory.md` and `review-learnings.md` (Section 16.2). Store recurring review findings and improvement patterns.
+Seed `review-memory.md` and `review-learnings.md` per Section 16.2. Record review
+outcomes and system-improvement patterns.
 
 ## Config Generation Rules
 
-Create `review-config.md` (Section 16.1) referencing global permissions and the tool access matrix.
+Write `review-config.md` (Section 16.1). `Inherited Rules` references global
+permissions. Note ownership of the user guide and `aos_version` reconciliation.
 
 ## Logging Rules
 
-Create `review-decision-log.md` (Section 16.5). Log review outcomes, audit findings, and system-improvement decisions.
+Append-only `review-decision-log.md` (Section 16.5). Log review outcomes, audit
+findings, and improvement decisions (Section 19.3).
 
 ## Validation Checklist
 
-```text
-[ ] Standard seven-file set created.
-[ ] Instruction file follows Section 11 schema with strong Non-Responsibilities.
-[ ] Ownership of weekly/monthly/quarterly reviews, the AOS User Guide (projection), and aos_version reconciliation documented.
-[ ] Completeness/consistency audit scope defined; drift invariant (Section 14.8) respected.
-[ ] Learning consolidation documented: weekly merge/prune/promote and monthly deeper consolidation + `Proceed`-gated template proposals (Sections 17.3-17.4, 17.10).
-[ ] Decision log present and append-only.
-[ ] Registry and map updated; build logged.
-```
+- Full Section 5.1 file set present; frontmatter stamped.
+- Identity from catalog, narrative from profile.
+- Review workflows owned; user-guide regeneration and `aos_version` reconciliation
+  wired in (Sections 16.6, 14.3.1).
+- Catalog validation V1–V8 and profile validation V9–V10 pass for this entry.
 
 ## Handoff Summary
 
-Produce a build summary (Section 13). Suggested next step: select and build at least one optional productive agent.
+Emit the Section 13 Build Summary to
+`/agents/review-agent/logs/review-build-summary.md` (file_type `build_summary`):
+files created, decisions, preferences, boundaries, open questions, and suggested
+next step (select at least one optional productive agent, Section 7.2).

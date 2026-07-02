@@ -1,23 +1,41 @@
 ---
-title: Build AOS (Entry)
+title: Build AOS — Entry Pointer
 file_type: builder_entry
-spec_version: 1.1.0
-created_date: 2026-06-03
-last_updated: 2026-06-25
+spec_version: 2.0.0
+created_date: 2026-07-01
+last_updated: 2026-07-01
 status: active
 compatible_aos_versions:
   - 1.x
 requires_approval_for_overwrite: true
 ---
 
-# Build AOS (Entry)
+# Build AOS
 
-This is a short entry pointer. The full AOS instance builder lives at:
+This is the root entry pointer for the AOS Factory. It does not contain the
+build logic itself; it points to the master builder.
+
+To build a new AOS instance, run the master builder:
 
 ```text
 /builders/build-aos.md
 ```
 
-When the user asks to build, set up, or create their AOS, open `/builders/build-aos.md` and run its interview and setup sequence from there. This entry file intentionally contains no build logic of its own — it exists so the user can start a build from the framework root.
+The master builder runs the interactive setup interview and, on `Proceed`,
+creates a complete AOS instance as a sibling folder inside the AOS Workspace
+(Section 4.1). This root pointer exists so that the framework has a single,
+obvious starting point; all build behavior is defined in `/builders/build-aos.md`
+(file_type `aos_builder`) and the per-agent builders in `/builders/`.
 
-Note: this file does not build or maintain the framework itself. The factory framework is generated once from the design specification and distributed as a Claude plugin; maintaining it is a manual, approval-gated operation (see design spec Section 28).
+To add a single optional agent to an existing instance later, run that agent's
+builder directly, for example:
+
+```text
+/builders/build-research-agent.md
+```
+
+## Safety
+
+No files are created until the user types exactly `Proceed` (Section 3.1). All
+builders default to dry-run / preview and gate every file overwrite or refresh
+behind a separate `Proceed` (Sections 28, 35.1).
