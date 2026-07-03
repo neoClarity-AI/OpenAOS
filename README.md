@@ -61,6 +61,7 @@ If you're using VS Code with Claude Code, follow these instructions:
 - **Install Claude on VS Code.** Instructions here: https://code.claude.com/docs/en/vs-code
 - **Create a folder for the AOS.**  File -> Open Folder... -> New Folder. You can name it anything you like. For these instructions, lets call it **AOS Workspace**.
 - **Install the aos-factory plugin.** In a Claude Code terminal session, enter these commands:
+
 ```
 /plugin marketplace add https://github.com/neoClarity-AI/neoClarity-Plugins
 /plugin install aos-factory@neoclarity-plugins
@@ -109,9 +110,9 @@ If you're using VS Code with Claude Code, follow these instructions:
 
 ## Available Agents
 
-| Agent | Role |
-|---|---|
-| **Chief of Staff Agent** *(required)* | Owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination. Joint owner of the instance router |
+| Agent                                         | Role                                                         |
+| --------------------------------------------- | ------------------------------------------------------------ |
+| **Chief of Staff Agent** *(required)*         | Owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination. Joint owner of the instance router |
 | **Security / Permissions Agent** *(required)* | Owns the global permission rules, tool-access matrix, approval requirements, and safety checks |
 | **Memory Agent** *(required)* | Owns shared memory structure, memory hygiene, preference capture, and cross-agent memory routing |
 | **Review / Reflection Agent** *(required)* | Owns completeness audits, consistency checks, retrospectives, and quality review |
