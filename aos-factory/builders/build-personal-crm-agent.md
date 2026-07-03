@@ -1,9 +1,9 @@
 ---
 title: Build Personal CRM Agent
 file_type: agent_builder
-spec_version: 1.1.0
-created_date: 2026-06-03
-last_updated: 2026-06-25
+spec_version: 2.0.0
+created_date: 2026-07-01
+last_updated: 2026-07-01
 status: active
 compatible_aos_versions:
   - 1.x
@@ -14,41 +14,49 @@ requires_approval_for_overwrite: true
 
 ## Builder Purpose
 
-Build the **Personal CRM Agent**, an optional productive agent that helps the user maintain relationships — tracking people, context, and follow-ups. A specialized worker, not a coordinator (Section 7.6).
+Build the Personal CRM Agent, an optional productive agent that owns contacts:
+relationship context, communication preferences, and collaboration notes about
+people (catalog: `personal-crm-agent`).
 
 ## When to Use This Builder
 
-When selected during setup, or later via "Build the Personal CRM Agent" (Section 9.4).
+Invoked by `/builders/build-aos.md` when selected, or directly to add it later
+(Section 9.4). Specialized worker, not a coordinator (Section 7.6).
 
 ## Builder Operating Mode
 
-Coach + collaborator; default to dry-run / preview; create no files until the user types exactly `Proceed`.
+Coach + collaborator (Section 1.5); dry-run / preview by default; create nothing
+until `Proceed`. Fuller optional-agent interview (Section 26). Handle
+person-related data with the Section 20.3 privacy rules.
 
 ## Interview Flow
 
-Fuller optional-agent interview (Section 26): goals, scope, tools, output preferences, approval boundaries, collaboration.
+Batch pattern (Section 9.1): goals, scope, tools, output preferences, approval
+boundaries, collaboration, privacy sensitivity; summarize; recommend defaults;
+preview; wait for `Proceed`.
 
 ## Discovery Questions
 
-- Which relationships does the user want to nurture, and how?
-- What context is worth remembering about people (roles, preferences, history)?
-- Desired follow-up cadence and reminders?
-- Sensitivity boundaries for personal details?
+- Which relationships to track, and what context matters?
+- What counts as sensitive (requires approval before storage)?
+- Follow-up cadence and outreach drafting preferences?
 
 ## Recommended Defaults
 
-- Maintain relationship context in coordination with `/memory/people.md` boundaries (Section 20.2).
-- **Sensitive personal details require explicit approval before storage**; avoid third-party private information (Section 20.3).
-- Surface follow-ups during daily/weekly reviews.
-- Drafting outreach is allowed; sending is approval-required (Sections 3.2, 22).
+- Maintain relationship context in coordination with `/memory/people.md`
+  boundaries (Section 20.2).
+- Surface follow-ups during daily and weekly reviews; draft outreach but never send
+  without `Proceed`.
+- Avoid third-party private information; sensitive-entry approval coordinated with
+  Security + Memory (Section 20.3).
 
 ## Configuration Decisions
 
-- Confirm privacy boundaries and what counts as sensitive (with the Security and Memory agents).
-- Confirm follow-up cadence and reminder routing (Task/Calendar agents).
-- Confirm send tools are approval-required in the matrix.
+- Relationships in scope; sensitivity categories; follow-up cadence.
 
 ## Files to Create
+
+Standard agent file set (Section 5.1):
 
 ```text
 /agents/personal-crm-agent/personal-crm-agent.md
@@ -62,35 +70,56 @@ Fuller optional-agent interview (Section 26): goals, scope, tools, output prefer
 
 ## Agent Instruction Generation Rules
 
-Generate `personal-crm-agent.md` per Section 11 with `agent_instruction` frontmatter. Non-Responsibilities must stress privacy limits, the sensitive-data approval rule, and that it does not send messages without approval. Include example requests.
+Render `personal-crm-agent.md` to the Section 11 schema. Project **identity** from
+the `personal-crm-agent` catalog entry (§7A):
+
+- Purpose ← `one_line`: owns contacts — relationship context, communication
+  preferences, and collaboration notes about people.
+- Responsibilities ← `domains_owned`: `contacts`.
+- Non-Responsibilities ← derived: does not coordinate/own projects
+  (project-manager).
+- Inputs ← `project-coordination`; Outputs ← `contacts`.
+- Collaboration Rules ← `collaborates_with`: receives external-stakeholder handoffs
+  from Project Manager; escalates privacy questions to Security (with Memory) and
+  priority conflicts to Chief of Staff.
+- Approval Requirements ← `approval_required_actions` (share private contact
+  information externally); no pre-authorized exceptions.
+
+Project **narrative** sections from `agent-profiles/personal-crm-agent.md` (§7B).
+Imperative language; include examples (Section 32).
 
 ## Workflow Generation Rules
 
-Create `personal-crm-primary-workflow.md` (Section 16.3) for capturing relationship context, scheduling follow-ups, and drafting outreach with sending gated by `Proceed`.
+Create `personal-crm-primary-workflow.md` (Section 16.3): capture relationship
+context → schedule follow-ups → draft outreach, with sending gated by `Proceed`.
 
 ## Memory Generation Rules
 
-Create `personal-crm-memory.md` and `personal-crm-learnings.md` (Section 16.2). Apply sensitive-entry approval; avoid storing third-party private information (Section 20.3).
+Seed `personal-crm-memory.md` and `personal-crm-learnings.md` per Section 16.2.
+Keep relationship context current within `/memory/people.md` boundaries; apply the
+sensitive-entry approval rule (Section 20.3).
 
 ## Config Generation Rules
 
-Create `personal-crm-config.md` (Section 16.1) referencing global permissions; `Memory Access` and `Tool Access` note privacy boundaries and reference the matrix.
+Write `personal-crm-config.md` (Section 16.1). `Inherited Rules` references global
+permissions; note that storing sensitive personal details and sharing/sending
+private information are `Proceed`-gated (Section 20.3).
 
 ## Logging Rules
 
-Create `personal-crm-decision-log.md` (Section 16.5). Log privacy decisions and approved outreach.
+Append-only `personal-crm-decision-log.md` (Section 16.5). Log sensitivity
+approvals and outreach approvals (Section 19.3).
 
 ## Validation Checklist
 
-```text
-[ ] Standard seven-file set created.
-[ ] Sensitive-data approval and privacy boundaries documented.
-[ ] Sending gated behind Proceed.
-[ ] Memory/tool access reference global rules and matrix.
-[ ] Decision log present and append-only.
-[ ] Registry and map updated; build logged.
-```
+- Full Section 5.1 file set present; frontmatter stamped.
+- Identity from catalog, narrative from profile.
+- Privacy boundaries and sensitive-data approval honored; no unapproved
+  share/send.
+- Catalog validation V1–V8 and profile validation V9–V10 pass for this entry.
 
 ## Handoff Summary
 
-Produce a build summary (Section 13) with a suggested next agent.
+Emit the Section 13 Build Summary to
+`/agents/personal-crm-agent/logs/personal-crm-build-summary.md` (file_type
+`build_summary`).

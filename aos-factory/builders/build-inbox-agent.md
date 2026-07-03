@@ -1,54 +1,62 @@
 ---
-title: Build Inbox / Communications Agent
+title: Build Inbox Agent
 file_type: agent_builder
-spec_version: 1.1.0
-created_date: 2026-06-03
-last_updated: 2026-06-25
+spec_version: 2.0.0
+created_date: 2026-07-01
+last_updated: 2026-07-01
 status: active
 compatible_aos_versions:
   - 1.x
 requires_approval_for_overwrite: true
 ---
 
-# Build Inbox / Communications Agent
+# Build Inbox Agent
 
 ## Builder Purpose
 
-Build the **Inbox / Communications Agent**, an optional productive agent that triages incoming items and communications and drafts responses. A specialized worker, not a coordinator (Section 7.6).
+Build the Inbox Agent, an optional productive agent that triages incoming
+communications and drafts responses, promoting items into other agents' domains
+(catalog: `inbox-agent`).
 
 ## When to Use This Builder
 
-When selected during setup, or later via "Build the Inbox Agent" (Section 9.4).
+Invoked by `/builders/build-aos.md` when selected, or directly to add it later
+(Section 9.4). Specialized worker, not a coordinator (Section 7.6).
 
 ## Builder Operating Mode
 
-Coach + collaborator; default to dry-run / preview; create no files until the user types exactly `Proceed`.
+Coach + collaborator (Section 1.5); dry-run / preview by default; create nothing
+until `Proceed`. Fuller optional-agent interview (Section 26).
 
 ## Interview Flow
 
-Fuller optional-agent interview (Section 26): goals, scope, tools, output preferences, approval boundaries, collaboration. Batch, summarize, recommend, request `Proceed`.
+Batch pattern (Section 9.1): goals, scope, tools, output/drafting preferences,
+approval boundaries, collaboration; summarize; recommend defaults; preview; wait
+for `Proceed`.
 
 ## Discovery Questions
 
-- Which channels/inboxes should the agent help with?
-- What should be drafted automatically versus only when asked?
-- Triage categories the user wants (urgent, waiting, FYI, archive)?
-- How aggressively should items be promoted to tasks/projects/calendar?
+- What sources feed the inbox, and what triage taxonomy does the user use
+  (urgent / waiting / FYI / archive)?
+- Should the agent draft replies automatically, and in what voice?
+- Which promotions should be aggressive vs. conservative?
+- What sending/publishing must always require `Proceed`?
 
 ## Recommended Defaults
 
-- Drafting messages is allowed; **sending requires approval** (`Proceed`) per the tool access matrix (Sections 3.2, 22).
-- Use the inbox-to-task workflow to promote items to tasks, projects, calendar items, memory, decisions, or archive (Section 17.6).
-- Moving processed items to `/inbox/processed` is the single pre-authorized move (Sections 3.2, 17.6, 31); all other moves require approval.
+- Triage → draft (where configured) → promote via the inbox-to-task workflow
+  (Section 17.6) → move processed items to `/inbox/processed` (the single
+  pre-authorized move).
+- Drafting autonomous; sending/publishing gated by `Proceed` (Sections 3.2, 22).
 - Feed the daily startup brief's processed-inbox summary (Section 17.1).
 
 ## Configuration Decisions
 
-- Confirm send/publish tools are `Approval-required` in the matrix (Section 22).
-- Confirm triage taxonomy and promotion thresholds.
-- Confirm collaboration with Task, Calendar, and Project Manager agents.
+- Triage taxonomy; drafting voice; promotion thresholds; send-approval rules.
 
 ## Files to Create
+
+Standard agent file set (Section 5.1):
 
 ```text
 /agents/inbox-agent/inbox-agent.md
@@ -62,35 +70,56 @@ Fuller optional-agent interview (Section 26): goals, scope, tools, output prefer
 
 ## Agent Instruction Generation Rules
 
-Generate `inbox-agent.md` per Section 11 with `agent_instruction` frontmatter. Non-Responsibilities must state it drafts but does not send without approval and does not own scheduling or task tracking. Include example requests.
+Render `inbox-agent.md` to the Section 11 schema. Project **identity** from the
+`inbox-agent` catalog entry (§7A):
+
+- Purpose ← `one_line`: triages incoming communications and drafts responses;
+  promotes items into other domains but owns none of them.
+- Responsibilities ← `domains_owned`: `communications.triage`,
+  `communications.drafting`.
+- Non-Responsibilities ← derived: does not schedule (calendar), track tasks
+  (task), or coordinate projects (project-manager).
+- Inputs ← none; Outputs ← `communications.triage`, `communications.drafting`.
+- Collaboration Rules ← `collaborates_with`: hands off to Task (commitments),
+  Calendar (events), Project Manager (project items); escalates unclear ownership
+  to Chief of Staff.
+- Approval Requirements ← `approval_required_actions` (send or publish any
+  message) + `pre_authorized_actions` (move processed items to `/inbox/processed`,
+  the sole pre-authorized move, Sections 3.2, 17.6).
+
+Project **narrative** sections from `agent-profiles/inbox-agent.md` (§7B).
+Imperative language; include examples (Section 32).
 
 ## Workflow Generation Rules
 
-Create `inbox-primary-workflow.md` (Section 16.3) implementing triage and the inbox-to-task promotion flow, with the `/inbox/processed` move as the only pre-authorized move and sending gated by `Proceed`.
+Create `inbox-primary-workflow.md` (Section 16.3): triage → inbox-to-task
+promotion; the `/inbox/processed` move is pre-authorized; sending is gated by
+`Proceed`. Supports the global inbox-to-task workflow (Section 17.6).
 
 ## Memory Generation Rules
 
-Create `inbox-memory.md` and `inbox-learnings.md` (Section 16.2). Store recurring senders, triage preferences, and draft styles; route sensitive details through approval (Section 20.3).
+Seed `inbox-memory.md` and `inbox-learnings.md` per Section 16.2. Track
+recurring-sender and triage preferences; route sensitive details through approval
+(Section 20.3).
 
 ## Config Generation Rules
 
-Create `inbox-config.md` (Section 16.1) referencing global permissions; `Tool Access` references the matrix (send = approval-required).
+Write `inbox-config.md` (Section 16.1). `Tool Access` references the matrix:
+email/message send = Approval-required; read/draft = Allowed (Section 22).
 
 ## Logging Rules
 
-Create `inbox-decision-log.md` (Section 16.5). Log promotion decisions, approved sends, and triage rule changes.
+Append-only `inbox-decision-log.md` (Section 16.5). Log promotions, sends
+(approved), and escalations (Section 19.3).
 
 ## Validation Checklist
 
-```text
-[ ] Standard seven-file set created.
-[ ] Sending gated behind Proceed; drafting allowed.
-[ ] Inbox-to-task promotion and /inbox/processed exception implemented correctly.
-[ ] Tool access references the global matrix.
-[ ] Decision log present and append-only.
-[ ] Registry and map updated; build logged.
-```
+- Full Section 5.1 file set present; frontmatter stamped.
+- Identity from catalog, narrative from profile.
+- `/inbox/processed` move pre-authorized; no unapproved send path.
+- Catalog validation V1–V8 and profile validation V9–V10 pass for this entry.
 
 ## Handoff Summary
 
-Produce a build summary (Section 13) with a suggested next agent.
+Emit the Section 13 Build Summary to
+`/agents/inbox-agent/logs/inbox-build-summary.md` (file_type `build_summary`).

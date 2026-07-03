@@ -3,8 +3,8 @@ title: AOS Factory Design Specification
 file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
-last_updated: 2026-06-11
-spec_version: 1.0.5
+last_updated: 2026-07-01
+spec_version: 2.0.0
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -41,9 +41,11 @@ This specification is maintained as a small set of companion files in this folde
 aos-factory-design-specification.md   - the canonical design (this file), Sections 1-32
 aos-factory-generation-runbook.md     - build, generation scope, and handoff procedure (Sections 33-37)
 aos-factory-revision-history.md       - dated revision and consistency-resolution history
+agent-catalog.yaml                    - the Agent Catalog: structured agent identity/ownership data (Section 7A)
+agent-profiles/                       - one narrative Agent Profile per agent, behavior only (Section 7B)
 ```
 
-The canonical specification remains the single source of truth (Section 1.6.1); the companion files are extracted from it for readability and are governed by the same `Proceed` safety gate.
+The canonical specification remains the single source of truth (Section 1.6.1); the companion files are extracted from it for readability and are governed by the same `Proceed` safety gate. `agent-catalog.yaml` and the `agent-profiles/` files are design-time **source** artifacts that live with the spec here in `design-spec/` (versioned by `spec_version`); they are framework-owned and read-only inside instances (Section 14.8), and the factory ships rendered copies of them (Sections 7A.4, 7B.2).
 
 ## Revision History
 
@@ -87,14 +89,16 @@ Three terms are used together throughout this document and should not be conflat
 
 ```text
 AOS Workspace  - The top-level container. Its root holds the workspace-governing
-                 files (/aos-router.md, /CLAUDE.md). The AOS Factory and each
-                 AOS instance live inside it as sibling folders.
+                 files (/aos-router.md, /CLAUDE.md). Each AOS instance live 
+                 inside it as sibling folders. An instance of the AOS Factory
+                 may also live inside a sibling folder, though it is not necessary
+                 if the AOS Factory is being used as a plugin.
 
 AOS Factory    - The reusable builder framework (aos-factory/) that generates
                  AOS instances.
 
 AOS            - A generated Agentic Operating System instance (/[aos-name]/),
-                 a sibling of the AOS Factory within the AOS Workspace.
+                 a sibling within the AOS Workspace.
 ```
 
 ## 1.2 Target Platform
@@ -219,7 +223,7 @@ The prebuilt factory instance was generated using Claude Opus 4.8. Because the s
 
 ### 1.6.10 Open Source
 
-The project is released openly in the hope of attracting contributors and evolving into a widely used application on Claude. Openness reinforces the principles above: a single-source-of-truth spec, standardized schemas, and self-documenting output are precisely what make external contribution tractable.
+The project is released openly on Github. Openness reinforces key principles that make external contribution tractable: a single-source-of-truth spec, standardized schemas, and self-documenting output.
 
 The project is hosted at:
 
@@ -255,6 +259,8 @@ The AOS should follow the **Single Responsibility Principle**.
 Each agent should have a clear purpose, responsibilities, non-responsibilities, inputs, outputs, boundaries, and escalation rules.
 
 The system should avoid creating a bloated central agent that does everything.
+
+Single responsibility and non-overlap are verified, not merely asserted: the Agent Catalog (§7A) records each agent's `domains_owned` and `artifacts_owned`, and the Review Agent's catalog validation (§7A.5, §27) is the enforcement surface for this principle.
 
 ## 2.2 Chief of Staff as Coordinator, Not Universal Worker
 
@@ -436,6 +442,8 @@ Inside the AOS Workspace, the **AOS Factory** (the reusable builder framework) a
 
 ```text
 /aos-factory/
+  /agent-catalog.yaml        (rendered copy of the design-spec source; §7A)
+  /agent-profiles/           (rendered copies of the design-spec sources; §7B)
   /build-aos.md
   /builder-changelog.md
   /builders/
@@ -462,7 +470,7 @@ All instance-relative paths in this document (for example `/configs/global-permi
 
 Likewise, all factory-internal paths in this document (for example `/build-aos.md`, `/builders/build-aos.md`, `/builder-changelog.md`) are interpreted relative to the **AOS Factory root** (`/aos-factory/`), per the factory tree above — for example, `/builders/build-aos.md` resolves to `/aos-factory/builders/build-aos.md`. In short, a leading slash denotes the root of the relevant container (the AOS Factory root for factory files, the target AOS instance root for instance files), not the AOS Workspace root. The AOS Workspace root itself is referenced only by the two workspace-governing files named explicitly as such (`/aos-router.md`, `/CLAUDE.md`).
 
-The AOS Factory never writes files inside an AOS instance except through `/builders/build-aos.md` (or the root entry `/build-aos.md`) during an authorized build, and never writes to the AOS Workspace root files (`/aos-router.md`, `/CLAUDE.md`) except via the example copies described in Section 28.2, which the user copies and edits manually.
+The AOS Factory never writes files inside an AOS instance except through `/builders/build-aos.md` (or the root entry `/build-aos.md`) during an authorized build. It writes to the AOS Workspace root files (`/aos-router.md`, `/CLAUDE.md`) only through `/builders/build-aos.md` during an authorized build, and only non-destructively: it creates them from the shipped example copies (Section 28.2) when they are absent, and overwrites an existing root file only after a separate `Proceed` (Sections 2.4, 3.2).
 
 ---
 
@@ -617,6 +625,8 @@ automation-agent
 
 ## 7.4 Required Agent Responsibilities
 
+The four agent descriptions below are a generated projection of the `agent-catalog.yaml` entries where `kind: governance` (§7A). The catalog is authoritative (§1.6.1); this rendering is kept here for readers and must be reconciled to the catalog whenever a governance entry changes.
+
 ```text
 Security Agent
 Owns permission rules, approval requirements, access boundaries, the tool access matrix, and safety checks.
@@ -635,12 +645,16 @@ Also owns and reconciles the instance version (aos_version in /aos-manifest.md):
 
 ## 7.5 Agent Maker Agent Clarification
 
-Earlier design notes referenced an Agent Maker Agent. The final consolidation recommendation is:
+Earlier design notes referenced an Agent Maker Agent. Do not add Agent Maker Agent to the required or optional roster; it is not a runtime agent.
+
+Agent creation and modification is a builder-framework capability, front-ended by a two-phase process:
 
 ```text
-Do not add Agent Maker Agent to the initial required or optional roster.
+Phase A - Design: author and validate a catalog (or instance-registry)
+entry, running the §10.3.1 overlap check, before the agent may exist.
 
-Treat agent creation and modification as a builder-framework capability unless the user explicitly decides to add Agent Maker Agent later.
+Phase B - Build: the existing builder interview (§9, §12, §26) instantiates
+the validated entry into the standard §5.1 file set.
 ```
 
 Rationale:
@@ -654,6 +668,222 @@ This avoids adding a new agent late in the design, preserves the approved roster
 Optional productive agents should be treated as specialized workers, not general coordinators.
 
 Coordination remains primarily with the Chief of Staff Agent.
+
+---
+
+# 7A. Agent Catalog
+
+## 7A.1 Definition and Intent
+
+The Agent Catalog is a framework-level, design-time **data** file capturing each agent's identity and ownership. It separates concerns into three layers:
+
+```text
+Spec     = the rules (schema, vocabulary rule, validation, the SRP itself, §2.1).
+Catalog  = the data (per-agent identity/ownership, machine-checked fields).
+Generated §11 instruction file = a projection of the catalog entry plus
+           instance choices. Narrative lives here, not in the catalog.
+```
+
+The catalog is distinct from the instance-level §10.3 Agent Registry and §10.4 AOS Map: the catalog is framework-level and read-only inside instances, governed by the §14.8 drift invariant (definition file, factory-owned).
+
+## 7A.2 Controlled Vocabulary Rule (normative)
+
+```text
+- domains_owned MUST be drawn from vocabulary.domains (defined in the catalog
+  file, §7A.6).
+- domains_owned MUST be pairwise disjoint across all agents.
+- Governance domain tokens MUST appear only on entries with kind: governance.
+```
+
+A new domain is a catalog edit, not a spec revision (§7A.6); this disjointness rule is the normative spec-level constraint the catalog must satisfy.
+
+## 7A.3 Per-Agent Entry Schema
+
+Only cross-cutting, machine-checked fields live here; narrative stays in the §11 instruction file.
+
+```yaml
+# Schema for each item under `agents:` in agent-catalog.yaml
+slug: string                  # kebab-case, unique, matches §7.3
+display_name: string
+kind: governance | productive
+tier: required | optional
+one_line: string              # single-sentence identity
+
+domains_owned: [domain-token] # from vocabulary; pairwise disjoint across all agents;
+                              # governance tokens only when kind: governance
+
+artifacts_owned: [glob]       # paths this agent is sole writer of;
+                              # pairwise disjoint across all agents;
+                              # includes own folder glob + any SHARED paths claimed
+
+inputs:  [domain-token]       # domains it consumes (owned by others) — informational
+outputs: [domain-token]       # domains it produces into (should equal domains_owned)
+
+collaborates_with:
+  - agent: slug
+    direction: handoff-to | handoff-from | escalates-to
+    "on": string               # what triggers the edge (quoted: bare `on` is a
+                               # YAML 1.1 boolean literal and must be quoted)
+
+pre_authorized_actions: [string]   # the ONLY autonomous exceptions to non-destructive
+                                    # default (§3.2/§3.3); kept in the catalog (§7A
+                                    # decision O1) — agent configs (§16.1/§22)
+                                    # cross-reference this rather than restating it
+approval_required_actions: [string]
+tool_notes: string                 # references the global matrix (§22); agent-specific
+                                    # notes only, never restates matrix grants
+
+# DERIVED — generated, not hand-authored. Listed for transparency/review.
+non_responsibilities:
+  - { claim: string, owned_by: slug }   # auto-generated from adjacent domains
+```
+
+## 7A.4 Catalog Data File
+
+A pointer to the catalog data file and its shape; full content in §7A.6.
+
+```text
+Source:   design-spec/agent-catalog.yaml — the single source of truth,
+          versioned with the spec (§1.6.1). Lives with the spec in design-spec/,
+          alongside the agent-profiles/ (§7B).
+Rendered: the factory ships a RENDERED COPY at its root (/agent-catalog.yaml,
+          sibling to /build-aos.md and /builders/) that all builders read.
+Format:   YAML (machine-validated).
+Ownership: framework-owned. Created/updated only by the framework; never
+          edited by an operating agent (§14.8). Read-only inside instances.
+```
+
+## 7A.5 Validation Procedures
+
+The Review Agent runs these checks against the catalog (tied to §27):
+
+```text
+V1. Every domain in domains_owned exists in vocabulary.domains.
+V2. Governance domain tokens appear only on entries with kind: governance.
+V3. domains_owned is pairwise disjoint across all entries.
+V4. artifacts_owned is pairwise disjoint across all entries.
+V5. Every collaborates_with.agent resolves to a real slug; reciprocal edges
+    are consistent (every handoff-to has a matching handoff-from).
+V6. non_responsibilities is consistent with neighbors' domains_owned.
+V7. Every installed instance agent traces to a catalog entry OR an
+    instance-registry entry (the two-scope check, §10.3.1).
+V8. kind: governance entries match the AGENTS.md governance set; the
+    removal prohibition becomes a machine-checkable property, not a prose
+    name list.
+```
+
+## 7A.6 Catalog File Shape and Versioning
+
+```yaml
+# agent-catalog.yaml (framework-level, read-only in instances)
+catalog_version: <semver>     # the catalog's own version track
+spec_version: <semver>        # the spec it was rendered against
+
+vocabulary:
+  domains:
+    # governance (reserved — kind: governance only)
+    - security.permissions
+    - memory.governance
+    - orchestration.routing
+    - review.retrospective
+    # productive
+    - communications.triage
+    - communications.drafting
+    - scheduling
+    - task-tracking
+    - project-coordination
+    - research
+    - writing
+    - document-management
+    - contacts
+    - automation
+    - learning
+
+agents:
+  - <per-agent entry, schema in §7A.3>
+```
+
+A new domain or new agent entry bumps `catalog_version`; a spec-driven schema change bumps `spec_version` (mirrors the `aos_version` vs `spec_version` split in §14.3).
+
+---
+
+# 7B. Agent Profiles
+
+## 7B.1 Definition and Intent
+
+An **Agent Profile** is a framework-level, design-time **narrative** file — one per agent — that holds the agent's behavioral detail: how it operates, its quality bar, failure modes, and example requests. It complements the Agent Catalog (§7A):
+
+```text
+Catalog (§7A) = structured, machine-checked identity/ownership (the DATA).
+Profile (§7B) = human-readable behavioral narrative (the BEHAVIOR).
+Generated §11 instruction file = catalog identity + profile narrative +
+                                 instance-specific choices (the PROJECTION).
+```
+
+A profile MUST reference the catalog for identity and MUST NOT restate `domains_owned`, responsibilities, non-responsibilities, collaboration edges, inputs/outputs, or approval actions — those are catalog-owned and projected into §11 (§7A, §11). This confines the profile to behavior and keeps a single source of truth for identity (§1.6.1). Profiles are framework-owned **definition files** (§14.8), read-only inside instances.
+
+## 7B.2 Location and Files
+
+```text
+Source:   design-spec/agent-profiles/[agent-name]-agent.md — one file per agent
+          in §7.3, the single source of truth, versioned with the spec.
+Rendered: the factory ships rendered copies (/agent-profiles/) that builders read.
+Ownership: framework-owned; read-only inside instances (§14.8).
+```
+
+## 7B.3 Profile Schema
+
+Every profile uses this structure. Frontmatter carries `file_type: agent_profile` (§15.4) and the `slug` that matches §7.3 and the catalog entry.
+
+```markdown
+---
+title: [Display Name] — Agent Profile
+file_type: agent_profile
+slug: [agent-name]-agent
+spec_version: <semver>
+---
+# [Display Name] — Profile
+
+> Identity (Purpose, Responsibilities, Non-Responsibilities, Inputs, Outputs,
+> Collaboration, Approval) is defined in the catalog entry (§7A) and projected
+> into §11. This profile adds behavior only; it does not restate identity.
+
+## Behavioral Summary
+## Operating Procedure
+## Primary Workflow
+## Autonomy & Judgment
+## Escalation Behavior      (narrative only; identity edges live in the catalog)
+## Quality Standards
+## Failure Modes
+## Example Requests
+## Maintenance Notes
+```
+
+## 7B.4 Projection into the Instruction File
+
+The generated §11 instruction file draws its **identity** sections from the catalog (§7A, §11) and its **narrative** sections — `Workflows`, `Autonomy Rules`, `Escalation Rules`, `Operating Procedure`, `Quality Standards`, `Failure Modes`, `Example Requests`, `Maintenance Notes` — from the agent's profile, tailored with instance-specific choices. Builders (§12) read BOTH the catalog entry and the profile; they do not hand-author identity or narrative that these sources already provide.
+
+## 7B.5 Contributor Path and Validation
+
+Adding an agent is a two-phase, design-first process (the §7.5 "Agent Maker" primitive):
+
+```text
+Phase A - Design: author the agent's catalog entry (§7A) AND its profile
+          (§7B), then run the §7A.5 and §10.3.1 checks before the agent may
+          exist.
+Phase B - Build: the existing builder interview (§9, §12, §26) instantiates the
+          validated entry + profile into the standard §5.1 file set.
+```
+
+The Review Agent's catalog validation (§7A.5, §27) extends with two profile checks:
+
+```text
+V9.  Every agent in §7.3 has exactly one profile, and every profile's slug
+     resolves to a catalog entry (full, one-to-one coverage).
+V10. No profile restates catalog-owned identity fields (behavior-only check):
+     domains_owned, responsibilities/non-responsibilities, collaboration edges,
+     inputs/outputs, and approval actions live only in the catalog.
+```
 
 ---
 
@@ -774,13 +1004,14 @@ Initial setup should use this sequence:
 0. The factory framework already exists (generated from this design spec and installed as a Claude plugin; see Section 28)
 1. /builders/build-aos.md starts the user-facing AOS setup interview
 2. Create top-level folder structure
-3. Create global config, memory, log, workflow, template, inbox, and archive files
-4. Confirm builder files for all possible agents exist
-5. Build required agents
-6. Ask the user to select at least one optional productive agent
-7. Build selected optional agents
-8. Update the agent registry
-9. Produce an AOS setup summary
+3. Provision the AOS Workspace root: ensure /aos-router.md and /CLAUDE.md exist, copying them from the factory's shipped example copies (templates/aos-router.md, templates/CLAUDE.md; Section 28.2). Create them if absent; if either already exists, do not overwrite without a separate Proceed (Sections 2.4, 3.2, 4.1).
+4. Create global config, memory, log, workflow, template, inbox, and archive files
+5. Confirm builder files for all possible agents exist
+6. Build required agents
+7. Ask the user to select at least one optional productive agent
+8. Build selected optional agents
+9. Update the agent registry
+10. Produce an AOS setup summary
 ```
 
 Actual file creation still waits until the user types:
@@ -883,6 +1114,19 @@ Recommended table:
 
 The Chief of Staff Agent's registry entry should note its joint ownership of the AOS Workspace router (`/aos-router.md`), shared with every other AOS instance's Chief of Staff Agent, so router responsibility is discoverable from the registry as well as the agent definition.
 
+### 10.3.1 Instance-Scope Overlap Check
+
+The instance Agent Registry absorbs the catalog's ownership fields (`domains_owned`, `artifacts_owned`) for any agent that exists in an instance, including contributor/user-created agents born inside that instance.
+
+When a new instance agent is added, its `domains_owned` and `artifacts_owned` are validated against BOTH:
+
+```text
+1. The framework catalog's reserved domains and existing entries (§7A).
+2. Every other agent already registered in this instance.
+```
+
+A new agent may not claim a reserved governance token or a domain/artifact already owned at either scope. This keeps the §14.8 drift invariant intact: the framework catalog stays read-only in instances; the instance registry is the instance-scope ownership ledger.
+
 ## 10.4 AOS Map
 
 `/aos-map.md` should distinguish between:
@@ -936,6 +1180,20 @@ Every generated `[agent-name]-agent.md` should follow this structure:
 ## Maintenance Notes
 ```
 
+The sections below are **projected from the agent's catalog entry** (§7A) rather than hand-written:
+
+```text
+# Purpose                <- one_line (expanded)
+# Responsibilities       <- domains_owned
+# Non-Responsibilities   <- DERIVED non_responsibilities (the SRP enforcer)
+# Inputs                 <- inputs
+# Outputs                <- outputs
+# Collaboration Rules    <- collaborates_with edges
+# Approval Requirements  <- approval_required_actions + pre_authorized_actions
+```
+
+The remaining sections are **projected from the agent's profile** (§7B) — `Workflows`, `Autonomy Rules`, `Escalation Rules`, `Operating Procedure`, `Quality Standards`, `Failure Modes`, `Example Requests`, `Maintenance Notes` — tailored with instance-specific choices rather than hand-authored from scratch. Identity comes from the catalog; behavior comes from the profile.
+
 The **Non-Responsibilities** section is especially important because it enforces the Single Responsibility Principle.
 
 ---
@@ -978,6 +1236,8 @@ Every `build-[agent-name]-agent.md` should follow this structure:
 ## Handoff Summary
 ```
 
+`Agent Instruction Generation Rules` must render `Purpose` / `Responsibilities` / `Non-Responsibilities` / `Inputs` / `Outputs` / `Collaboration Rules` / `Approval Requirements` from the agent's `agent-catalog.yaml` entry (§7A); builders do not duplicate this content as hand-authored prose. It must likewise render the narrative sections (`Workflows`, `Autonomy Rules`, `Escalation Rules`, `Operating Procedure`, `Quality Standards`, `Failure Modes`, `Example Requests`, `Maintenance Notes`) from the agent's profile (§7B), tailored with instance choices; builders read both the catalog entry and the profile.
+
 ## 12.1 AOS Factory File Schema
 
 `/builders/build-aos.md` (file_type `aos_builder`) builds a complete AOS instance and should follow this structure:
@@ -1014,7 +1274,7 @@ Every `build-[agent-name]-agent.md` should follow this structure:
 ## AOS Setup Summary
 ```
 
-`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1. `AOS Setup Sequence` follows the ten steps in Section 9.3. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Validation Checklist` uses the completeness checks in Section 27.
+`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1. `AOS Setup Sequence` follows the setup sequence in Section 9.3, which includes provisioning the AOS Workspace root files (`/aos-router.md`, `/CLAUDE.md`) from the shipped example copies (Section 28.2), non-destructively — created when absent and overwritten only after a separate `Proceed`. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Validation Checklist` uses the completeness checks in Section 27.
 
 The root entry `/build-aos.md` (file_type `builder_entry`) is a short pointer to `/builders/build-aos.md` and does not repeat this schema.
 
@@ -1197,6 +1457,8 @@ An AOS instance is a living system: its files change after it is built. To keep 
 
 **Mixed and derived files.** Where a file combines a rendered structure with instance data (for example the rows of `/configs/agent-registry.md`, the values in `/aos-manifest.md`), apply the strict test: if the file contains *any* non-regenerable information it is treated as a **data file** for update purposes — updated by targeted, approval-gated merge, never wholesale overwrite — or it is split so each file is purely one kind. A **projection** (for example the AOS User Guide, Section 16.6) is a regenerable view built from definitions plus named data inputs; it is treated as a **definition file** for update purposes (safe to regenerate), with its data inputs stored separately as data files.
 
+`agent-catalog.yaml` (§7A) is a **definition file**: framework-owned, created and updated only by the framework, never edited by an operating agent. It is read-only inside instances. The instance registry's absorbed ownership fields (§10.3.1) are **data** — they describe instance-born agents — and are treated per the strict mixed-file test above: targeted, approval-gated merge, never wholesale overwrite. The `agent-profiles/` files (§7B) are likewise **definition files**: framework-owned, created and updated only by the framework, read-only inside instances, and regenerable from the spec.
+
 **The drift invariant.** Agents write data files; the factory owns definition files; **no operating agent modifies a framework-derived definition file.** This bounds drift to data (which is supposed to grow) and keeps definition files pristine renderings, so a factory update is a clean overwrite of definitions with `Proceed` rather than a three-way merge.
 
 ---
@@ -1223,7 +1485,7 @@ requires_approval_for_overwrite: true
 
 `spec_version` records the spec the file was rendered from (Section 14.1–14.2). `compatible_aos_versions` is the separate compatibility axis: it declares which `aos_version` lines a builder may operate on, matched against the MAJOR line of an instance's `aos_version` (Section 14.3.1).
 
-**Stamping rule (mandatory).** Every file the factory generates — builder files, agent instruction files, and all other generated markdown — records, in its frontmatter, the `spec_version` it was rendered from. Generated instance files additionally carry `aos_version` (Sections 15.2–15.3).
+**Stamping rule (mandatory).** Every file the factory generates — builder files, agent instruction files, and all other generated markdown — records, in its frontmatter, the `spec_version` it was rendered from. Generated instance files additionally carry `aos_version` (Sections 15.2–15.3). `agent-catalog.yaml`'s `catalog_version` + `spec_version` header keys (§7A.6) satisfy this same stamping rule for the catalog.
 
 ## 15.2 Generated Agent File Frontmatter
 
@@ -1290,6 +1552,8 @@ agent_instruction
 aos_router
 project_instructions
 design_spec
+agent_catalog
+agent_profile
 ```
 
 `design_spec` applies to this design specification itself (`aos-factory-design-specification.md`), the source document the AOS Factory is generated from. It is the one source/design artifact in the vocabulary; the other types all describe factory-generated files.
@@ -1328,6 +1592,14 @@ aos_router    /aos-router.md (AOS Workspace root, shared across instances and fa
 
 project_instructions
               /CLAUDE.md (AOS Workspace root, session-start instruction file)
+
+agent_catalog design-spec/agent-catalog.yaml (source) and its rendered factory
+              copy /agent-catalog.yaml; framework-level, read-only in
+              instances; see Section 7A
+
+agent_profile design-spec/agent-profiles/[agent-name]-agent.md (source) and its
+              rendered factory copy; framework-level narrative behavior per
+              agent, read-only in instances; see Section 7B
 ```
 
 ## 15.5 Controlled Status Vocabulary
@@ -1416,7 +1688,7 @@ Global and agent config files should follow:
 ## Notes
 ```
 
-For agent configs, `Inherited Rules` is especially important because agent configs should reference global permissions instead of duplicating them. Likewise, the `Tool Access` section must reference the global tool access matrix (`/configs/tool-access-matrix.md`), which is authoritative, and list only agent-specific notes or requests rather than restating or overriding matrix grants (see Section 22).
+For agent configs, `Inherited Rules` is especially important because agent configs should reference global permissions instead of duplicating them. Likewise, the `Tool Access` section must reference the global tool access matrix (`/configs/tool-access-matrix.md`), which is authoritative, and list only agent-specific notes or requests rather than restating or overriding matrix grants (see Section 22). For an agent with `pre_authorized_actions`, the config's `Tool Access` section adds a one-line cross-reference to the agent's catalog entry (§7A) rather than restating the pre-authorized actions.
 
 ## 16.2 Memory File Schema
 
@@ -2210,6 +2482,7 @@ Approved decisions:
 - Review Agent audits generated files for completeness and consistency.
 - Security Agent audits permissions and tool access.
 - Memory Agent audits memory routing and memory file boundaries.
+- Catalog and profile validation (§7A.5 V1-V8, §7B.5 V9-V10) must pass before an AOS or an agent build is considered complete.
 ```
 
 ---
@@ -2251,20 +2524,23 @@ These are the user-facing steps to generate the reusable factory framework from 
 2. Review the proposed generation scope in Section 35 — the exact list of
    framework files to be created.
 3. Type exactly `Proceed` to authorize generation (the approval gate in
-   Section 3.1; the §34.2 Safety Confirmation Checklist must also be
+   Section 3.1; the §33 safety-related governance rules must also be
    satisfied). Nothing is written before this.
 4. Claude previews, then on `Proceed` writes the framework files:
    - the root entry pointer `/build-aos.md`,
    - all `/builders/build-*.md` files (one master AOS builder plus one
      builder per agent in the Section 7 roster),
-   - the framework changelog `/builder-changelog.md`.
+   - the framework changelog `/builder-changelog.md`,
+   - the rendered factory-root copies `/agent-catalog.yaml` and
+     `/agent-profiles/[agent-name]-agent.md` (one per Section 7.3 agent),
+     read-only inside instances (Sections 7A.4, 7B.2).
 5. This phase does NOT create a user AOS instance. Instructions for creating an AOS instance are outside the scope of this document.
 6. Validate the generated framework against the QA checks in Sections 27 and 34.
 ```
 
 The workspace-root router (`/aos-router.md`, file_type `aos_router`) and project instructions (`/CLAUDE.md`, file_type `project_instructions`) govern target selection *across* instances and the factory; they live at the AOS Workspace root alongside the factory and instances and are not produced by the factory build.
 
-Framework generation, as scoped above and in Section 35, produces only the AOS Factory's own files: the root build entry (`/build-aos.md`), the `/builders/build-*.md` files, and `/builder-changelog.md`. The example workspace-root files referenced in Section 28.2 (`templates/aos-router.md`, `templates/CLAUDE.md`) are not part of this generation phase — they are authored separately during plugin packaging.
+Framework generation, as scoped above and in Section 35, produces only the AOS Factory's own files: the root build entry (`/build-aos.md`), the `/builders/build-*.md` files, `/builder-changelog.md`, and the rendered factory-root copies `/agent-catalog.yaml` and `/agent-profiles/` (Sections 7A.4, 7B.2). The example workspace-root files referenced in Section 28.2 (`templates/aos-router.md`, `templates/CLAUDE.md`) are not part of this generation phase — they are authored separately during plugin packaging.
 
 ## 28.2 Packaging the Factory as a Claude Plugin
 
@@ -2317,7 +2593,7 @@ Steps:
    then re-package and re-publish.
 ```
 
-The router (`/aos-router.md`) and project instructions (`/CLAUDE.md`) are AOS Workspace root files, not factory components, but the plugin **ships example copies** of both under `templates/`, authored at packaging time per step 3 above. After installing the plugin and generating their first instance, the user copies these examples to their AOS Workspace root and edits them (default instance, routing signals, planning-mode rules) for their setup. Shipping them as examples — rather than writing them to the workspace automatically — keeps the plugin from overwriting a user's existing root files.
+The router (`/aos-router.md`) and project instructions (`/CLAUDE.md`) are AOS Workspace root files, not factory components, but the plugin **ships example copies** of both under `templates/`, authored at packaging time per step 3 above. During AOS setup, `/builders/build-aos.md` provisions these into the AOS Workspace root non-destructively: it creates `/aos-router.md` and `/CLAUDE.md` from the examples when they are absent, and overwrites an existing root file only after a separate `Proceed` (Sections 2.4, 3.2, 4.1). The user then edits them (default instance, routing signals, planning-mode rules) for their setup. Provisioning them from shipped examples — and gating any overwrite behind `Proceed` — keeps the plugin from silently overwriting a user's existing root files.
 
 ---
 
@@ -2410,4 +2686,4 @@ Sections 33-37 — the final consolidation decisions, ready-to-generate checklis
 aos-factory-generation-runbook.md
 ```
 
-Cross-references elsewhere in this document to Sections 33-37 (for example Section 34.2 and Section 35 in Section 28.1) resolve to the runbook, where the original 33-37 numbering is preserved. The `Proceed` safety gate is unchanged: actual AOS Factory file generation remains blocked until the user types exactly `Proceed`, per the Purpose section above and the runbook.
+Cross-references elsewhere in this document to Sections 33-37 (for example Section 33 and Section 35 in Section 28.1) resolve to the runbook, where the original 33-37 numbering is preserved. The `Proceed` safety gate is unchanged: actual AOS Factory file generation remains blocked until the user types exactly `Proceed`, per the Purpose section above and the runbook.
