@@ -1,139 +1,70 @@
-# Open AOS Factory Plugin
+# AOS Factory (Claude Plugin)
 
-The **Open AOS Factory** builds and maintains one or more **Agentic Operating System (AOS)** instances. Each AOS is a personal or professional AI standardized operating environment composed of specialized agents, workflows, memory files, templates, and configuration files that work together to create a complete agentic system. The factory guides both technical and non-technical users through setup via a conversational interview, produces all files automatically once approved, and can add or rebuild individual agents at any time. Although this particular implementation is configured to run on Claude Cowork (for non-technical users) or Claude Code (for developers), it can be easily ported to work with Codex and possibly other platforms.
+The **AOS Factory** stands up a complete **Agentic Operating System (AOS)** inside
+a Claude workspace: the required governance agents, the productive agents you
+choose, plus the workflows, templates, configs, logs, and a User Guide that make
+them work together. It can also add or rebuild a single agent later.
 
-The **Open AOS Factory** is an open-source project locate here: https://github.com/neoClarity-AI/Open-AOS-Factory
+This plugin is a **rendering** of the AOS Factory design specification
+(`spec_version` 2.1.0). The specification is the single source of truth; the
+builders, skills, and templates here are generated from it.
 
-**What Is an AI Agent?**
+## What's inside
 
-An AI agent is an LLM (like Claude) that has been given a specific role, a defined set of responsibilities, and the autonomy to carry out tasks on your behalf. Rather than simply answering questions, an agent operates from a written set of instructions that tell it what it is responsible for, what tools and data it may use, where its boundaries lie, and when it should escalate back to you. In an AOS, each agent is specialized — one handles your inbox, another manages your calendar, another tracks projects — so that each behaves like a focused, reliable team member instead of a general-purpose assistant. Agents can work on their own, hand tasks off to one another, and follow the same rules every time, which is what makes the overall system predictable and trustworthy.
+- **`skills/build-aos/`** — the master builder. Runs the interactive setup
+  interview, creates the instance folder tree and global files, provisions the
+  workspace root, builds the required governance agents and your selected
+  optional agents, and writes a setup summary.
+- **`skills/build-agent/`** — the generic build engine. Builds any one approved
+  agent from its catalog entry, profile, and interview script — used during
+  initial setup and to add an optional agent later.
+- **`templates/aos-router.md`** and **`templates/CLAUDE.md`** — example
+  workspace-root files you copy to your AOS Workspace root after install.
+- **`builder-changelog.md`** — framework-file and packaging change history.
 
-**What is an Agentic Operating System?**
+## Install
 
-An Agentic Operating System is not a piece of software you install — it is a structured workspace that gives your LLM a persistent identity, a memory, and a set of specialized agents, each with clear responsibilities, boundaries, and escalation rules. The AOS runs inside your Claude project folder. Once built, Claude reads the agent files at the start of every session and behaves consistently across conversations, routing tasks to the right agent, remembering context, and following the rules you approved when the system was set up.
+1. Add the marketplace that publishes this plugin, then install `aos-factory`
+   from it (the repo's `.claude-plugin/marketplace.json` points at this
+   directory as the plugin `source`).
+2. After installing, copy the two example files from `templates/` into your AOS
+   Workspace root:
+   - `templates/aos-router.md` → `/aos-router.md`
+   - `templates/CLAUDE.md` → `/CLAUDE.md`
+   The `build-aos` skill will also create these for you (non-destructively) on
+   first build if they are absent.
 
-**What Are the Benefits of an AOS?**
+## Usage
 
-An **Agentic Operating System (AOS)** turns scattered, one-off interactions with an LLM into a dependable system that works the way you do. Because each agent has a fixed role, clear boundaries, and a shared memory, you stop re-explaining context and re-checking output every session. The system remembers your preferences, follows the rules you approved, and behaves consistently across conversations. Specialized agents let you delegate whole categories of work (such as inbox, calendar, projects, and research). Each task is handled by a focused, reliable team member rather than a general-purpose assistant. Built-in escalation rules keep you in control of anything sensitive. The result is less cognitive load, fewer dropped threads, and more leverage: you describe outcomes, the right agent does the work, and you get predictable, trustworthy results. And because the AOS is structured rather than coded, you get these benefits without any technical expertise, and can extend the system by adding new agents whenever your needs grow.
+Ask Claude to build an AOS and the `build-aos` skill takes over:
 
-## Claude Cowork
+> "Set up a new AOS for my consulting work."
 
-Although the **Open AOS Factory** is generic in nature and can be adapted to a variety of LLMs, **Claude Cowork** is used for this particular implementation. **Claude Cowork** makes Agentic AI accessible to non-technical users. But it is not an AOS. The **Open AOS Factory** adds the structure necessary to make Claude Cowork a true AOS, without requiring any technical expertise to use.  Claude Code's agentic capabilities to the Claude Desktop app for knowledge work beyond coding. Instead of responding to one prompt at a time, Claude can take on complex, multi-step tasks and carry them out on your behalf — reading and writing your local files, running code in an isolated environment, and producing finished deliverables like formatted documents, spreadsheets, and presentations. You describe an outcome, let Claude work, and come back to completed results.
+It runs the setup interview, previews everything it will create, and waits for you
+to type exactly `Proceed` before writing any files. To add one agent to an
+existing instance, the `build-agent` engine handles it:
 
-## Prerequisites
+> "Build the Research Agent."
 
-Before using the Open AOS Factory, you'll need:
+### Safety model
 
-- **A Claude subscription:** Claude Pro is the minimum subscription level, and it's sufficient for most uses of the AOS Factory. See the [Claude plans page](https://claude.com/pricing) for the available options.
-- **The Claude Desktop application:** Required to run [Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork).
-- An active Internet is required for all **Claude Cowork** sessions.
+Every builder defaults to **dry-run / preview** and gates file creation behind the
+exact string `Proceed`. Approval is action-specific: each `Proceed` authorizes
+only the action described immediately before it. Existing files are never
+overwritten, moved, renamed, or deleted without a separate `Proceed`.
 
-## Setup
+## Versioning
 
-### Create Claude Cowork Project
+The plugin version tracks the framework `spec_version` and the
+`builder-changelog.md`. This release is **2.1.0**.
 
-Follow these steps to create a new in **Claude Cowork** project. You will use this project to interact with all your AOS instances.
+## Contributing
 
-1. Setup **Claude Desktop** on your computer.
-   - Download and install **Claude Desktop** (see [Getting Started with Claude Cowork](https://support.claude.com/en/articles/13345190-get-started-with-claude-cowork) for details.)
-   - Start **Claude Desktop** and sign in using your Claude subscription.
+The repository accepts pull requests **only against the design specification**.
+The prebuilt factory and this plugin are regenerated and published from the
+approved spec, so every released artifact traces back to a reviewed design. To
+change the official factory or plugin, change the spec.
 
-2. Using **Claude Desktop**:
+## License
 
-    - Click on the **Cowork** tab at the top of the lefthand navigation pane.
-      
-    - Click on **Projects** in the nav menu.
-      
-    - Click on the **New project** button.
-      
-    - Click on **Use an existing folder** option.
-      
-    - Click on **Select a folder...**
-      
-    - Create a new folder called **AOS Workspace**.
-      
-    - If necessary, shorten the project **Name** to **AOS Workspace**. 
-      No instructions or additional files are required at this time
-      
-    - Click on the **Create** button.
-
-You now have a workspace for your AOS. Before you can create your AOS, you first need to install the **AOS Factory** plugin.
-
-### Install AOS Factory plugin
-
-1. Using **Claude Desktop**:
-   
-   - Click on the **Cowork** tab at the top of the lefthand navigation pane.
-   - Click on **Customize** button
-   - Click on **Browse plugins** button
-   - Click on **Personal** button
-   - Click on Plus sign (**+**) to add new plugin
-   - Click on **Add Marketplace** button
-   - Click on **Add from a repository** button
-   - Enter this URL: [https://github.com/neoClarity-AI/neoClarity-Plugins](https://github.com/neoClarity-AI/neoClarity-Plugins)
-   - Click on the **Sync** button
-   - Click on the **Aos factory** plugin.
-   - Click on the **Install** button.
-   - Verify that the **Install** button had changed to a **Manage** button.
-     The plugin is now installed!
-   - Click the back arrow ()
-   
-2. To complete the setup, copy the template files into your AOS workspace root folder. Here's how:
-
-   - Click on the **Cowork** tab at the top of the lefthand navigation pane.
-
-   - Click on **Projects** in the nav menu.
-
-   - Click on the **AOS Workspace** project.
-
-   - Set the model to **Sonnet Medium**. This model works well for most **AOS** tasks.
-
-   - Type this prompt into the message box:
-
-     `Copy the template files from the AOS Factory into the project root folder.`
-
-You're now ready to create your first AOS instance!
-
-
-## Create your first AOS Instance
-
-To create your first AOS instance, invoke the build process as follows. The factory will walk you through the steps.
-
-1. **Open a new session** in your **AOS Workspace** project, then issue the prompt: Build an AOS.
-2. **Start the build.** Type: `Build my AOS` — Claude will open the master builder and begin the setup interview.
-3. **Answer the interview questions.** The builder acts as an executive coach and collaborator, asking about your work style, the agents you want, and how you want the system to behave. It recommends sensible defaults and documents decisions as it goes. Recommended first agents to install: 
-4. **Review the proposed files.** Before anything is created, Claude shows you exactly what it plans to write.
-5. **Type `Proceed`** to authorize file creation. Nothing is written until you do.
-
-After your AOS instance is created, start a new conversation in the AOS Workspace. Here are some prompts to get you started.
-
-- `Show me the daily brief.`
-- `Show me the AOS User Guide.`
-- `Take me on a guided tour of my new AOS.`
-- `Let's setup the scheduled tasks.`
-
-**Best practice:** Always start a new conversation when you switch topics. Conversations that grow too long invite drift, which causes erratic results.
-
-**Pro tip:** You can multi-task in Claude Cowork. While Claude is working on one request, you can navigate back to the **AOS Workspace** home page and start a new conversation. You can have as many conversations going as you like. But, keep in mind that you'll be burning through your session limits faster.
-
-## Workspace root files
-
-The AOS Factory plugin contains two template files (**CLAUDE.md** and **aos-router.md**) that must be in your workspace root folder. Both of these files are required for your AOS to work correctly.
-
-These two files contain important instructions that include:
-
-- How to operate in **Planning Mode**.
-- Which AOS instance to use when you start a new conversation in the **AOS Workspace**.
-
-## Planning Mode
-
-If you start any conversation with the words, "Planning mode" or "P mode" or "pmode", Claude will not create, edit, or delete any file until you give it the instruction to "Proceed" (using that exact word). Planning mode means the session is for discussing and designing changes — not implementing them. Instead, Claude will display proposed changes and ask you to proceed. You can either continue the conversation or type "Proceed" to implement the proposed changes. It's a great way to collaborate with Claude without creating unintended changes.
-
-## Skills
-
-- **build-aos** — master entry point; stands up a complete AOS instance.
-- **build-{security,memory,chief-of-staff,review}-agent** — the four required
-  governance agents.
-- **build-{tutor,inbox,calendar,task,project-manager,research,writing,
-  document,personal-crm,automation}-agent**
-  — optional productive agents (add at least one).
+MIT © neoClarity

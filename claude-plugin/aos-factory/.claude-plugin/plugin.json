@@ -1,16 +1,21 @@
 {
   "name": "aos-factory",
-  "version": "2.0.0",
-  "description": "Agentic Operating System (AOS) Factory — builders that stand up a complete AOS instance (four required governance agents, optional productive agents, workflows, templates, configs, logs, and a User Guide) and add or rebuild individual agents.",
+  "version": "2.1.0",
+  "description": "Agentic Operating System (AOS) Factory — builders that stand up a complete AOS instance (required governance agents, selected optional productive agents, workflows, templates, configs, logs, and a User Guide) and add or rebuild individual agents. Rendered from AOS Factory design specification spec_version 2.1.0.",
   "author": {
-    "name": "Open AOS Factory",
+    "name": "neoClarity",
     "email": "github@neoclarity.ai"
   },
+  "homepage": "https://github.com/neoclarity/open-aos-factory",
+  "license": "MIT",
   "keywords": [
     "aos",
     "agentic-operating-system",
     "agents",
-    "productivity",
-    "builder"
+    "agent-factory",
+    "builder",
+    "orchestration",
+    "governance",
+    "workflows"
   ]
 }
