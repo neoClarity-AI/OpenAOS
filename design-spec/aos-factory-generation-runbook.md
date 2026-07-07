@@ -2,9 +2,9 @@
 title: AOS Factory Generation Runbook
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.0.0
+spec_version: 2.1.0
 created_date: 2026-06-02
-last_updated: 2026-07-01
+last_updated: 2026-07-06
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -84,10 +84,10 @@ When generating an AOS Factory instance, you must follow these rules.
 - Include root build entry file.
 - Include /builders folder files.
 - Include builder changelog.
-- Include all approved agent builder files.
+- Include the generic agent build engine (`build-agent.md`), which builds every approved agent from its design artifacts (design spec Sections 8, 12).
 - Include dry-run / preview mode in all builders.
 - Include approval gates before any file overwrite or refresh.
-- Render factory-root copies of `agent-catalog.yaml` and `agent-profiles/[agent-name]-agent.md` from the design-spec sources (design spec Sections 7A.4, 7B.2); they are read-only inside instances.
+- Render factory-root copies of `agent-catalog.yaml`, `agent-specs/[agent-name]-agent/` (profile.md + interviews.md per agent), and `aos-interviews.md` from the design-spec sources (design spec Sections 7A.4, 7B.2, 7C.2); they are read-only inside instances.
 - Stamp every generated file's frontmatter with the `spec_version` it was rendered from (design spec Sections 14.1–14.2, 15.1). Do not emit `builder_version` or `schema_version`; those have been collapsed into `spec_version`.
 
 ## 35.2 Generation Scope
@@ -100,22 +100,11 @@ No AOS instance should be generated in this first generation phase unless the us
 /build-aos.md
 /builder-changelog.md
 /agent-catalog.yaml
-/agent-profiles/[agent-name]-agent.md   (one per Section 7.3 agent — 14 files)
+/agent-specs/[agent-name]-agent/profile.md      (one per Section 7.3 agent — 15 folders)
+/agent-specs/[agent-name]-agent/interviews.md   (one per Section 7.3 agent)
+/aos-interviews.md
 /builders/build-aos.md
-/builders/build-security-agent.md
-/builders/build-memory-agent.md
-/builders/build-chief-of-staff-agent.md
-/builders/build-review-agent.md
-/builders/build-tutor-agent.md
-/builders/build-inbox-agent.md
-/builders/build-calendar-agent.md
-/builders/build-task-agent.md
-/builders/build-project-manager-agent.md
-/builders/build-research-agent.md
-/builders/build-writing-agent.md
-/builders/build-document-agent.md
-/builders/build-personal-crm-agent.md
-/builders/build-automation-agent.md
+/builders/build-agent.md                        (generic engine — replaces the former 14 per-agent builders)
 ```
 
 ---
@@ -179,3 +168,4 @@ Read the source file `design-spec/aos-factory-design-specification.md` (Section 
 
 Do not add, modify, or delete any plugin files unless the user types exactly: Proceed.
 ```
+                                                                                                          

@@ -1,0 +1,128 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/neoClarity-AI/Open-AOS-Factory/design-spec/catalog.schema.json",
+  "title": "AOS Factory Agent Catalog",
+  "description": "DERIVED ARTIFACT — a JSON Schema rendering of design spec §7A.3/§7A.6 for agent-catalog.yaml, used by repo CI (shape/type surface of validation checks V1–V4). The markdown design specification is the single source of truth (§1.6.1); this file is a rendering, never the source. Regenerate it from the spec when §7A changes. Cross-entry checks (domain/artifact disjointness, vocabulary membership, slug resolution) are enforced by scripts/validate-catalog.py.",
+  "type": "object",
+  "required": ["catalog_version", "spec_version", "vocabulary", "agents"],
+  "properties": {
+    "catalog_version": { "$ref": "#/$defs/semver" },
+    "spec_version": { "$ref": "#/$defs/semver" },
+    "vocabulary": {
+      "type": "object",
+      "required": ["domains"],
+      "properties": {
+        "domains": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/domainToken" },
+          "uniqueItems": true,
+          "minItems": 1
+        }
+      },
+      "additionalProperties": false
+    },
+    "agents": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/agentEntry" }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "semver": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$"
+    },
+    "slug": {
+      "type": "string",
+      "pattern": "^[a-z0-9]+(-[a-z0-9]+)*-agent$"
+    },
+    "domainToken": {
+      "type": "string",
+      "pattern": "^[a-z0-9-]+(\\.[a-z0-9-]+)*$"
+    },
+    "agentEntry": {
+      "type": "object",
+      "required": [
+        "slug",
+        "display_name",
+        "kind",
+        "tier",
+        "one_line",
+        "domains_owned",
+        "artifacts_owned",
+        "inputs",
+        "outputs",
+        "collaborates_with",
+        "pre_authorized_actions",
+        "approval_required_actions",
+        "tool_notes",
+        "non_responsibilities"
+      ],
+      "properties": {
+        "slug": { "$ref": "#/$defs/slug" },
+        "display_name": { "type": "string", "minLength": 1 },
+        "kind": { "enum": ["governance", "productive"] },
+        "tier": { "enum": ["required", "optional"] },
+        "one_line": { "type": "string", "minLength": 1 },
+        "domains_owned": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/domainToken" },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "artifacts_owned": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 },
+          "uniqueItems": true,
+          "minItems": 1
+        },
+        "inputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/domainToken" },
+          "uniqueItems": true
+        },
+        "outputs": {
+          "type": "array",
+          "items": { "$ref": "#/$defs/domainToken" },
+          "uniqueItems": true
+        },
+        "collaborates_with": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["agent", "direction", "on"],
+            "properties": {
+              "agent": { "$ref": "#/$defs/slug" },
+              "direction": { "enum": ["handoff-to", "handoff-from", "escalates-to"] },
+              "on": { "type": "string", "minLength": 1 }
+            },
+            "additionalProperties": false
+          }
+        },
+        "pre_authorized_actions": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "approval_required_actions": {
+          "type": "array",
+          "items": { "type": "string", "minLength": 1 }
+        },
+        "tool_notes": { "type": "string", "minLength": 1 },
+        "non_responsibilities": {
+          "type": "array",
+          "items": {
+            "type": "object",
+            "required": ["claim", "owned_by"],
+            "properties": {
+              "claim": { "type": "string", "minLength": 1 },
+              "owned_by": { "$ref": "#/$defs/slug" }
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

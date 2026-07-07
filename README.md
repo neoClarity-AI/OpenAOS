@@ -20,7 +20,7 @@ The **Open AOS Factory** sits in three active areas of agent design and contribu
 
 **2. A router that resolves across whole system instances.** Routing a request to the right *agent* is well-established. What's less common is a router that resolves across **separate, memory-isolated AOS instances** (for example, a personal AOS, a work AOS, a client AOS) using a priority-ordered resolution chain (explicit override → framework vs. instance → session pin → signal match → ask) where the router is itself a generated, spec-defined artifact that a non-technical user configures by talking, never by editing code.
 
-**3. Mandatory governance agents that bootstrap the system.** "Governance-first" is now an emerging, named paradigm, but the literature treats governance as a *layer* or *control plane* bolted around the agents. This project makes governance **four required agents** (security/permissions, memory, coordination, and review/reflection) that *must* be instantiated before any productive agent exists. Governance isn't a wrapper; it's the founding membership of every system the factory builds.
+**3. Mandatory governance agents that bootstrap the system.** "Governance-first" is now an emerging, named paradigm, but the literature treats governance as a *layer* or *control plane* bolted around the agents. This project makes governance **five required agents** (security, memory, coordination, review, and upstream feedback) that *must* be instantiated before any productive agent exists. Governance isn't a wrapper; it's the founding membership of every system the factory builds.
 
 Individually, each idea has neighbors in the field. The **combination** of a factory that generates governed AOS instances as a fleet, a cross-instance router, governance reified as required agents, all regenerated from a single canonical spec, and aimed at non-technical users, is one we have not found assembled in any single existing project. That combination is the contribution.
 
@@ -80,7 +80,7 @@ If you're using VS Code with Claude Code, follow these instructions:
 
 ## Key Features
 
-**Governance-first architecture.** Every AOS includes four required governance agents that must be set up before any productive agents are added. These agents own the system's safety, memory, coordination, and quality, not any one task domain.
+**Governance-first architecture.** Every AOS includes five required governance agents that must be set up before any productive agents are added. These agents own the system's safety, memory, coordination, quality, and upstream feedback, not any one task domain.
 
 **Three-level permission model.** Actions are classified as Level 1 (safe autonomous: the agent may act without asking), Level 2 (approval-required: the agent must describe the action and ask the user to type `Proceed`), or Level 3 (prohibited: the agent must not do this at all). The global tool-access matrix is the authoritative source for permissions and overrides any agent-level setting in the event of a conflict.
 
@@ -94,7 +94,7 @@ If you're using VS Code with Claude Code, follow these instructions:
 
 ## Key Benefits
 
-**You can trust it with real work.** Governance comes first, not as an afterthought. Before any productive agent is added, four governance agents (security, memory, coordination, and quality review) are already in place. The system never deletes, overwrites, or moves your files on its own. Anything consequential waits for you to type one word: `Proceed`.
+**You can trust it with real work.** Governance comes first, not as an afterthought. Before any productive agent is added, five governance agents (security, memory, coordination, quality review, and upstream feedback) are already in place. The system never deletes, overwrites, or moves your files on its own. Anything consequential waits for you to type one word: `Proceed`.
 
 **It's built for non-technical people.** Setup is an interview, not a config file. You talk. It builds. There's no command grammar to memorize. You trigger things by plain intent ("Start my day," "Process my inbox").
 
@@ -112,22 +112,21 @@ If you're using VS Code with Claude Code, follow these instructions:
 
 | Agent                                         | Role                                                         |
 | --------------------------------------------- | ------------------------------------------------------------ |
-| **Chief of Staff Agent** *(required)*         | Owns orchestration, routing, prioritization, conflict resolution, and user-facing coordination. Joint owner of the instance router |
-| **Security / Permissions Agent** *(required)* | Owns the global permission rules, tool-access matrix, approval requirements, and safety checks |
+| **Chief of Staff Agent** *(required)*  | Coordinates, routes, prioritizes, and resolves conflicts across agents; joint owner of the AOS Workspace router |
+| **Security Agent** *(required)* | Owns permission rules, approval requirements, access boundaries, the tool-access matrix, and safety checks; the escalation target for all permission, access, and privacy questions |
 | **Memory Agent** *(required)* | Owns shared memory structure, memory hygiene, preference capture, and cross-agent memory routing |
-| **Review / Reflection Agent** *(required)* | Owns completeness audits, consistency checks, retrospectives, and quality review |
-| Task / Commitment Agent | Tracks tasks, commitments, deadlines, and follow-ups |
-| Calendar / Scheduling Agent | Manages scheduling, meetings, and time blocking |
-| Inbox / Communications Agent | Triages email and messages, drafts replies, and runs the inbox-to-task workflow |
-| Project Manager Agent | Runs projects, milestones, kickoffs, and status tracking |
-| Research Agent | Gathers, synthesizes, and cites information |
-| Writing / Content Agent | Drafts, edits, and refines written content |
-| Finance / Admin Agent | Handles finances, budgets, invoices, and administrative tasks |
-| Health / Life Logistics Agent | Manages health appointments, errands, and life logistics |
-| Learning / Tutor Agent | Builds study plans, explains concepts, and tracks learning goals |
-| Personal CRM Agent | Tracks people, relationships, interactions, and follow-ups |
-| Document Agent | Organizes, files, names, and retrieves documents |
-| Automation / Tool-Use Agent | Wires up tools, integrations, and repeatable automations |
+| **Review Agent** *(required)* | Owns retrospectives, system improvement, the review cadence, decision audits, AOS refinement, and the AOS User Guide |
+| **Feedback Agent** *(required)* | Owns the upstream feedback channel: captures bug reports and enhancement proposals locally, then submits them to the factory after scrubbing and approval |
+| Task Agent | Owns task and commitment tracking: capturing, prioritizing, and closing out tasks from inbox items, projects, and direct requests |
+| Calendar Agent | Owns scheduling: reading availability, proposing times, and creating or changing calendar events under approval |
+| Inbox Agent | Triages incoming communications and drafts responses; promotes items into other agents' domains but owns none of them |
+| Project Manager Agent | Owns project coordination: briefs, plans, milestones, stakeholders, and cross-task tracking for active projects |
+| Research Agent | Owns research: gathering, synthesizing, and sourcing information for projects, decisions, and learning |
+| Writing Agent | Owns long-form content and drafting: documents, posts, and written deliverables distinct from message replies |
+| Tutor Agent | Owns learning: structuring material into lessons, tracking progress, and supporting study or skill-building goals |
+| Personal CRM Agent | Owns contacts: relationship context, communication preferences, and collaboration notes about people |
+| Document Agent | Owns document management: filing, organizing, and retrieving documents and reference material across the AOS |
+| Automation Agent | Owns automation and tool-use: scripting, integrations, and recurring automated actions on behalf of other agents |
 
 At least one optional productive agent must be added before initial AOS setup is considered complete.
 
@@ -139,6 +138,7 @@ At least one optional productive agent must be added before initial AOS setup is
 Open AOS Factory/                ← project root
 │
 ├── CLAUDE.md                    ← session-start instructions for Claude
+├── AGENTS.md                    ← cross-agent rules (governance-removal hard rule, routing); pulled in by CLAUDE.md
 ├── aos-router.md                ← instance router (read first every session)
 ├── README.md
 ├── CONTRIBUTING.md
@@ -152,9 +152,10 @@ Open AOS Factory/                ← project root
 ├── aos-factory/                 ← factory source (not an AOS instance)
 │   ├── build-aos.md             ← entry-point pointer to the master builder
 │   ├── builder-changelog.md
-│   ├── builders/                ← 17 builder files (one per agent + master build-aos)
-│   └── logs/
-│       └── factory-routing-decision-log.md
+│   ├── agent-catalog.yaml       ← rendered catalog of all agents (§7A.4)
+│   ├── aos-interviews.md        ← AOS-level setup interview (§7C/§12.1)
+│   ├── agent-specs/             ← 15 agent spec folders, each with profile.md + interviews.md
+│   └── builders/                ← build-aos.md (master builder) + build-agent.md (generic build engine)
 │
 └── claude-plugin/               ← packaged plugin (for Claude Cowork users)
     └── aos-factory/
@@ -162,7 +163,7 @@ Open AOS Factory/                ← project root
         │   └── plugin.json      ← plugin manifest
         ├── README.md
         ├── builder-changelog.md
-        ├── skills/              ← 17 SKILL.md files, one per builder
+        ├── skills/              ← 2 SKILL.md files: build-aos and build-agent
         └── templates/           ← starter CLAUDE.md and aos-router.md to copy to workspace root
 ```
 
@@ -172,11 +173,11 @@ AOS instances are created as **sibling folders** at the project root alongside `
 
 ## Technical Overview
 
-**Design philosophy.** The **Open AOS Factory** applies the **Single Responsibility Principle** at every level: each agent owns exactly one domain, and coordination is the Chief of Staff's job rather than being absorbed into a catch-all central agent. The governance layer (the four required agents) is mandatory because safety, memory, coordination, and quality review must exist before any productive work happens. Optional productive agents are additive and replaceable.
+**Design philosophy.** The **Open AOS Factory** applies the **Single Responsibility Principle** at every level: each agent owns exactly one domain, and coordination is the Chief of Staff's job rather than being absorbed into a catch-all central agent. The governance layer (the five required agents) is mandatory because safety, memory, coordination, quality review, and upstream feedback must exist before any productive work happens. Optional productive agents are additive and replaceable.
 
 **`CLAUDE.md` and `aos-router.md`.** These two files are the load-bearing wiring of the system. `CLAUDE.md` is read by Claude at the start of every session. It sets Planning mode behavior and instructs Claude to resolve the active instance before doing anything else. `aos-router.md` is that resolution mechanism: it classifies each incoming request as targeting the factory, a specific AOS instance, or a cross-instance query, using a priority-ordered resolution chain (explicit user override → framework vs. instance → session pin → signal match → ask). Example copies of both files ship under `claude-plugin/aos-factory/templates/` and should be copied to the workspace root after install.
 
-**Builder schema.** Each builder file in `builders/` follows a standardized YAML front matter schema (`title`, `file_type`, `builder_version`, `schema_version`, `created_date`, `last_updated`, `status`, `compatible_aos_versions`, `requires_approval_for_overwrite`) and a common markdown section structure: Builder Purpose, When to Use, Builder Operating Mode, Interview Flow, Discovery Questions, Recommended Defaults, Configuration Decisions, and Output Files. This consistency allows the factory to be extended with new agent builders without redesigning the document format.
+**Builder schema.** The builder files (`build-aos.md` and the generic `build-agent.md`) follow a standardized YAML front matter schema (`title`, `file_type`, `builder_version`, `schema_version`, `created_date`, `last_updated`, `status`, `compatible_aos_versions`, `requires_approval_for_overwrite`) and a common markdown section structure: Builder Purpose, When to Use, Builder Operating Mode, Interview Flow, Discovery Questions, Recommended Defaults, Configuration Decisions, and Output Files. This consistency allows the factory to be extended with new agents — via the rendered `agent-specs/` — without redesigning the builder format.
 
 **What a built instance looks like.** When `build-aos` completes an authorized build, it creates a folder with the user's chosen AOS name containing:
 
