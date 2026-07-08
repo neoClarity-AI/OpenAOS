@@ -3,8 +3,8 @@ title: AOS Factory Design Specification
 file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
-last_updated: 2026-07-06
-spec_version: 2.1.0
+last_updated: 2026-07-08
+spec_version: 2.1.1
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -485,6 +485,8 @@ Inside the AOS Workspace, the **AOS Factory** (the reusable builder framework) a
   /templates
   /configs
   /docs
+  /outputs
+    /[agent-name]-agent      (one subfolder per installed agent; §5.1)
   /inbox
     /processed
   /archive
@@ -2056,7 +2058,7 @@ Because the guide is an HTML file, it carries its metadata via meta tags or an H
 The guide has a defined **skeleton** so that `/builders/build-aos.md` can always generate a valid, useful file. The Review Agent regenerates the guide from this skeleton plus current instance data during the monthly review (Section 17.4). Every section below the Table of Contents carries a unique HTML bookmark (an `id` anchor), and every Table of Contents item is an in-page link to the corresponding bookmark. The skeleton is a minimal valid HTML document with these fixed top-level sections, in order:
 
 ```text
-- Header metadata (meta tags / HTML comment: file_type documentation, AOS name, aos_version, last_updated)
+- Header metadata (meta tags / HTML comment: file_type documentation, AOS name, aos_version, spec_version, last_updated)
 - Title and subtitle — the title is the AOS instance name; the subtitle shows the revision (last_updated) date
 - Table of Contents — lists every subsequent section below and links to each section's HTML bookmark
 - Change Log — what is new in the guide itself (placed immediately after the Table of Contents)
@@ -2402,4 +2404,789 @@ Approved review question:
 Is the whole system still aimed at the right goals?
 ```
 
-The Feedback Agent's self-examination also runs at quarte
+The Feedback Agent's self-examination also runs at quarterly review, as at the monthly review (Section 17.4): enhancement candidates from learnings and preferences are presented for accept / edit / discard; sends require Security Agent scrubbing and `Proceed`.
+
+The quarterly review repeats the advertising check (Section 17.3) and is the point where previously declined suggestions may be re-raised. **Anti-nagging rule (normative):** a declined suggestion is logged and not re-raised until the next quarterly review or a material change in usage pattern. The quarterly review also surfaces retirement signals for installed agents (§7B.3 Retirement) — likewise suggestion only.
+
+Primary owner:
+
+```text
+Review Agent
+```
+
+## 17.6 Inbox-to-Task Workflow
+
+Create:
+
+```text
+/workflows/inbox-to-task-workflow.md
+```
+
+Purpose:
+
+```text
+Convert raw inbox notes, messages, or captured thoughts into tasks, projects, calendar items, memory updates, decisions, or archive items.
+```
+
+Processed inbox items should be moved to:
+
+```text
+/inbox/processed
+```
+
+Moving an item to `/inbox/processed` is treated as part of normal inbox processing and should be allowed if the user has approved the inbox-processing workflow. This is the single pre-authorized exception to the Section 3.2 rule that moving files requires explicit approval.
+
+Primary owner:
+
+```text
+Chief of Staff Agent, with Inbox Agent support when installed.
+```
+
+## 17.7 Project Kickoff Workflow
+
+Create:
+
+```text
+/workflows/project-kickoff-workflow.md
+```
+
+Purpose:
+
+```text
+Turn a new project idea into a project folder, project brief, goals, stakeholders, milestones, tasks, and review cadence.
+```
+
+Primary owner:
+
+```text
+Chief of Staff Agent, with Project Manager Agent support when installed.
+```
+
+## 17.8 Decision Capture Workflow
+
+Create:
+
+```text
+/workflows/decision-capture-workflow.md
+```
+
+Purpose:
+
+```text
+Capture important decisions consistently in the correct decision log, including context, rationale, affected files, and follow-up.
+```
+
+Primary owner:
+
+```text
+Chief of Staff Agent, with Memory Agent support.
+```
+
+## 17.9 Memory Review Workflow
+
+Create:
+
+```text
+/workflows/memory-review-workflow.md
+```
+
+Purpose:
+
+```text
+Review memory files for stale, duplicated, misplaced, sensitive, or low-value information.
+```
+
+Primary owner:
+
+```text
+Memory Agent, with Review Agent support.
+```
+
+---
+
+# 18. Global Templates
+
+Every generated AOS should include these global templates.
+
+## 18.1 Status Report Template
+
+Create:
+
+```text
+/templates/status-report-template.md
+```
+
+Purpose:
+
+```text
+Give the user a concise summary of current priorities, active projects, pending approvals, recent decisions, next actions, and processed inbox items.
+```
+
+Body skeleton:
+
+```markdown
+## Priorities
+## Active Projects
+## Pending Approvals
+## Recent Decisions
+## Next Actions
+## Processed Inbox
+```
+
+## 18.2 Project Brief Template
+
+Create:
+
+```text
+/templates/project-brief-template.md
+```
+
+Purpose:
+
+```text
+Define a project’s purpose, desired outcome, scope, stakeholders, milestones, risks, next actions, and review cadence.
+```
+
+Body skeleton (the purpose list above as sections):
+
+```markdown
+## Purpose
+## Desired Outcome
+## Scope
+## Stakeholders
+## Milestones
+## Risks
+## Next Actions
+## Review Cadence
+```
+
+This template should exist even if the Project Manager Agent is not installed.
+
+## 18.3 Decision Entry Template
+
+Create:
+
+```text
+/templates/decision-entry-template.md
+```
+
+Purpose:
+
+```text
+Provide a standard format for recording decisions in global, project-level, or agent-level decision logs.
+```
+
+This template embeds the §16.5 decision-log entry block; it defines no new schema of its own.
+
+## 18.4 Handoff Summary Template
+
+Create:
+
+```text
+/templates/handoff-summary-template.md
+```
+
+Purpose:
+
+```text
+Create consistent summaries when an agent finishes major work, escalates, or transfers context to another agent. Build completion is covered separately by the Build Summary (Section 13), not by this template.
+```
+
+Body skeleton:
+
+```markdown
+## From / To
+## Trigger
+## Work Completed
+## Open Items
+## Files Touched
+## Decisions Needed
+```
+
+## 18.5 Approval Request Template
+
+Create:
+
+```text
+/templates/approval-request-template.md
+```
+
+Purpose:
+
+```text
+Standardize how agents ask the user to approve Level 2 actions requiring Proceed.
+```
+
+The request must explain the proposed action, affected files, reason, consequence, and ask the user to type exactly `Proceed`.
+
+Body skeleton (the five §3.1 elements as labeled fields):
+
+```markdown
+**Proposed Action:**
+**Affected Files:**
+**Reason:**
+**Consequence:**
+**Approval:** type exactly `Proceed` to authorize
+```
+
+## 18.6 Memory Entry Template
+
+Create:
+
+```text
+/templates/memory-entry-template.md
+```
+
+Purpose:
+
+```text
+Standardize how important preferences, facts, decisions, people, projects, and agent learnings are recorded.
+```
+
+This template embeds the §16.2 dated memory entry block (the seven §20.3 fields); it defines no new schema of its own.
+
+---
+
+# 19. Logging Model
+
+## 19.1 Global Logs
+
+The AOS should maintain:
+
+```text
+/logs/aos-decision-log.md
+/logs/change-log.md
+```
+
+Global logs should capture:
+
+```text
+- System-wide decisions
+- Major configuration changes
+- Build history
+- Global workflow changes
+- Permission policy changes
+```
+
+## 19.2 Agent-Level Logs
+
+Each agent should maintain:
+
+```text
+/agents/[agent-name]-agent/logs/[agent-name]-decision-log.md
+```
+
+Agent logs should capture local decisions within the agent’s domain.
+
+## 19.3 Must-Log Categories
+
+Agents should log these events:
+
+```text
+- Important user preferences
+- Configuration decisions
+- Permission changes
+- Files created
+- Files modified with approval
+- Workflows created or changed
+- Important assumptions
+- Escalations
+- Errors or failed actions
+- Handoff summaries
+- Agent retirement or restoration
+```
+
+Logs should not capture every trivial action. They should preserve decisions that affect future behavior.
+
+---
+
+# 20. Global Memory Files and Governance
+
+## 20.1 Required Global Memory Files
+
+Every generated AOS should include:
+
+```text
+/memory/user-profile.md
+/memory/preferences.md
+/memory/people.md
+/memory/projects.md
+/memory/decisions.md
+/memory/agent-learnings-index.md
+```
+
+## 20.2 Memory File Boundaries
+
+```text
+/memory/user-profile.md
+Stores durable, user-approved facts about the user that help the AOS personalize assistance. Avoid sensitive personal attributes unless explicitly approved.
+
+/memory/preferences.md
+Stores durable user preferences about communication style, workflows, defaults, formatting, decision-making, tools, and collaboration.
+
+/memory/people.md
+Stores relevant people, roles, relationship context, communication preferences, and collaboration notes. Avoid sensitive personal details unless explicitly approved.
+
+/memory/projects.md
+Tracks active, paused, completed, and potential projects at a high level. Detailed project files live in /projects.
+
+/memory/decisions.md
+Captures durable decisions that affect future AOS behavior, user preferences, projects, permissions, workflows, and defaults. Decision logs remain the authoritative chronological record.
+
+/memory/agent-learnings-index.md
+Provides a global index of agent-specific learning files without centralizing all learnings in one global file.
+```
+
+## 20.3 Memory Governance Rules
+
+```text
+- Information is memory-worthy only if durable, useful, relevant to the AOS, and likely to improve future assistance.
+- Do not store trivial one-time facts, short-lived temporary details, sensitive personal attributes unless explicitly approved, inappropriate third-party private information, raw notes better suited for /inbox, or large source documents better suited for /projects or a project's /assets folder.
+- Sensitive memory entries require explicit user approval.
+- Memory entries should include Type, Summary, Source, Confidence, Owner, Review Date, and Notes.
+- Memory should receive lightweight review during weekly review and deeper hygiene review monthly.
+- Stale memory should not be silently deleted; it should be marked stale, superseded, corrected with a new entry, or archived only with approval.
+```
+
+---
+
+# 21. Project Folder Structure
+
+Every project created inside the AOS should have its own folder.
+
+Approved standard structure:
+
+```text
+/projects/[project-name]/
+  project-brief.md
+  project-plan.md
+  project-status.md
+  project-decisions.md
+  project-notes.md
+  /assets
+  /archive
+```
+
+Approved rules:
+
+```text
+- Every project gets its own folder.
+- Project folder names use file-safe slugs.
+- Every project includes the five standard project files.
+- Every project includes /assets and /archive.
+- Moving files into /archive requires explicit approval.
+- Projects use lifecycle states: Idea, Proposed, Active, Paused, Waiting, Completed, Canceled, Archived.
+- Project-specific decisions go in project-decisions.md.
+- System-wide AOS decisions stay in /logs/aos-decision-log.md.
+```
+
+A project's lifecycle state (Idea, Proposed, Active, Paused, Waiting, Completed, Canceled, Archived) is recorded in the body of `project-status.md` and reflected at a high level in `/memory/projects.md`. It is **not** a frontmatter field. The YAML `status` field on a project file remains the file-artifact status (`draft`, `active`, `deprecated`, `archived`) per Section 15.5, and should not be set to a project lifecycle value.
+
+File schemas (file_type `project_doc`, §15.4):
+
+```markdown
+project-brief.md      — follows the §18.2 project-brief template body.
+
+project-plan.md:
+## Goals
+## Milestones
+## Tasks
+## Dependencies
+## Risks
+
+project-status.md:
+## Lifecycle State      (body, not frontmatter — the rule above)
+## Summary
+## Progress
+## Blockers
+## Next Actions
+
+project-decisions.md  — entries use the §16.5 decision-log entry block.
+
+project-notes.md:
+### YYYY-MM-DD — [Note]  (dated freeform entries)
+```
+
+---
+
+# 22. Tool Access Matrix
+
+Every generated AOS should include:
+
+```text
+/configs/tool-access-matrix.md
+```
+
+Approved rules:
+
+```text
+- Every AOS includes a required global tool access matrix.
+- Tool access is tracked by agent in a table.
+- Access levels are: Allowed, Read-only, Approval-required, Prohibited, Not configured.
+- Not configured means the agent may not use the tool until access is explicitly granted.
+- Sending, publishing, spending money, sharing private information, or affecting other people requires explicit approval.
+- Security Agent owns the tool access matrix.
+- The global tool access matrix is the single source of truth for tool access and overrides any agent config on conflict.
+- Agent config Tool Access sections reference the matrix and list only agent-specific notes or requests; they do not restate or override matrix grants (parallel to the permissions pattern in Section 3.5).
+- Chief of Staff Agent and Review Agent may recommend changes.
+```
+
+Recommended table structure:
+
+```markdown
+| Agent | Tool | Access Level | Approval Required? | Notes |
+|---|---|---|---:|---|
+| Research Agent | Web search | Allowed | No | For research tasks |
+| Inbox Agent | Email send | Approval-required | Yes | Drafting is allowed; sending requires Proceed |
+| Feedback Agent | Email send | Approval-required | Yes | Scrubbed by Security Agent first; queued as staged in the feedback log when email is unavailable |
+| Calendar Agent | Calendar read | Allowed | No | Within approved scope |
+| Calendar Agent | Calendar modify | Approval-required | Yes | Especially when other people are involved |
+```
+
+File schema (authoritative for `/configs/tool-access-matrix.md`; the permission-enforcer threading in the portability phase conforms to this schema):
+
+```markdown
+---
+title: Tool Access Matrix
+file_type: config
+---
+# Tool Access Matrix
+
+## Purpose
+[single source of truth for tool access; owned by the Security Agent]
+
+## Rules
+[the approved rules above: five access levels, Not-configured default,
+matrix-overrides-config, reference-don't-restate]
+
+## Matrix
+[the table above]
+
+## Change Notes
+
+### YYYY-MM-DD — [change]
+[dated, append-only record of every grant, change, or revocation]
+```
+
+---
+
+# 23. Agent Collaboration Rules
+
+Approved decisions:
+
+```text
+- Chief of Staff Agent is the default coordinator for cross-agent routing.
+- Agents may directly hand off to another agent only when the receiving agent has clear domain ownership and no safety, permission, or priority conflict exists.
+- Conflicts between agents escalate to Chief of Staff Agent.
+- Permission or access conflicts escalate to Security Agent.
+- Cross-agent handoffs should use /templates/handoff-summary-template.md.
+```
+
+---
+
+# 24. Escalation Model
+
+Approved decisions:
+
+```text
+- Escalate to the user for approval-required actions, ambiguity with material consequences, external communication, publishing, spending, sensitive information, or irreversible changes.
+- Escalate to Security Agent for permission conflicts, prohibited actions, tool access uncertainty, privacy risk, or sensitive memory questions.
+- Escalate to Chief of Staff Agent for priority conflicts, cross-agent routing issues, unclear ownership, or competing project demands.
+- Failed actions should be reported to the user when relevant and logged if they affect future behavior, files, permissions, or project status.
+```
+
+---
+
+# 25. Global Operating Rhythms
+
+Approved rhythms:
+
+```text
+- Daily startup workflow
+- End-of-day shutdown workflow
+- Weekly review workflow
+- Monthly review workflow
+- Quarterly review workflow
+- Stale project review as part of monthly review
+- Memory hygiene as lightweight weekly review plus deeper monthly review
+- AOS User Guide refresh as part of monthly review
+```
+
+Approved review scopes:
+
+```text
+Daily startup:
+What matters today?
+
+End-of-day shutdown:
+What changed today, and what must not be lost?
+
+Weekly review:
+What needs follow-up soon?
+
+Monthly review:
+What is stale, misplaced, or structurally messy?
+
+Quarterly review:
+Is the whole system still aimed at the right goals?
+```
+
+Approved rationale:
+
+```text
+- The weekly review keeps the AOS operationally clean and prevents loose ends from becoming forgotten obligations.
+- The monthly review keeps the AOS structurally healthy by reviewing stale projects, memory hygiene, workflows, boundaries, and tool access.
+- The quarterly review keeps the AOS aligned with larger goals and prevents the system from being well-maintained but aimed at outdated priorities.
+```
+
+---
+
+# 26. Agent-Specific Builder Interviews
+
+Agent interviews are scripted per Section 7C: each agent's questions live in its `agent-specs/[agent-name]-agent/interviews.md`, executed by the generic build engine (Sections 8, 12). Approved decisions, expressed as script properties:
+
+```text
+- Every agent build uses the common interview pattern (Section 9.1), fed by
+  the agent's Section 7C Initialization script.
+- Required agents have shorter scripts because their purpose is mostly
+  standardized; standardized choices carry `default:` values with
+  `skippable: yes`.
+- Optional productive agents' scripts ask about user goals, scope, tools,
+  output preferences, approval boundaries, and collaboration patterns.
+- Each agent build creates the standard agent file set already approved.
+- Agent-specific workflows and templates should be created only when useful
+  to that agent's domain.
+- Each agent build ends with a validation checklist and handoff summary.
+```
+
+---
+
+# 27. Validation and QA
+
+Approved decisions:
+
+```text
+- A complete AOS must include required folders, required global files, required agents, at least one optional productive agent, registry entries, AOS map, permissions, workflows, templates, logs, and the AOS User Guide.
+- A complete agent build must include instruction file, memory file, learnings file, primary workflow, output template, config, and decision log.
+- Review Agent audits generated files for completeness and consistency.
+- Security Agent audits permissions and tool access.
+- Memory Agent audits memory routing and memory file boundaries.
+- Catalog, profile, and interview validation (§7A.5 V1-V8, §7B.5 V9-V13) must pass before an AOS or an agent build is considered complete.
+```
+
+---
+
+# 28. Distribution and Update Mechanics
+
+The AOS Factory is generated once from this design specification and then **manually packaged and distributed as a Claude plugin**. There is no runtime installer. Framework maintenance and re-distribution are manual, approval-gated operations.
+
+Approved decisions:
+
+```text
+- Use frontmatter as the primary update detection mechanism.
+- Use expected file lists and required-heading checks as secondary validation.
+- Warn on schema mismatches by default.
+- Block only when compatibility is explicitly marked as broken.
+- Present upgrade recommendations with affected files, reason, consequence, and approval requirement, using the defined block below.
+- Require dry-run / preview mode in all builders.
+- Never silently update existing builder files.
+- Require Proceed before refreshing, replacing, or overwriting any existing builder file.
+```
+
+Files affected when the framework is updated:
+
+```text
+/builders/build-aos.md
+/builders/build-agent.md
+/builder-changelog.md
+/aos-manifest.md
+/logs/change-log.md
+/logs/aos-decision-log.md
+```
+
+Upgrade recommendations use this defined block:
+
+```markdown
+## Upgrade Recommendation
+
+**Affected Files:**
+**Reason:**
+**Consequence:**
+**Approval Requirement:** [Proceed-gated action(s), per §3.2]
+```
+
+## 28.1 Generating a Factory Instance
+
+These are the user-facing steps to generate the reusable factory framework from this design specification:
+
+```text
+1. Open a Claude session with this design specification available.
+2. Review the proposed generation scope in Section 35 — the exact list of
+   framework files to be created.
+3. Type exactly `Proceed` to authorize generation (the approval gate in
+   Section 3.1; the §33 safety-related governance rules must also be
+   satisfied). Nothing is written before this.
+4. Claude previews, then on `Proceed` writes the framework files:
+   - the root entry pointer `/build-aos.md`,
+   - the `/builders/` files: the master AOS builder (`build-aos.md`) and
+     the generic agent build engine (`build-agent.md`),
+   - the framework changelog `/builder-changelog.md`,
+   - the rendered factory-root copies `/agent-catalog.yaml`,
+     `/agent-specs/[agent-name]-agent/` (profile.md + interviews.md, one
+     folder per Section 7.3 agent), and `/aos-interviews.md`, read-only
+     inside instances (Sections 7A.4, 7B.2, 7C.2).
+5. This phase does NOT create a user AOS instance. Instructions for creating an AOS instance are outside the scope of this document.
+6. Validate the generated framework against the QA checks in Sections 27 and 34.
+```
+
+The workspace-root router (`/aos-router.md`, file_type `aos_router`) and project instructions (`/CLAUDE.md`, file_type `project_instructions`) govern target selection *across* instances and the factory; they live at the AOS Workspace root alongside the factory and instances and are not produced by the factory build.
+
+Framework generation, as scoped above and in Section 35, produces only the AOS Factory's own files: the root build entry (`/build-aos.md`), the `/builders/` files (`build-aos.md`, `build-agent.md`), `/builder-changelog.md`, and the rendered factory-root copies `/agent-catalog.yaml`, `/agent-specs/`, and `/aos-interviews.md` (Sections 7A.4, 7B.2, 7C.2). The example workspace-root files referenced in Section 28.2 (`templates/aos-router.md`, `templates/CLAUDE.md`) are not part of this generation phase — they are authored separately during plugin packaging.
+
+## 28.2 Packaging the Factory as a Claude Plugin
+
+Once generated, the factory is distributed as a Claude plugin. A plugin is a directory whose only required file is a manifest at `.claude-plugin/plugin.json`; all functional components live at the plugin root (not inside `.claude-plugin/`).
+
+```text
+my-aos-factory/                 (plugin root)
+  .claude-plugin/
+    plugin.json                 (REQUIRED manifest: name, version, description, author)
+  skills/                       (each builder exposed as a skill, or as commands/)
+    build-aos/ ...
+    build-agent/ ...            (the generic engine; one skill covers every agent)
+  commands/                     (optional: slash-command entry points)
+  agents/                       (optional)
+  .mcp.json                     (optional: bundled MCP servers)
+  builder-changelog.md          (framework/plugin changelog)
+  README.md                     (plugin install + usage instructions)
+  templates/                    (shipped example workspace-root files)
+    aos-router.md               (example router; user copies to workspace root)
+    CLAUDE.md                   (example project instructions; user copies to root)
+```
+
+Steps:
+
+```text
+1. Create the plugin directory and add .claude-plugin/plugin.json with the
+   plugin's name, version, description, and author. Keep the plugin version in
+   sync with the framework spec_version (Section 14.1) and /builder-changelog.md.
+2. Place the generated factory content at the plugin root: expose the builder
+   files (build-aos.md and each /builders/build-*.md) as skills or slash
+   commands so Claude can invoke them after install. Components must sit at the
+   plugin root, never inside .claude-plugin/.
+3. Author the example workspace-root files under templates/ (aos-router.md,
+   CLAUDE.md), and author or refresh README.md with install and usage
+   instructions. These are written during this packaging step, not during
+   framework generation (Section 35) — the templates are starting-point copies
+   of the AOS Workspace root files described below.
+4. (Optional) Bundle MCP servers via .mcp.json at the plugin root.
+5. Test locally before publishing: load the plugin without installing using
+   `claude --plugin-dir <path>`.
+6. Package for distribution as a .zip archive of the plugin directory
+   (requires Claude Code v2.1.128 or later), OR publish via a marketplace.
+7. To distribute via a marketplace, create .claude-plugin/marketplace.json
+   listing the plugin (at minimum a name and source) and host it on GitHub,
+   GitLab, or another git host. URL-based marketplaces must reference external
+   sources (GitHub, npm, or git URLs); use a Git-based marketplace for plugins
+   referenced by relative path.
+8. On each framework change, bump plugin.json version and /builder-changelog.md,
+   then re-package and re-publish.
+```
+
+The router (`/aos-router.md`) and project instructions (`/CLAUDE.md`) are AOS Workspace root files, not factory components, but the plugin **ships example copies** of both under `templates/`, authored at packaging time per step 3 above. The router example is a rendering of the §16.10 schema — including the call-name resolution tier and the registry's Call name column — and the CLAUDE.md example renders §16.11. During AOS setup, `/builders/build-aos.md` provisions these into the AOS Workspace root non-destructively: it creates `/aos-router.md` and `/CLAUDE.md` from the examples when they are absent, and overwrites an existing root file only after a separate `Proceed` (Sections 2.4, 3.2, 4.1). The user then edits them (default instance, routing signals, planning-mode rules) for their setup. Provisioning them from shipped examples — and gating any overwrite behind `Proceed` — keeps the plugin from silently overwriting a user's existing root files.
+
+---
+
+# 29. Naming and Slug Rules
+
+Approved decisions:
+
+```text
+- Use lowercase kebab-case for generated folder and file slugs.
+- Strip or replace special characters.
+- Do not use spaces in generated folder names.
+- Preserve human-readable names in frontmatter and headings.
+- Handle duplicates by appending a short numeric suffix, such as -2 or -3.
+- Standalone deliverables in /outputs use YYYY-MM-DD-[slug].md (or the
+  appropriate extension for the artifact type).
+```
+
+---
+
+# 30. Archive Policy
+
+Approved decisions:
+
+```text
+- /archive stores retired, superseded, obsolete, or historical materials.
+- Archiving requires explicit approval because it moves files.
+- Archived files or folders should be dated when useful.
+- Retired agents should remain in /agents with status Retired unless the user explicitly approves moving copies to /archive.
+- Prefer copying to archive over moving when preserving active context is important.
+- When an agent is retired, update /configs/agent-registry.md and /aos-map.md.
+- A retired agent's /outputs/[agent-name]-agent/ subfolder is preserved (data per Section 14.8); archiving its contents follows the normal approval rules.
+- Retiring an agent should be logged in /logs/aos-decision-log.md and /logs/change-log.md.
+- Restoring a retired agent requires checking registry status, permissions, tool access, file completeness, and compatibility.
+- Restoring a retired agent changes its status back to Active.
+- Restoring a retired agent requires explicit approval with Proceed.
+```
+
+Clarification:
+
+```text
+Retired agent folders are not renamed by default.
+```
+
+---
+
+# 31. Inbox Policy
+
+Approved decisions:
+
+```text
+- /inbox is for raw notes, unresolved items, imported material, quick captures, and items awaiting routing.
+- /inbox should be reviewed during daily startup when relevant and during weekly review by default.
+- Inbox items should be promoted to tasks, projects, memory, decisions, calendar items, or archive according to the inbox-to-task workflow.
+- Inbox items should not be deleted after processing unless explicitly approved.
+- Processed inbox items should be moved to /inbox/processed to avoid duplicate processing.
+- Moving an item to /inbox/processed is treated as part of normal inbox processing and should be allowed if the user has approved the inbox-processing workflow. This is the sole pre-authorized exception to the move-approval rule in Section 3.2.
+- The daily startup workflow should include a startup brief section summarizing recently processed inbox items.
+- The startup brief should distinguish between items processed today, items still unresolved, items promoted to tasks, items promoted to projects, items promoted to calendar items, items promoted to memory, items promoted to decisions, items promoted to archive, and items requiring user approval. These promotion categories mirror the full set of promotion targets in the inbox-to-task workflow (Section 17.6).
+```
+
+Files affected later:
+
+```text
+/docs/aos-user-guide.html
+/workflows/inbox-to-task-workflow.md
+/workflows/daily-startup-workflow.md
+/templates/status-report-template.md
+/templates/decision-entry-template.md
+/logs/change-log.md
+```
+
+---
+
+# 32. Output Style Standards
+
+Approved decisions:
+
+```text
+- Generated files should be detailed enough to be useful but not bloated.
+- Agent instructions should use direct imperative language.
+- Use must/should/may consistently: must for requirements, should for strong defaults, may for optional behavior.
+- Include examples in agent instruction files and important templates.
+- Templates should include placeholders plus brief guidance, not long sample completed entries unless useful.
+```
+
+---
+
+# 33. Generation Runbook
+
+Sections 33-37 — the final consolidation decisions, ready-to-generate checklist, proposed builder generation scope, required continuation behavior, and status — have been moved to a companion file so this specification holds the design and the runbook holds the build-and-handoff procedure:
+
+```text
+aos-factory-generation-runbook.md
+```
+
+Cross-references elsewhere in this document to Sections 33-37 (for example Section 33 and Section 35 in Section 28.1) resolve to the runbook, where the original 33-37 numbering is preserved. The `Proceed` safety gate is unchanged: actual AOS Factory file generation remains blocked until the user types exactly `Proceed`, per the Purpose section above and the runbook.

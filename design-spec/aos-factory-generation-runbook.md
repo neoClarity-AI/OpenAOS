@@ -2,9 +2,9 @@
 title: AOS Factory Generation Runbook
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.1.0
+spec_version: 2.1.1
 created_date: 2026-06-02
-last_updated: 2026-07-06
+last_updated: 2026-07-08
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -121,7 +121,7 @@ When the user requests a "Design Readiness Review", using this workflow.
 Read the source file `design-spec/aos-factory-design-specification.md`.
 1. Verify with the user that we are entering a Design Readiness Review. When the user types "Proceed", do the following:
    1.1 Update all design specs with the status of "in_review".
-   1.2 In Section "34. Design Completion Checklist", mark every checklist item as Not Done. (Replace [ ] with [ ]).
+   1.2 In Section "34. Design Completion Checklist", mark every checklist item as Not Done. (Replace [x] with [ ]).
 2. Conduct a completeness check by verifying each item in the "34. Design Completion Checklist". When an item has been verified, mark it as Done (Replace [ ] with [x]). Report any missing items and recommended actions. Repeat this step until you have marked all items Done.
 3. Conduct a safety check by verifying the design complies with each safety-related governance rule in Section 33. Report any safety issues and recommended actions.
 4. Review the design in "aos-factory-design-specification.md" for logical consistency. Report any inconsistencies to the user. Include only inconsistencies that impact the functionality of the factory it generates. If no such inconsistencies exist then inform the user. Otherwise, work with the user to resolve each issue one at a time. For each issue, offer the user options and a recommendation.
@@ -168,4 +168,3 @@ Read the source file `design-spec/aos-factory-design-specification.md` (Section 
 
 Do not add, modify, or delete any plugin files unless the user types exactly: Proceed.
 ```
-                                                                                                          
