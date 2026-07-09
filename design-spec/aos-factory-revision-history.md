@@ -2,9 +2,9 @@
 title: AOS Factory Design Specification — Revision History
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.1.1
+spec_version: 2.1.2
 created_date: 2026-06-02
-last_updated: 2026-07-08
+last_updated: 2026-07-09
 status: design_ready_for_factory_generation
 ---
 
@@ -16,6 +16,7 @@ Entries below are in reverse chronological order (newest first).
 
 | spec_version | Date       | Change |
 |--------------|------------|--------|
+| 2.1.2        | 2026-07-09 | Fixed a functionality-impacting gap surfaced after installing the packaged plugin: §28.2's plugin layout and §36.3's plugin generation scope never included the rendered design artifacts (`agent-catalog.yaml`, `agent-specs/`, `aos-interviews.md`) that the `build-aos`/`build-agent` skills read at runtime, so a plugin packaged strictly to the prior scope could not build or add any agent once installed standalone. §28.2 layout diagram and step 2, and runbook §36.3 step 3 (new 3.4, existing steps renumbered), now include copying these from the framework's Section 35.1 rendered copies to the plugin root; §36.3 step 8 QA check extended to confirm their presence. Fixed directly (not via a full §36.1 DRR cycle, per user decision) |
 | 2.1.1        | 2026-07-08 | §36.1 Design Readiness Review cycle — all 20 §34 items re-verified, §33 safety rules confirmed, catalog validation passed (15 agents, 0 errors); two functionality-impacting inconsistencies resolved: §4.1 instance tree gained the missing `/outputs` subtree, §16.6 guide-skeleton metadata line gained the missing `spec_version` stamp; runbook §36.1 step 1.2 editorial fix |
 | 2.1.0        | 2026-07-06 | Lifecycle Profiles, Agent Advertising, Feedback Agent, Call-Name Routing + Schema Explicitness (Phase 2 of v2.0): §7B profiles gain five lifecycle sections; new §7C scripted interviews (H20); 14 per-agent builders collapsed into the generic build engine `build-agent.md`; `agent-profiles/` reorganized into per-agent `agent-specs/` folders; Feedback Agent added as fifth governance agent (`feedback.upstream`); F2 review-time advertising; F4 call-name routing (§16.10 router schema); BF-001 routing + attribution rules; U1 explicit schemas (§16.7–16.12 and in-place upgrades, items A1–H20); U2 `catalog.schema.json` + repo CI; U3 `/outputs` folder |
 | 2.0.0        | 2026-06-30 | Agent Catalog + Agent Profiles (Phase 1 of v2.0): new §7A (machine-checked agent identity/ownership catalog) and §7B (per-agent behavioral profiles), both as source under design-spec/; `agent-catalog.yaml` + 14 profiles authored for the 14-agent §7.3 roster; §7.4 demoted to a generated view; §11/§12 made catalog+profile projections; §10.3.1 instance-scope overlap check; §7.5 Phase A/Phase B split; §14.8/§15.4/§27 updated for the new `agent_catalog` and `agent_profile` file types |

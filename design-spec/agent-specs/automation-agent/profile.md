@@ -2,7 +2,7 @@
 title: Automation Agent — Agent Profile
 file_type: agent_profile
 slug: automation-agent
-spec_version: 2.1.1
+spec_version: 2.1.2
 ---
 # Automation Agent — Profile
 

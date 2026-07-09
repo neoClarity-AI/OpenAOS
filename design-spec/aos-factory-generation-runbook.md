@@ -2,9 +2,9 @@
 title: AOS Factory Generation Runbook
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.1.1
+spec_version: 2.1.2
 created_date: 2026-06-02
-last_updated: 2026-07-08
+last_updated: 2026-07-09
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -158,13 +158,14 @@ Read the source file `design-spec/aos-factory-design-specification.md` (Section 
    3.1 `.claude-plugin/plugin.json` — manifest: name `aos-factory`, version synced to the framework `spec_version` (design spec Section 14.1) and `/builder-changelog.md`, plus description, author, keywords.
    3.2 `skills/build-*/SKILL.md` — one skill per builder. Convert each `/builders/build-*.md` into a `SKILL.md` whose frontmatter carries `name` and an invocation-oriented `description` (when-to-use triggers), with the builder body as the skill content. Map `/builders/build-aos.md` → `skills/build-aos/SKILL.md` and `/builders/build-agent.md` → `skills/build-agent/SKILL.md` (the generic engine; one skill covers every agent). The root `/build-aos.md` entry pointer is a framework-root convenience and is not packaged separately; the `build-aos` skill replaces it in plugin context.
    3.3 `builder-changelog.md` — copy the framework `/builder-changelog.md` to the plugin root.
-   3.4 `templates/aos-router.md` and `templates/CLAUDE.md` — author the example workspace-root files the user copies to their AOS Workspace root after install (Section 28.2).
-   3.5 `README.md` — author or refresh the plugin install and usage instructions.
+   3.4 `agent-catalog.yaml`, `agent-specs/[agent-name]-agent/` (profile.md + interviews.md per agent), and `aos-interviews.md` — copy these from the framework's rendered factory-root copies (Section 35.1) to the plugin root, unchanged. The build-aos and build-agent skills read these at runtime (Sections 7A.4, 7B.2, 7C.2, 28.2); since the plugin is the only distribution mechanism (no runtime installer, Section 28), omitting them leaves the installed plugin unable to build or add any agent.
+   3.5 `templates/aos-router.md` and `templates/CLAUDE.md` — author the example workspace-root files the user copies to their AOS Workspace root after install (Section 28.2).
+   3.6 `README.md` — author or refresh the plugin install and usage instructions.
 4. Apply the global file-safety and overwrite-approval model: for every existing file the preview would overwrite (e.g. when refreshing `claude-plugin/aos-factory/`), list it explicitly and flag it as an overwrite. Never silently overwrite (Section 28).
 5. Present the full preview (files to create, files to overwrite, manifest version) and answer any user questions.
 6. Wait for the user to type exactly: Proceed — to authorize plugin generation. This gate authorizes only writing the plugin directory; it does not authorize zipping, local-load testing, or marketplace publishing (those remain manual — Section 28.2 steps 5-8).
 7. Only after that exact instruction, write the plugin files. If the framework changed since the last packaging, bump `plugin.json` version and add a `/builder-changelog.md` entry.
-8. Validate the generated plugin against Section 28.2 and the QA checks in Sections 27 and 34: confirm `.claude-plugin/plugin.json` is present and well-formed, every builder maps to a `skills/build-*/SKILL.md`, each `SKILL.md` frontmatter has `name` and `description`, and any in-skill file references resolve.
+8. Validate the generated plugin against Section 28.2 and the QA checks in Sections 27 and 34: confirm `.claude-plugin/plugin.json` is present and well-formed, every builder maps to a `skills/build-*/SKILL.md`, each `SKILL.md` frontmatter has `name` and `description`, the rendered design artifacts (`agent-catalog.yaml`, `agent-specs/`, `aos-interviews.md`) are present at the plugin root, and any in-skill file references resolve.
 
 Do not add, modify, or delete any plugin files unless the user types exactly: Proceed.
 ```

@@ -2,7 +2,7 @@
 title: Memory Agent — Agent Interviews
 file_type: interview_script
 slug: memory-agent
-spec_version: 2.1.1
+spec_version: 2.1.2
 ---
 # Memory Agent — Interviews
 

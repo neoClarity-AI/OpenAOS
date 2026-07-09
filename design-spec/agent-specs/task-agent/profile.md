@@ -2,7 +2,7 @@
 title: Task Agent — Agent Profile
 file_type: agent_profile
 slug: task-agent
-spec_version: 2.1.1
+spec_version: 2.1.2
 ---
 # Task Agent — Profile
 

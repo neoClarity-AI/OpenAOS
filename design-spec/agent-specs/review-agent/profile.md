@@ -2,7 +2,7 @@
 title: Review Agent — Agent Profile
 file_type: agent_profile
 slug: review-agent
-spec_version: 2.1.1
+spec_version: 2.1.2
 ---
 # Review Agent — Profile
 
