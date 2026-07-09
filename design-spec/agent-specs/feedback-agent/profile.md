@@ -2,7 +2,7 @@
 title: Feedback Agent — Agent Profile
 file_type: agent_profile
 slug: feedback-agent
-spec_version: 2.1.0
+spec_version: 2.1.1
 ---
 # Feedback Agent — Profile
 

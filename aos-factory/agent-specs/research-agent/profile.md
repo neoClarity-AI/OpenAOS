@@ -2,7 +2,7 @@
 title: Research Agent — Agent Profile
 file_type: agent_profile
 slug: research-agent
-spec_version: 2.1.0
+spec_version: 2.1.1
 ---
 # Research Agent — Profile
 

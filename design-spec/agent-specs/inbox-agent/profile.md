@@ -2,7 +2,7 @@
 title: Inbox Agent — Agent Profile
 file_type: agent_profile
 slug: inbox-agent
-spec_version: 2.1.0
+spec_version: 2.1.1
 ---
 # Inbox Agent — Profile
 

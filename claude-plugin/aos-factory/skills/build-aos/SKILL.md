@@ -1,13 +1,7 @@
 ---
-title: Build AOS
-file_type: aos_builder
+name: build-aos
+description: Build a complete Agentic Operating System (AOS) instance from scratch — run the interactive setup interview, create the instance folder structure and global files, provision the AOS Workspace root, build the required governance agents and the user's selected optional productive agents, and produce an AOS setup summary. The master AOS builder. Use when the user asks to set up, create, stand up, or build a new AOS, an "agentic operating system", or an additional AOS instance. To add or rebuild a single agent inside an existing instance instead, use the build-agent skill.
 spec_version: 2.1.1
-created_date: 2026-07-06
-last_updated: 2026-07-09
-status: active
-compatible_aos_versions:
-  - 1.x
-requires_approval_for_overwrite: true
 ---
 # Build AOS
 
@@ -17,17 +11,21 @@ Build a complete AOS instance: run the interactive setup interview, create the
 instance folder structure and global files, provision the AOS Workspace root,
 build the required governance agents and the user's selected optional productive
 agents, and produce an AOS setup summary. This is the master AOS builder (§12.1).
-It reads the factory-shipped design artifacts — `/agent-catalog.yaml` (§7A), the
-`/agent-specs/` profiles and interviews (§7B, §7C), and `/aos-interviews.md`
+It reads the factory-shipped design artifacts — `agent-catalog.yaml` (§7A), the
+`agent-specs/` profiles and interviews (§7B, §7C), and `aos-interviews.md`
 (§7C) — and never hand-authors identity or narrative those sources already
 provide.
+
+> Packaged as a Claude plugin skill. The design artifacts referenced below
+> (`agent-catalog.yaml`, `agent-specs/`, `aos-interviews.md`) ship with the
+> factory framework; resolve them from the installed factory / plugin context.
 
 ## When to Use This Builder
 
 Use when the user asks to set up, create, or build a new AOS instance. To add a
-single agent to an existing instance instead, use the generic build engine
-`/builders/build-agent.md` (§9.4). Maintaining or refreshing the framework files
-themselves is a separate, manually approved operation (§8.4, §14.4).
+single agent to an existing instance instead, use the `build-agent` skill (§9.4).
+Maintaining or refreshing the framework files themselves is a separate, manually
+approved operation (§8.4, §14.4).
 
 ## Builder Operating Mode
 
@@ -47,7 +45,7 @@ Follow the §9.1 batch pattern: (1) ask a small batch of questions, (2) summariz
 what the user said, (3) recommend defaults for anything vague, (4) ask approval on
 important design decisions, (5) generate a build plan / pre-build preview, (6) ask
 the user to type `Proceed` before creating files. Execute the scripted AOS setup
-interview in `/aos-interviews.md` (§7C): the script is normative for question
+interview in `aos-interviews.md` (§7C): the script is normative for question
 content, order, and captured fields; delivery stays conversational (paraphrase
 allowed; never add, remove, or reorder questions). Fast path (move-faster
 exception, §7C.4): questions marked `skippable: yes` resolve to their `default:`
@@ -65,14 +63,14 @@ The step-5 pre-build preview uses this block (§9.1):
 
 ## Discovery Questions
 
-Defined by the scripted AOS setup interview in `/aos-interviews.md` (§7C) —
+Defined by the scripted AOS setup interview in `aos-interviews.md` (§7C) —
 purpose, instance name, optional-agent selection, memory seeds, autonomy
 baseline, and optional call name. This builder references that script and does
 not restate it (§12.1).
 
 ## Recommended Defaults
 
-Defined by the `default:` values in `/aos-interviews.md` (§7C): propose an
+Defined by the `default:` values in `aos-interviews.md` (§7C): propose an
 instance name from the stated purpose; seed memory empty and never fabricate;
 adopt the §3 permission model unchanged; recommend Inbox + Task + Calendar for a
 productivity AOS or Research + Writing for a knowledge-work AOS; no call name
@@ -84,7 +82,7 @@ Follow §9.3, gating file creation on `Proceed`:
 
 ```text
 0. The factory framework already exists (this build runs from it).
-1. Start the user-facing AOS setup interview (/aos-interviews.md).
+1. Start the user-facing AOS setup interview (aos-interviews.md).
 2. Create the top-level folder structure (see below), as a sibling AOS root (§4.1).
 3. Provision the AOS Workspace root: ensure /aos-router.md and /CLAUDE.md exist,
    copying them from the factory's shipped example copies (templates/aos-router.md,
@@ -95,7 +93,7 @@ Follow §9.3, gating file creation on `Proceed`:
    (catalog entry, profile, interviews) exist.
 6. Build the required governance agents.
 7. Ask the user to select at least one optional productive agent (§2.3, §7.2).
-8. Build the selected optional agents (via /builders/build-agent.md).
+8. Build the selected optional agents (via the build-agent skill).
 9. Update the agent registry and AOS map.
 10. Produce the AOS setup summary (/logs/aos-build-summary.md).
 ```
@@ -170,18 +168,17 @@ user-provided content — never fabricate (§14.8, §20.3):
 ## Required Agent Orchestration
 
 Build all five required governance agents (Security, Memory, Chief of Staff,
-Review, Feedback; §7.1) by invoking the generic build engine
-`/builders/build-agent.md` for each, resolving its catalog entry and
-`/agent-specs/[agent-name]-agent/` folder. Required agents have shorter
-Initialization interviews (§7C.4). These agents cannot be omitted (governance
-before productivity, §1.6.2). Note the Chief of Staff's joint ownership of the
-AOS Workspace router in its registry entry (§10.3).
+Review, Feedback; §7.1) by invoking the `build-agent` skill for each, resolving
+its catalog entry and `agent-specs/[agent-name]-agent/` folder. Required agents
+have shorter Initialization interviews (§7C.4). These agents cannot be omitted
+(governance before productivity, §1.6.2). Note the Chief of Staff's joint
+ownership of the AOS Workspace router in its registry entry (§10.3).
 
 ## Optional Agent Selection
 
 Enforce that at least one optional productive agent is chosen before setup is
 complete (§2.3, §7.2). Present the §7.2 roster with the recommended defaults;
-build each selected agent via `/builders/build-agent.md`. Remaining optional
+build each selected agent via the `build-agent` skill. Remaining optional
 agents stay `Available` and can be added later (§9.4).
 
 ## Registry and Map Updates

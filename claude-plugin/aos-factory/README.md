@@ -6,7 +6,7 @@ choose, plus the workflows, templates, configs, logs, and a User Guide that make
 them work together. It can also add or rebuild a single agent later.
 
 This plugin is a **rendering** of the AOS Factory design specification
-(`spec_version` 2.1.0). The specification is the single source of truth; the
+(`spec_version` 2.1.1). The specification is the single source of truth; the
 builders, skills, and templates here are generated from it.
 
 ## What's inside
@@ -56,7 +56,7 @@ overwritten, moved, renamed, or deleted without a separate `Proceed`.
 ## Versioning
 
 The plugin version tracks the framework `spec_version` and the
-`builder-changelog.md`. This release is **2.1.0**.
+`builder-changelog.md`. This release is **2.1.1**.
 
 ## Contributing
 

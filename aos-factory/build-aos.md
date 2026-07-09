@@ -1,9 +1,9 @@
 ---
 title: Build AOS — Entry Pointer
 file_type: builder_entry
-spec_version: 2.1.0
+spec_version: 2.1.1
 created_date: 2026-07-06
-last_updated: 2026-07-06
+last_updated: 2026-07-09
 status: active
 compatible_aos_versions:
   - 1.x

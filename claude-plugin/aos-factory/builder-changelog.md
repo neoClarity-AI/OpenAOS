@@ -1,9 +1,9 @@
 ---
 title: AOS Factory Builder Changelog
 file_type: builder_changelog
-spec_version: 2.1.0
+spec_version: 2.1.1
 created_date: 2026-07-06
-last_updated: 2026-07-06
+last_updated: 2026-07-09
 status: active
 ---
 # AOS Factory Builder Changelog
@@ -19,7 +19,44 @@ Entries are in reverse chronological order (newest first).
 
 | spec_version | Date       | Plugin version | Summary |
 |--------------|------------|----------------|---------|
+| 2.1.1        | 2026-07-09 | not published  | Re-render of the full framework from `spec_version` 2.1.1 (§4.1 `/outputs` subtree fix, §16.6 spec_version-stamp fix carried in from the design spec) — no structural changes to the builder files themselves, all frontmatter restamped |
 | 2.1.0        | 2026-07-06 | not published  | Initial framework generation: root entry, generic build engine + master AOS builder, and rendered design artifacts (catalog, agent-specs, aos-interviews) |
+
+## 2.1.1 — Version-sync re-render (2026-07-09)
+
+Full re-render of the AOS Factory framework files from `spec_version` 2.1.1
+(runbook §36.2), following a manual deletion of the prior 2.1.0 framework. The
+design spec advanced from 2.1.0 → 2.1.1 via a §36.1 Design Readiness Review that
+resolved two functionality-impacting inconsistencies (revision history 2.1.1):
+the §4.1 instance tree gained the missing `/outputs` subtree, and the §16.6
+guide-skeleton metadata line gained the missing `spec_version` stamp. Neither
+change altered the content of the four authored builder files — the `/outputs`
+subtree was already present in `/builders/build-aos.md`'s Folder Structure to
+Create, and §16.6 is generated dynamically at instance-build time from the
+design spec rather than hardcoded here. This generation therefore carries the
+four authored files forward unchanged in substance, restamped to 2.1.1, and
+re-copies the three rendered-artifact categories fresh from their (already
+2.1.1) `design-spec/` sources.
+
+Framework files generated (§35.2):
+
+1. **Root entry** — `/build-aos.md` (`file_type: builder_entry`), a short pointer
+   to `/builders/build-aos.md` (§8.3).
+
+2. **Builders** — `/builders/build-aos.md` (`aos_builder`, §12.1, the master AOS
+   builder) and `/builders/build-agent.md` (`agent_builder`, §12, the generic
+   build engine).
+
+3. **Rendered design artifacts** (read-only inside instances, §14.8) — a factory-root
+   copy of `agent-catalog.yaml` (§7A.4), the `agent-specs/[agent-name]-agent/`
+   folders holding `profile.md` (§7B) and `interviews.md` (§7C) for all 15
+   §7.3 agents, and `aos-interviews.md` (§7C/§12.1). Each is rendered from its
+   `design-spec/` source.
+
+4. **Changelog** — this file (`builder_changelog`, §16.9).
+
+Every generated file's frontmatter is stamped with `spec_version: 2.1.1` (§35.1,
+§15). No user-specific AOS instance was generated in this phase (§35.1).
 
 ## 2.1.0 — Initial framework generation (2026-07-06)
 

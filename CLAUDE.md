@@ -1,4 +1,4 @@
-## Planning Mode Rules
+## Planning mode rules
 
 - Planning mode is active when the user's message begins with "Planning mode" or "pmode".
 - While in planning mode:
@@ -9,6 +9,11 @@
   - Claude must wait for the user to type exactly: Proceed — before making any changes.
 
 - Refining, adjusting, or approving a plan in conversation is NOT a "Proceed". Only the exact word counts.
+
+## Commonly used files and folders
+
+"design spec" = "/design-spec/aos-factory-design-specification.md"
+"runbook" = "/design-spec/aos-factory-generation-runbook.md"
 
 ## Include the standard AGENTS.md file
 
