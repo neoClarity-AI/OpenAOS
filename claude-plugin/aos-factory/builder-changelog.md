@@ -1,7 +1,7 @@
 ---
 title: AOS Factory Builder Changelog
 file_type: builder_changelog
-spec_version: 2.1.1
+spec_version: 2.1.3
 created_date: 2026-07-06
 last_updated: 2026-07-09
 status: active
@@ -19,8 +19,32 @@ Entries are in reverse chronological order (newest first).
 
 | spec_version | Date       | Plugin version | Summary |
 |--------------|------------|----------------|---------|
+| 2.1.3        | 2026-07-09 | 2.1.3          | `/AGENTS.md` added as a third workspace-governing file: `/builders/build-aos.md` AOS Setup Sequence step 3 now provisions it alongside `/aos-router.md`/`/CLAUDE.md`; plugin packaging gains `templates/AGENTS.md` |
+| 2.1.2        | 2026-07-09 | 2.1.3          | No framework-file changes; plugin generation scope (§28.2, §36.3) fixed to include `agent-catalog.yaml`, `agent-specs/`, `aos-interviews.md` at the plugin root — first applied in this same regeneration pass, so plugin version jumps straight to 2.1.3 |
 | 2.1.1        | 2026-07-09 | not published  | Re-render of the full framework from `spec_version` 2.1.1 (§4.1 `/outputs` subtree fix, §16.6 spec_version-stamp fix carried in from the design spec) — no structural changes to the builder files themselves, all frontmatter restamped |
 | 2.1.0        | 2026-07-06 | not published  | Initial framework generation: root entry, generic build engine + master AOS builder, and rendered design artifacts (catalog, agent-specs, aos-interviews) |
+
+## 2.1.3 — AGENTS.md workspace-governing file (2026-07-09)
+
+Fixed a functionality-impacting gap: `/CLAUDE.md`'s required "AGENTS.md include"
+section (§16.11) has always resolved to `@AGENTS.md`, and five governance-agent
+profiles cite an "AGENTS.md removal prohibition" as their retirement-refusal
+enforcement text, but no `/AGENTS.md` was ever defined as a workspace-governing
+file, scoped into plugin packaging, or provisioned by build-aos — a dangling
+include and unenforceable prohibition in every generated instance. Historical
+precedent (`plugin/aos-factory/templates/AGENTS.md`, commit `df581c4`) confirms
+this was shipped once and lost during the `plugin/` → `claude-plugin/` migration.
+
+Framework change: `/builders/build-aos.md` AOS Setup Sequence step 3 now
+provisions `/AGENTS.md` alongside `/aos-router.md` and `/CLAUDE.md`, non-
+destructively, from the shipped example copies (§28.2). No other framework file
+changed in substance.
+
+Rolled in together with the 2.1.2 plugin-scope fix (`agent-catalog.yaml`,
+`agent-specs/`, `aos-interviews.md` now ship in the plugin) since neither had
+been packaged yet — this is the first plugin release to include either fix,
+hence plugin version 2.1.3 for both changelog rows above. Fixed directly (not
+via a full §36.1 DRR cycle, per user decision).
 
 ## 2.1.1 — Version-sync re-render (2026-07-09)
 

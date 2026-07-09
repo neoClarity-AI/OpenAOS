@@ -1,7 +1,7 @@
 ---
 name: build-aos
 description: Build a complete Agentic Operating System (AOS) instance from scratch — run the interactive setup interview, create the instance folder structure and global files, provision the AOS Workspace root, build the required governance agents and the user's selected optional productive agents, and produce an AOS setup summary. The master AOS builder. Use when the user asks to set up, create, stand up, or build a new AOS, an "agentic operating system", or an additional AOS instance. To add or rebuild a single agent inside an existing instance instead, use the build-agent skill.
-spec_version: 2.1.1
+spec_version: 2.1.3
 ---
 # Build AOS
 
@@ -84,10 +84,11 @@ Follow §9.3, gating file creation on `Proceed`:
 0. The factory framework already exists (this build runs from it).
 1. Start the user-facing AOS setup interview (aos-interviews.md).
 2. Create the top-level folder structure (see below), as a sibling AOS root (§4.1).
-3. Provision the AOS Workspace root: ensure /aos-router.md and /CLAUDE.md exist,
-   copying them from the factory's shipped example copies (templates/aos-router.md,
-   templates/CLAUDE.md; §28.2). Create if absent; if either already exists, do
-   not overwrite without a separate Proceed (§2.4, §3.2, §4.1).
+3. Provision the AOS Workspace root: ensure /aos-router.md, /CLAUDE.md, and
+   /AGENTS.md exist, copying them from the factory's shipped example copies
+   (templates/aos-router.md, templates/CLAUDE.md, templates/AGENTS.md; §28.2).
+   Create if absent; if any already exists, do not overwrite without a
+   separate Proceed (§2.4, §3.2, §4.1).
 4. Create global config, memory, log, workflow, template, inbox, and archive files.
 5. Confirm the generic build engine and every approved agent's design artifacts
    (catalog entry, profile, interviews) exist.

@@ -2,7 +2,7 @@
 title: Chief of Staff Agent — Agent Profile
 file_type: agent_profile
 slug: chief-of-staff-agent
-spec_version: 2.1.2
+spec_version: 2.1.3
 ---
 # Chief of Staff Agent — Profile
 

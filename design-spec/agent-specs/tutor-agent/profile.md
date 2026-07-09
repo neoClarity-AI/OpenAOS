@@ -2,7 +2,7 @@
 title: Tutor Agent — Agent Profile
 file_type: agent_profile
 slug: tutor-agent
-spec_version: 2.1.2
+spec_version: 2.1.3
 ---
 # Tutor Agent — Profile
 

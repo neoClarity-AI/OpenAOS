@@ -1,7 +1,7 @@
 ---
 title: AOS Workspace Instructions
 file_type: project_instructions
-spec_version: 2.1.1
+spec_version: 2.1.3
 ---
 # AOS Workspace Instructions
 

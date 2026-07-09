@@ -2,7 +2,7 @@
 title: Research Agent — Agent Interviews
 file_type: interview_script
 slug: research-agent
-spec_version: 2.1.2
+spec_version: 2.1.3
 ---
 # Research Agent — Interviews
 

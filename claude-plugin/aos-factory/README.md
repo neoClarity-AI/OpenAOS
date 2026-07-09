@@ -6,7 +6,7 @@ choose, plus the workflows, templates, configs, logs, and a User Guide that make
 them work together. It can also add or rebuild a single agent later.
 
 This plugin is a **rendering** of the AOS Factory design specification
-(`spec_version` 2.1.1). The specification is the single source of truth; the
+(`spec_version` 2.1.3). The specification is the single source of truth; the
 builders, skills, and templates here are generated from it.
 
 ## What's inside
@@ -18,8 +18,14 @@ builders, skills, and templates here are generated from it.
 - **`skills/build-agent/`** — the generic build engine. Builds any one approved
   agent from its catalog entry, profile, and interview script — used during
   initial setup and to add an optional agent later.
-- **`templates/aos-router.md`** and **`templates/CLAUDE.md`** — example
-  workspace-root files you copy to your AOS Workspace root after install.
+- **`agent-catalog.yaml`** and **`agent-specs/`** — the design artifacts
+  (identity/ownership, behavioral profile, scripted interviews) both skills
+  above read at runtime to build each of the 15 approved agents.
+- **`aos-interviews.md`** — the scripted AOS-level setup interview the
+  `build-aos` skill executes.
+- **`templates/aos-router.md`**, **`templates/CLAUDE.md`**, and
+  **`templates/AGENTS.md`** — example workspace-root files you copy to your
+  AOS Workspace root after install.
 - **`builder-changelog.md`** — framework-file and packaging change history.
 
 ## Install
@@ -27,10 +33,11 @@ builders, skills, and templates here are generated from it.
 1. Add the marketplace that publishes this plugin, then install `aos-factory`
    from it (the repo's `.claude-plugin/marketplace.json` points at this
    directory as the plugin `source`).
-2. After installing, copy the two example files from `templates/` into your AOS
-   Workspace root:
+2. After installing, copy the three example files from `templates/` into your
+   AOS Workspace root:
    - `templates/aos-router.md` → `/aos-router.md`
    - `templates/CLAUDE.md` → `/CLAUDE.md`
+   - `templates/AGENTS.md` → `/AGENTS.md`
    The `build-aos` skill will also create these for you (non-destructively) on
    first build if they are absent.
 
@@ -56,7 +63,7 @@ overwritten, moved, renamed, or deleted without a separate `Proceed`.
 ## Versioning
 
 The plugin version tracks the framework `spec_version` and the
-`builder-changelog.md`. This release is **2.1.1**.
+`builder-changelog.md`. This release is **2.1.3**.
 
 ## Contributing
 

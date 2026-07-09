@@ -1,7 +1,7 @@
 ---
 name: build-agent
 description: Build any one approved agent inside an existing AOS instance — execute that agent's initialization interview and instantiate its catalog entry, profile, and interviews into the standard agent file set. The generic build engine used both during initial AOS setup and to add an optional agent later. Use when the user says things like "build the Research Agent", "add a Calendar agent", "create the Inbox agent", or otherwise asks to add or rebuild a single agent in an AOS instance. To stand up a whole new AOS instance instead, use the build-aos skill.
-spec_version: 2.1.1
+spec_version: 2.1.3
 ---
 # Build Agent (Generic Engine)
 

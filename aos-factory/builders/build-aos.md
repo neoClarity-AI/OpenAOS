@@ -1,7 +1,7 @@
 ---
 title: Build AOS
 file_type: aos_builder
-spec_version: 2.1.1
+spec_version: 2.1.3
 created_date: 2026-07-06
 last_updated: 2026-07-09
 status: active
@@ -86,10 +86,11 @@ Follow §9.3, gating file creation on `Proceed`:
 0. The factory framework already exists (this build runs from it).
 1. Start the user-facing AOS setup interview (/aos-interviews.md).
 2. Create the top-level folder structure (see below), as a sibling AOS root (§4.1).
-3. Provision the AOS Workspace root: ensure /aos-router.md and /CLAUDE.md exist,
-   copying them from the factory's shipped example copies (templates/aos-router.md,
-   templates/CLAUDE.md; §28.2). Create if absent; if either already exists, do
-   not overwrite without a separate Proceed (§2.4, §3.2, §4.1).
+3. Provision the AOS Workspace root: ensure /aos-router.md, /CLAUDE.md, and
+   /AGENTS.md exist, copying them from the factory's shipped example copies
+   (templates/aos-router.md, templates/CLAUDE.md, templates/AGENTS.md; §28.2).
+   Create if absent; if any already exists, do not overwrite without a
+   separate Proceed (§2.4, §3.2, §4.1).
 4. Create global config, memory, log, workflow, template, inbox, and archive files.
 5. Confirm the generic build engine and every approved agent's design artifacts
    (catalog entry, profile, interviews) exist.

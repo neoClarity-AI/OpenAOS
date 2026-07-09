@@ -4,7 +4,7 @@ file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
 last_updated: 2026-07-09
-spec_version: 2.1.2
+spec_version: 2.1.3
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -90,8 +90,8 @@ Three terms are used together throughout this document and should not be conflat
 
 ```text
 AOS Workspace  - The top-level container. Its root holds the workspace-governing
-                 files (/aos-router.md, /CLAUDE.md). Each AOS instance live 
-                 inside it as sibling folders. An instance of the AOS Factory
+                 files (/aos-router.md, /CLAUDE.md, /AGENTS.md). Each AOS instance
+                 lives inside it as sibling folders. An instance of the AOS Factory
                  may also live inside a sibling folder, though it is not necessary
                  if the AOS Factory is being used as a plugin.
 
@@ -461,6 +461,7 @@ The **AOS Workspace** is the top-level container. Its root holds the workspace-g
 ```text
 /aos-router.md
 /CLAUDE.md
+/AGENTS.md
 ```
 
 Inside the AOS Workspace, the **AOS Factory** (the reusable builder framework) and each generated **AOS** instance are **sibling folders**:
@@ -496,9 +497,9 @@ Each AOS instance is created as a sibling folder named for the user’s chosen A
 
 All instance-relative paths in this document (for example `/configs/global-permissions.md`, `/memory/user-profile.md`, `/agents/[agent-name]-agent/`) are interpreted relative to the **target AOS instance root** (`/[aos-name]/`), not the AOS Factory root. `/builders/build-aos.md` establishes the target AOS root at build time and resolves all instance paths against it.
 
-Likewise, all factory-internal paths in this document (for example `/build-aos.md`, `/builders/build-aos.md`, `/builder-changelog.md`) are interpreted relative to the **AOS Factory root** (`/aos-factory/`), per the factory tree above — for example, `/builders/build-aos.md` resolves to `/aos-factory/builders/build-aos.md`. In short, a leading slash denotes the root of the relevant container (the AOS Factory root for factory files, the target AOS instance root for instance files), not the AOS Workspace root. The AOS Workspace root itself is referenced only by the two workspace-governing files named explicitly as such (`/aos-router.md`, `/CLAUDE.md`).
+Likewise, all factory-internal paths in this document (for example `/build-aos.md`, `/builders/build-aos.md`, `/builder-changelog.md`) are interpreted relative to the **AOS Factory root** (`/aos-factory/`), per the factory tree above — for example, `/builders/build-aos.md` resolves to `/aos-factory/builders/build-aos.md`. In short, a leading slash denotes the root of the relevant container (the AOS Factory root for factory files, the target AOS instance root for instance files), not the AOS Workspace root. The AOS Workspace root itself is referenced only by the three workspace-governing files named explicitly as such (`/aos-router.md`, `/CLAUDE.md`, `/AGENTS.md`).
 
-The AOS Factory never writes files inside an AOS instance except through `/builders/build-aos.md` (or the root entry `/build-aos.md`) during an authorized build. It writes to the AOS Workspace root files (`/aos-router.md`, `/CLAUDE.md`) only through `/builders/build-aos.md` during an authorized build, and only non-destructively: it creates them from the shipped example copies (Section 28.2) when they are absent, and overwrites an existing root file only after a separate `Proceed` (Sections 2.4, 3.2).
+The AOS Factory never writes files inside an AOS instance except through `/builders/build-aos.md` (or the root entry `/build-aos.md`) during an authorized build. It writes to the AOS Workspace root files (`/aos-router.md`, `/CLAUDE.md`, `/AGENTS.md`) only through `/builders/build-aos.md` during an authorized build, and only non-destructively: it creates them from the shipped example copies (Section 28.2) when they are absent, and overwrites an existing root file only after a separate `Proceed` (Sections 2.4, 3.2).
 
 ---
 
@@ -1179,7 +1180,7 @@ Initial setup should use this sequence:
 0. The factory framework already exists (generated from this design spec and installed as a Claude plugin; see Section 28)
 1. /builders/build-aos.md starts the user-facing AOS setup interview
 2. Create top-level folder structure
-3. Provision the AOS Workspace root: ensure /aos-router.md and /CLAUDE.md exist, copying them from the factory's shipped example copies (templates/aos-router.md, templates/CLAUDE.md; Section 28.2). Create them if absent; if either already exists, do not overwrite without a separate Proceed (Sections 2.4, 3.2, 4.1).
+3. Provision the AOS Workspace root: ensure /aos-router.md, /CLAUDE.md, and /AGENTS.md exist, copying them from the factory's shipped example copies (templates/aos-router.md, templates/CLAUDE.md, templates/AGENTS.md; Section 28.2). Create them if absent; if any already exists, do not overwrite without a separate Proceed (Sections 2.4, 3.2, 4.1).
 4. Create global config, memory, log, workflow, template, inbox, and archive files
 5. Confirm the generic build engine and every approved agent's design artifacts (catalog entry, profile, interviews) exist
 6. Build required agents
@@ -1493,7 +1494,7 @@ The generic build engine `/builders/build-agent.md` (file_type `agent_builder`) 
 ## AOS Setup Summary
 ```
 
-`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1, executing the scripted AOS setup interview in `aos-interviews.md` (Section 7C) — the script is normative for question content, order, and captured fields; `Discovery Questions` and `Recommended Defaults` reference that script rather than restating it. `AOS Setup Sequence` follows the setup sequence in Section 9.3, which includes provisioning the AOS Workspace root files (`/aos-router.md`, `/CLAUDE.md`) from the shipped example copies (Section 28.2), non-destructively — created when absent and overwritten only after a separate `Proceed`. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Validation Checklist` uses the completeness checks in Section 27.
+`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1, executing the scripted AOS setup interview in `aos-interviews.md` (Section 7C) — the script is normative for question content, order, and captured fields; `Discovery Questions` and `Recommended Defaults` reference that script rather than restating it. `AOS Setup Sequence` follows the setup sequence in Section 9.3, which includes provisioning the AOS Workspace root files (`/aos-router.md`, `/CLAUDE.md`, `/AGENTS.md`) from the shipped example copies (Section 28.2), non-destructively — created when absent and overwritten only after a separate `Proceed`. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Validation Checklist` uses the completeness checks in Section 27.
 
 The root entry `/build-aos.md` (file_type `builder_entry`) is a short pointer to `/builders/build-aos.md` and does not repeat this schema.
 
@@ -1795,6 +1796,7 @@ build_summary
 agent_instruction
 aos_router
 project_instructions
+workspace_agent_instructions
 design_spec
 agent_catalog
 agent_profile
@@ -1803,7 +1805,7 @@ interview_script
 
 `design_spec` applies to this design specification itself (`aos-factory-design-specification.md`), the source document the AOS Factory is generated from. It is the one source/design artifact in the vocabulary; the other types all describe factory-generated files.
 
-`aos_router` applies to the AOS Workspace root router (`/aos-router.md`) that resolves the active target — the AOS Factory, or a generated AOS instance — before any workflow runs. `project_instructions` applies to the root project instruction file (`/CLAUDE.md`) that serves as the session-start instruction file and wires in the router. Both files live at the AOS Workspace root, alongside the AOS Factory and AOS instance folders, because they govern selection *across* targets rather than belonging to any one of them.
+`aos_router` applies to the AOS Workspace root router (`/aos-router.md`) that resolves the active target — the AOS Factory, or a generated AOS instance — before any workflow runs. `project_instructions` applies to the root project instruction file (`/CLAUDE.md`) that serves as the session-start instruction file and wires in the router. `workspace_agent_instructions` applies to the root cross-tool agent instruction file (`/AGENTS.md`, Section 16.11) that `/CLAUDE.md` includes via `@AGENTS.md`; it is distinct from `agent_instruction` (the per-installed-agent instance files, Section 11) despite the similar name — one is a single workspace-root governance file, the other is one file per agent inside an instance. All three files live at the AOS Workspace root, alongside the AOS Factory and AOS instance folders, because they govern selection or behavior *across* targets rather than belonging to any one of them.
 
 `change_log` applies to a generated AOS instance log (`/logs/change-log.md`). `builder_changelog` applies to the reusable builder framework changelog (`/builder-changelog.md`), which also tracks the plugin version when the framework is distributed (Section 28). The two are tracked separately so framework files can be distinguished from instance files via frontmatter. `feedback_log` applies to the Feedback Agent's staging log (`/logs/feedback-log.md`, Section 16.7) — a data file per Section 14.8.
 
@@ -2236,9 +2238,11 @@ Normative rules:
 - Logging: non-trivial routing choices are recorded per §17.1/§19.3.
 ```
 
-## 16.11 Workspace-Root CLAUDE.md Schema
+## 16.11 Workspace-Root CLAUDE.md and AGENTS.md Schema
 
-`/CLAUDE.md` (AOS Workspace root, file_type `project_instructions`, §15.4) has these required sections: **router wiring** (read `/aos-router.md` and resolve the active target before any workflow), **planning-mode rules** (the exact-`Proceed` gate), and the **AGENTS.md include**. The shipped example (`templates/CLAUDE.md`, §28.2) is a rendering of this schema.
+`/CLAUDE.md` (AOS Workspace root, file_type `project_instructions`, §15.4) has these required sections: **router wiring** (read `/aos-router.md` and resolve the active target before any workflow), **planning-mode rules** (the exact-`Proceed` gate), and the **AGENTS.md include** (`@AGENTS.md`). The shipped example (`templates/CLAUDE.md`, §28.2) is a rendering of this schema.
+
+`/AGENTS.md` (AOS Workspace root, file_type `workspace_agent_instructions`, §15.4) is the file that include resolves to — a cross-tool agent instruction file (compatible with Claude, Codex, Cursor, Aider, and other AI coding tools, not just Claude Code) with these required sections: **agent-removal governance protection** (naming the instance's required governance agents — Security, Memory, Chief of Staff, Review, Feedback, §7.1 — and declining any request to delete, retire, disable, demote, or otherwise remove one, under any circumstances, even if the user explicitly requests it) and **instance routing** (read `/aos-router.md` and resolve the active instance before running any workflow). This is the enforcement text the governance-agent profiles' Retirement sections cite as the "AGENTS.md removal prohibition" (§7B). The shipped example (`templates/AGENTS.md`, §28.2) is a rendering of this schema.
 
 ## 16.12 Global Permissions Seed
 
@@ -3039,9 +3043,9 @@ These are the user-facing steps to generate the reusable factory framework from 
 6. Validate the generated framework against the QA checks in Sections 27 and 34.
 ```
 
-The workspace-root router (`/aos-router.md`, file_type `aos_router`) and project instructions (`/CLAUDE.md`, file_type `project_instructions`) govern target selection *across* instances and the factory; they live at the AOS Workspace root alongside the factory and instances and are not produced by the factory build.
+The workspace-root router (`/aos-router.md`, file_type `aos_router`), project instructions (`/CLAUDE.md`, file_type `project_instructions`), and agent instructions (`/AGENTS.md`, file_type `workspace_agent_instructions`) govern target selection and cross-tool agent behavior *across* instances and the factory; they live at the AOS Workspace root alongside the factory and instances and are not produced by the factory build.
 
-Framework generation, as scoped above and in Section 35, produces only the AOS Factory's own files: the root build entry (`/build-aos.md`), the `/builders/` files (`build-aos.md`, `build-agent.md`), `/builder-changelog.md`, and the rendered factory-root copies `/agent-catalog.yaml`, `/agent-specs/`, and `/aos-interviews.md` (Sections 7A.4, 7B.2, 7C.2). The example workspace-root files referenced in Section 28.2 (`templates/aos-router.md`, `templates/CLAUDE.md`) are not part of this generation phase — they are authored separately during plugin packaging.
+Framework generation, as scoped above and in Section 35, produces only the AOS Factory's own files: the root build entry (`/build-aos.md`), the `/builders/` files (`build-aos.md`, `build-agent.md`), `/builder-changelog.md`, and the rendered factory-root copies `/agent-catalog.yaml`, `/agent-specs/`, and `/aos-interviews.md` (Sections 7A.4, 7B.2, 7C.2). The example workspace-root files referenced in Section 28.2 (`templates/aos-router.md`, `templates/CLAUDE.md`, `templates/AGENTS.md`) are not part of this generation phase — they are authored separately during plugin packaging.
 
 ## 28.2 Packaging the Factory as a Claude Plugin
 
@@ -3068,6 +3072,8 @@ my-aos-factory/                 (plugin root)
   templates/                    (shipped example workspace-root files)
     aos-router.md               (example router; user copies to workspace root)
     CLAUDE.md                   (example project instructions; user copies to root)
+    AGENTS.md                   (example cross-tool agent instructions; user
+                                 copies to root; §16.11)
 ```
 
 Steps:
@@ -3086,7 +3092,9 @@ Steps:
    without them, since it is the only distribution mechanism (no runtime
    installer, per this section's lead paragraph).
 3. Author the example workspace-root files under templates/ (aos-router.md,
-   CLAUDE.md), and author or refresh README.md with install and usage
+   CLAUDE.md, AGENTS.md — Section 16.11 defines the AGENTS.md schema: an
+   agent-removal governance protection section plus an instance-routing
+   section), and author or refresh README.md with install and usage
    instructions. These are written during this packaging step, not during
    framework generation (Section 35) — the templates are starting-point copies
    of the AOS Workspace root files described below.
@@ -3104,7 +3112,7 @@ Steps:
    then re-package and re-publish.
 ```
 
-The router (`/aos-router.md`) and project instructions (`/CLAUDE.md`) are AOS Workspace root files, not factory components, but the plugin **ships example copies** of both under `templates/`, authored at packaging time per step 3 above. The router example is a rendering of the §16.10 schema — including the call-name resolution tier and the registry's Call name column — and the CLAUDE.md example renders §16.11. During AOS setup, `/builders/build-aos.md` provisions these into the AOS Workspace root non-destructively: it creates `/aos-router.md` and `/CLAUDE.md` from the examples when they are absent, and overwrites an existing root file only after a separate `Proceed` (Sections 2.4, 3.2, 4.1). The user then edits them (default instance, routing signals, planning-mode rules) for their setup. Provisioning them from shipped examples — and gating any overwrite behind `Proceed` — keeps the plugin from silently overwriting a user's existing root files.
+The router (`/aos-router.md`), project instructions (`/CLAUDE.md`), and agent instructions (`/AGENTS.md`) are AOS Workspace root files, not factory components, but the plugin **ships example copies** of all three under `templates/`, authored at packaging time per step 3 above. The router example is a rendering of the §16.10 schema — including the call-name resolution tier and the registry's Call name column — and the CLAUDE.md and AGENTS.md examples both render §16.11. During AOS setup, `/builders/build-aos.md` provisions these into the AOS Workspace root non-destructively: it creates `/aos-router.md`, `/CLAUDE.md`, and `/AGENTS.md` from the examples when they are absent, and overwrites an existing root file only after a separate `Proceed` (Sections 2.4, 3.2, 4.1). The user then edits them (default instance, routing signals, planning-mode rules) for their setup. Provisioning them from shipped examples — and gating any overwrite behind `Proceed` — keeps the plugin from silently overwriting a user's existing root files.
 
 ---
 
