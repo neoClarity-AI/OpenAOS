@@ -9,15 +9,6 @@ This is the AOS Workspace root. Copy this file (and `aos-router.md`) here after
 installing the `aos-factory` plugin. These instructions apply to every request in
 this workspace. Required sections follow (§16.11).
 
-## Router Wiring
-
-Before any workflow, read `/aos-router.md` and resolve the active target using its
-Resolution Order. Exactly one target (the factory framework or a single instance)
-is active per request. Never blend instance memory; for a cross-instance request,
-run each instance separately with labeled output. State the resolved target on the
-first line of any routed output (e.g. `**[work-aos]** …`). If routing is ambiguous
-or signals are mixed or weak, ASK — do not silently pick.
-
 ## Planning-Mode Rules
 
 - Planning mode is active when the user's message begins with "Planning mode" or

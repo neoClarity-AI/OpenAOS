@@ -23,7 +23,12 @@ Governance agents are: Chief of Staff Agent, Memory Agent, Review Agent,
 Security Agent, Feedback Agent, and any other agent listed under
 `Required — governance` in the manifest.
 
-## Instance routing
+## Router Wiring
 
-Read `/aos-router.md` and resolve the active instance before running any
-workflow.
+Before any workflow, read `/aos-router.md` and resolve the active target using its
+Resolution Order. Exactly one target (the factory framework or a single instance)
+is active per request. Never blend instance memory; for a cross-instance request,
+run each instance separately with labeled output. State the resolved target on the
+first line of any routed output (e.g. `**[work-aos]** …`). If routing is ambiguous
+or signals are mixed or weak, ASK — do not silently pick.
+
