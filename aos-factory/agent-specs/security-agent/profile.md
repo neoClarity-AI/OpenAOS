@@ -2,7 +2,7 @@
 title: Security Agent — Agent Profile
 file_type: agent_profile
 slug: security-agent
-spec_version: 2.1.0
+spec_version: 2.1.1
 ---
 # Security Agent — Profile
 

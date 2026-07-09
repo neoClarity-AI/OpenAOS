@@ -2,7 +2,7 @@
 title: Memory Agent — Agent Profile
 file_type: agent_profile
 slug: memory-agent
-spec_version: 2.1.0
+spec_version: 2.1.1
 ---
 # Memory Agent — Profile
 
