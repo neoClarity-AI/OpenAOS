@@ -1,7 +1,7 @@
 ---
 name: build-aos
 description: Build a complete Agentic Operating System (AOS) instance from scratch — run the interactive setup interview, create the instance folder structure and global files, provision the AOS Workspace root, build the required governance agents and the user's selected optional productive agents, and produce an AOS setup summary. The master AOS builder. Use when the user asks to set up, create, stand up, or build a new AOS, an "agentic operating system", or an additional AOS instance. To add or rebuild a single agent inside an existing instance instead, use the build-agent skill.
-spec_version: 2.2.0
+spec_version: 2.2.1
 ---
 # Build AOS
 
@@ -209,6 +209,11 @@ memory review; §17.5–17.8) — they run on their triggering event, not a
 cadence. Creating a Scheduled Task is Level 2 (§3.4): preview the proposed
 schedule and gate creation behind `Proceed`. Log each accepted schedule to
 `/logs/change-log.md`.
+
+Each task's instructions must contain exactly one line pointing to its
+workflow file, as an `@`-path reference against the instance root — e.g.
+`@/[aos-name]/workflows/daily-startup-workflow.md` — and nothing else; the
+workflow file is the single source of truth for the run's behavior.
 
 ## Validation Checklist
 

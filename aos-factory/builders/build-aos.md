@@ -1,7 +1,7 @@
 ---
 title: Build AOS
 file_type: aos_builder
-spec_version: 2.2.0
+spec_version: 2.2.1
 created_date: 2026-07-06
 last_updated: 2026-07-11
 status: active
@@ -212,6 +212,11 @@ memory review; §17.5–17.8) — they run on their triggering event, not a
 cadence. Creating a Scheduled Task is Level 2 (§3.4): preview the proposed
 schedule and gate creation behind `Proceed`. Log each accepted schedule to
 `/logs/change-log.md`.
+
+Each task's instructions must contain exactly one line pointing to its
+workflow file, as an `@`-path reference against the instance root — e.g.
+`@/[aos-name]/workflows/daily-startup-workflow.md` — and nothing else; the
+workflow file is the single source of truth for the run's behavior.
 
 ## Validation Checklist
 

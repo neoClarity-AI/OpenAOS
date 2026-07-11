@@ -4,7 +4,7 @@ file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
 last_updated: 2026-07-11
-spec_version: 2.2.0
+spec_version: 2.2.1
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -1190,6 +1190,8 @@ Initial setup should use this sequence:
 ```
 
 **Scheduling the rhythmic workflows (step 10).** The four cadence-driven workflows — daily startup, end-of-day shutdown, weekly review, and monthly review (Section 17.1–17.4) — are candidates for a Cowork Scheduled Task per workflow, each one invoking that workflow's routed execution (through the instance router, Section 16.10) on its cadence. This is offered, never assumed: present the four candidates with their standard cadence (Section 25) and the reviewing agent's preferred timing where already captured (e.g. the Review Agent's `review-timing` answer, Section 26), and create a task only for each one the user accepts; declining any or all leaves that workflow manually triggered, as today. Event-triggered workflows (inbox-to-task, project kickoff, decision capture, memory review; Sections 17.5–17.8) are not scheduled — they run when their triggering event occurs, not on a cadence. Creating a Scheduled Task is Level 2 (Section 3.4): preview the proposed schedule and gate creation behind `Proceed`, consistent with the rest of this sequence. Each accepted schedule is logged to `/logs/change-log.md`.
+
+Each Scheduled Task's instructions must contain **exactly one line** pointing to its associated workflow file, as an `@`-path reference resolved against the instance root — e.g. `@/[aos-name]/workflows/daily-startup-workflow.md`. The task carries no other embedded instructions; the workflow file remains the single source of truth for what the run does, so editing the workflow changes future runs without touching the schedule.
 
 The step 11 **AOS setup summary** is a saved file: `/logs/aos-build-summary.md`, file_type `build_summary` (§15.4), with a schema parallel to the Section 13 per-agent Build Summary (Files Created, Key Decisions, User Preferences Captured, Permissions and Boundaries, Open Questions, Suggested Next Steps) at instance scope.
 
