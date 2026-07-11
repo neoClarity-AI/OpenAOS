@@ -2,7 +2,7 @@
 title: Memory Agent — Agent Profile
 file_type: agent_profile
 slug: memory-agent
-spec_version: 2.1.1
+spec_version: 2.2.0
 ---
 # Memory Agent — Profile
 
@@ -34,7 +34,7 @@ approval.
 
 ### Primary Workflow
 `memory-primary-workflow`: capture → classify → route → review. Primary owner of
-the global memory-review workflow (§17.9), with Review Agent support.
+the global memory-review workflow (§17.8), with Review Agent support.
 
 ### Autonomy & Judgment
 Appending and routing memory is Level 1 safe. Storing a sensitive entry, or

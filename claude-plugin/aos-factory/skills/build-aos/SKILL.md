@@ -1,7 +1,7 @@
 ---
 name: build-aos
 description: Build a complete Agentic Operating System (AOS) instance from scratch — run the interactive setup interview, create the instance folder structure and global files, provision the AOS Workspace root, build the required governance agents and the user's selected optional productive agents, and produce an AOS setup summary. The master AOS builder. Use when the user asks to set up, create, stand up, or build a new AOS, an "agentic operating system", or an additional AOS instance. To add or rebuild a single agent inside an existing instance instead, use the build-agent skill.
-spec_version: 2.1.1
+spec_version: 2.2.2
 ---
 # Build AOS
 
@@ -64,17 +64,23 @@ The step-5 pre-build preview uses this block (§9.1):
 ## Discovery Questions
 
 Defined by the scripted AOS setup interview in `aos-interviews.md` (§7C) —
-purpose, instance name, optional-agent selection, memory seeds, autonomy
-baseline, and optional call name. This builder references that script and does
-not restate it (§12.1).
+purpose, instance name, optional-agent selection, memory seeds, and optional
+call name. This builder references that script and does not restate it
+(§12.1).
 
 ## Recommended Defaults
 
 Defined by the `default:` values in `aos-interviews.md` (§7C): propose an
-instance name from the stated purpose; seed memory empty and never fabricate;
-adopt the §3 permission model unchanged; recommend Inbox + Task + Calendar for a
-productivity AOS or Research + Writing for a knowledge-work AOS; no call name
-unless requested. This builder references that script and does not restate it.
+instance name from the stated purpose; recommend agents by the stated
+aos-purpose category — Inbox + Task + Calendar + Document for Personal
+Productivity, Project Manager + Task + Document for Project Management,
+Personal CRM + Task + Calendar for Client Specific, and the full §7.2 roster
+with no default for Other; seed memory empty and never fabricate; no call name
+unless requested. This builder references that script and does not restate
+it. The §3 permission model
+applies unchanged by default — autonomy is no longer asked about at setup;
+instance-specific tightening or loosening happens later in
+`/configs/global-permissions.md` (§3.5).
 
 ## AOS Setup Sequence
 
@@ -95,7 +101,8 @@ Follow §9.3, gating file creation on `Proceed`:
 7. Ask the user to select at least one optional productive agent (§2.3, §7.2).
 8. Build the selected optional agents (via the build-agent skill).
 9. Update the agent registry and AOS map.
-10. Produce the AOS setup summary (/logs/aos-build-summary.md).
+10. Offer to schedule the rhythmic workflows as Cowork Scheduled Tasks (see below).
+11. Produce the AOS setup summary (/logs/aos-build-summary.md).
 ```
 
 ## Folder Structure to Create
@@ -148,7 +155,6 @@ user-provided content — never fabricate (§14.8, §20.3):
 /workflows/end-of-day-shutdown-workflow.md
 /workflows/weekly-review-workflow.md
 /workflows/monthly-review-workflow.md
-/workflows/quarterly-review-workflow.md
 /workflows/inbox-to-task-workflow.md
 /workflows/project-kickoff-workflow.md
 /workflows/decision-capture-workflow.md
@@ -188,6 +194,26 @@ each built agent (status `Active`), each `Available` uninstalled agent, and the
 instance's folder map. Record installed/active agents in `/aos-manifest.md`
 (§14.3). These are mixed/data files — update by targeted merge, never wholesale
 overwrite (§14.8).
+
+## Rhythmic Workflow Scheduling
+
+Offer a Cowork Scheduled Task for each of the four cadence-driven workflows —
+daily startup, end-of-day shutdown, weekly review, monthly review (§17.1–17.4)
+— invoking that workflow's routed execution (through the instance router,
+§16.10) on its cadence. This is offered, never assumed: present the standard
+cadence (§25) and the Review Agent's captured `review-timing` preference
+where set (§26); create a task only for each workflow the user accepts.
+Declining any or all leaves that workflow manually triggered. Do not schedule
+event-triggered workflows (inbox-to-task, project kickoff, decision capture,
+memory review; §17.5–17.8) — they run on their triggering event, not a
+cadence. Creating a Scheduled Task is Level 2 (§3.4): preview the proposed
+schedule and gate creation behind `Proceed`. Log each accepted schedule to
+`/logs/change-log.md`.
+
+Each task's instructions must contain exactly one line pointing to its
+workflow file, as an `@`-path reference against the instance root — e.g.
+`@/[aos-name]/workflows/daily-startup-workflow.md` — and nothing else; the
+workflow file is the single source of truth for the run's behavior.
 
 ## Validation Checklist
 

@@ -2,7 +2,7 @@
 title: Inbox Agent — Agent Profile
 file_type: agent_profile
 slug: inbox-agent
-spec_version: 2.1.1
+spec_version: 2.2.0
 ---
 # Inbox Agent — Profile
 
@@ -27,7 +27,7 @@ handoffs rather than acting in them.
 ### Operating Procedure
 Classify new inbox items by the user's triage taxonomy (urgent / waiting / FYI /
 archive); draft responses where configured; promote items through the
-inbox-to-task workflow (§17.6) to tasks, projects, calendar, memory, decisions,
+inbox-to-task workflow (§17.5) to tasks, projects, calendar, memory, decisions,
 or archive; move processed items to `/inbox/processed` (the single pre-authorized
 move); feed the daily startup brief's processed-inbox summary (§17.1).
 
@@ -84,6 +84,6 @@ as before.
 Signals (usage-pattern and user-request): no invocations across two consecutive
 review cycles; the inbox left unprocessed or processed manually by the user;
 the user asking to remove or stop using the agent. The Review Agent surfaces
-these at the quarterly review — suggestion only. Procedure: §10.2 (prefer
+these at the monthly review — suggestion only. Procedure: §10.2 (prefer
 pausing when in doubt); retirement is `Proceed`-gated (§3.2), and the agent's
 memory, learnings, and logs are preserved per §10.2.

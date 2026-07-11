@@ -2,7 +2,7 @@
 title: Inbox Agent — Agent Interviews
 file_type: interview_script
 slug: inbox-agent
-spec_version: 2.1.1
+spec_version: 2.2.0
 ---
 # Inbox Agent — Interviews
 
@@ -36,7 +36,7 @@ spec_version: 2.1.1
 - id: promotion-thresholds
   ask: Which promotions should be aggressive vs. conservative?
   type: text
-  default: conservative — promote only clear commitments and dated items (§17.6)
+  default: conservative — promote only clear commitments and dated items (§17.5)
   skippable: yes
   when: always
   captures: inbox-config.md promotion thresholds

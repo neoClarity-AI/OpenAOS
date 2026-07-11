@@ -1,9 +1,9 @@
 ---
 title: Build Agent (Generic Engine)
 file_type: agent_builder
-spec_version: 2.1.1
+spec_version: 2.2.2
 created_date: 2026-07-06
-last_updated: 2026-07-09
+last_updated: 2026-07-11
 status: active
 compatible_aos_versions:
   - 1.x
