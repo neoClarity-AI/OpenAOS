@@ -210,7 +210,7 @@ The spec is also the correct starting point for any change to the factory itself
 
 ## Maintainer and Project Status
 
-The OpenAOS is built and actively maintained by Martin Danner, founder of neoClarity, with decades in software engineering, technical training, and IT management. neoClarity is a human-centered AI learning community focused on making capable AI accessible to non-technical professionals.
+The **OpenAOS** is built and actively maintained by Martin Danner, founder of neoClarity, with decades in software engineering, technical training, and IT management. neoClarity is a human-centered AI learning community focused on making capable AI accessible to non-technical professionals. More info at [https://neoclarity.ai](https://neoclarity.ai)
 
 The project is under active development with ongoing commits on `main`, a published architecture and a spec-driven contribution model, and labeled good-first-issues for new contributors. The reference factory was built with Claude Opus 4.8 and is designed to be rebuilt as newer models ship. Issues and design-spec pull requests are welcome.
 
