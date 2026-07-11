@@ -7,7 +7,7 @@
 
 ## Why This Exists
 
-Claude Cowork gives you a powerful general-purpose platform: project memory, skills, subagents, plugins, scheduled tasks, and a permission system. What they deliberately don't give you is framework for assembling those primitives into a trustworthy, coordinated team of agents. A non-technical person has no straightforward path from the generic platform to a coordinated team of agents built for their own specific needs. **OpenAOS** closes that gap. It lets anyone turn the general-purpose platform into purpose-built, governed agents through an interview-style conversation.  No config, no code. What's more, governance comes first, not as an afterthought. Every consequential action waits on a one-word human approval (`Proceed`), and the entire system is generated from a single canonical specification, so the design, the docs, and the shipped code cannot quietly drift apart.
+Claude Cowork gives you a powerful general-purpose platform: project memory, skills, subagents, plugins, scheduled tasks, and a permission system. What they deliberately don't give you is framework for assembling those primitives into a trustworthy, coordinated team of agents. A non-technical person has no straightforward path from the generic platform to a coordinated team of agents built for their own specific needs. **OpenAOS** closes that gap. It lets anyone turn the general-purpose platform into a purpose-built team of agents through an interview-style conversation.  No config, no code. What's more, governance comes first, not as an afterthought. Every consequential action waits on a one-word human approval (`Proceed`), and the entire system is generated from a single canonical specification, so the design, the docs, and the shipped code cannot quietly drift apart.
 
 ## Overview
 
@@ -29,9 +29,13 @@ Individually, each idea has neighbors in the field. The **combination** of a fac
 
 ### How the Factory Relates to Claude Cowork
 
-The Factory is not a replacement for the Claude Cowork. Rather, the Factory is complements and extends it. Cowork provides the primitives and stays general-purpose by design. The Factory turns those primitives into a specific, governed system shaped to the user's needs.
+The AOS built by the Factory is not a replacement for the Claude Cowork. Rather, the AOS complements and extends it. Cowork provides the primitives and stays general-purpose by design. The AOS turns those primitives into a specific, governed system shaped to the user's specific needs.
 
-Some of what the Factory adds is genuinely new ground: governance reified as required agents, and spec-driven regeneration of the whole system. Some of it deliberately overlaps the platform — most notably the `Proceed` gate (see below).
+**Where it overlaps.** A factory-built AOS reuses Cowork's own primitives rather than replacing them: project memory (the `memory/` folder is a structured application of it, not a new mechanism), skills/subagents (agents are markdown instruction files invoked through Cowork's existing skill/subagent execution), scheduled tasks (the daily/weekly/monthly/quarterly operating rhythms are Cowork's scheduler, pre-wired to specific cadences), the permission system (the three-level model and tool-access matrix sit on top of Cowork's own approval gating), and plugins (the Factory itself ships and installs as a standard Cowork plugin).
+
+**Where it complements.** Cowork has no concept of agents that must exist before productive work happens, no enforcement of single-responsibility boundaries between skills, no unified approval gate beyond its own built-in safeguards, no notion of a canonical spec used to generate the running system, and no built-in cadence for documenting or reviewing itself. The Factory adds all of these: the five required governance agents, Chief-of-Staff-enforced single responsibility, the `Proceed` gate layered on top of Cowork's own safety checks, spec-driven regeneration, and the self-documenting/self-improving review rhythms.
+
+In short, Cowork supplies the engine; the AOS is a specific, governed vehicle built from it. **OpenAOS** reuses Cowork's mechanisms whenever possible and adds only what governance and non-technical usability require on top.
 
 ------
 
@@ -76,8 +80,8 @@ Although **OpenAOS** is designed with Cowork in mind, it also runs works well on
 /biuld-aos help
 ```
 
-- Read the overview to familiarize yourself with the skill, then proceed with the interview to create your first AOS instance.
-- You can begin issuing commands to your new AOS. See the **AOS User Guide** (`docs/aos-user-guide.html`) in the `docs` folder of your new AOS instance for details.
+- Read the overview to familiarize yourself with the skill, then proceed with the interview to create your AOS.
+- You can begin issuing commands to your new AOS. See the **AOS User Guide** (`docs/aos-user-guide.html`) in the `docs` folder of your new AOS for details.
 
 ---
 
@@ -91,7 +95,7 @@ Although **OpenAOS** is designed with Cowork in mind, it also runs works well on
 
 **Single Responsibility Principle.** Each agent has a well-defined purpose and set of responsibilities. The Factory ensures that responsibilities don't overlap. For instance, the Chief of Staff agent coordinates and routes without taking on any other responsibilities.
 
-**Works for personal and professional use.** The factory is designed as a reusable template. A user can build a personal AOS, a work AOS, or both, as sibling instances in the same workspace (see Repository Structure below). The user can build as many AOS instances as they need, with each specialized for a specific purpose. A routing mechanism activates the appropriate AOS and agents for a specific task.
+**Works for personal and professional use.** The factory is designed as a reusable template. A user can build a personal AOS, a work AOS, or both, as sibling instances in the same workspace (see Repository Structure below). The user can build as many AOS instances as they need, with each specialized for a specific purpose (each instance requires its own Claude Cowork project).
 
 **Scheduled, recurring work.** Agents don't only act when prompted. They run on a cadence. Each AOS includes daily, weekly, monthly, and quarterly operating rhythms: a daily start-of-day briefing and inbox pass driven by the Chief of Staff, plus a weekly review, a monthly health check and user-guide refresh, and a quarterly retrospective owned by the Review Agent. You approve the schedule once. The system maintains the rhythm so routine work happens on its own.
 
@@ -136,13 +140,13 @@ At least one optional productive agent must be added before the AOS setup is con
 ## Repository Structure
 
 ```
-OpenAOS/                ← project root
+OpenAOS/                         ← project root
 │
 ├── CLAUDE.md                    ← session-start instructions for Claude
-├── AGENTS.md                    ← cross-agent rules (governance-removal hard rule, factory-vs-instance guard); pulled in by CLAUDE.md
-├── README.md
-├── CONTRIBUTING.md
-├── LICENSE
+├── AGENTS.md                    ← Proceed gate definition, basic routing; pulled in by CLAUDE.md
+├── README.md                    ← This document
+├── CONTRIBUTING.md              ← Instructions for those interested in contributing to the project
+├── LICENSE                      ← MIT license
 │
 ├── design-spec/                 ← canonical design specification document set
 │   ├── aos-factory-design-specification.md  ← canonical design spec
@@ -164,10 +168,10 @@ OpenAOS/                ← project root
         ├── README.md
         ├── builder-changelog.md
         ├── skills/              ← 2 SKILL.md files: build-aos and build-agent
-        └── templates/           ← starter CLAUDE.md to copy to workspace root
+        └── templates/           ← starter files to copy into the workspace
 ```
 
-The AOS instance is created as a **sibling folder** at the project root alongside `aos-factory/`. For example: `work-aos/` or `personal-aos/`. The factory never writes into the instance except through an authorized build.
+The AOS instance is created as a **sibling folder** at the project root alongside `aos-factory/`. The factory never writes into the instance except through an authorized build.
 
 ---
 
