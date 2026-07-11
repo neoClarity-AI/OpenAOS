@@ -1,7 +1,7 @@
 ---
 title: AOS Instance Router
 file_type: aos_router
-spec_version: 2.1.1
+spec_version: 2.2.2
 ---
 # AOS Instance Router
 
