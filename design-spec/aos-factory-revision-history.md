@@ -2,9 +2,9 @@
 title: AOS Factory Design Specification — Revision History
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.1.1
+spec_version: 2.1.4
 created_date: 2026-06-02
-last_updated: 2026-07-08
+last_updated: 2026-07-11
 status: design_ready_for_factory_generation
 ---
 
@@ -16,6 +16,9 @@ Entries below are in reverse chronological order (newest first).
 
 | spec_version | Date       | Change |
 |--------------|------------|--------|
+| 2.1.4        | 2026-07-11 | Defined default optional-agent bundles per `aos-purpose` category in the AOS setup interview (`aos-interviews.md`, §7C), decided via a short user interview: Personal Productivity → Inbox + Task + Calendar + Document (Automation intentionally excluded from the default to keep initial tool-access scope minimal, per §1.6.2 governance-first; addable later via §9.4); Project Management → Project Manager + Task + Document; Client Specific → Personal CRM + Task + Calendar; Other → no default, full §7.2 roster presented. Also aligned the `aos-purpose` question's category label to "Client Specific" (no hyphen) and simplified its `ask` wording, matching an in-session edit. `build-aos.md` (§12.1) and its packaged `SKILL.md` mirror updated to match. |
+| 2.1.3        | 2026-07-11 | Replaced the `aos-purpose` interview question's open free-text framing ("work, personal, or a specific purpose") with a closed `type: choice` set — Personal Productivity, Project Management, Client-Specific, Other — collapsing the former separate work/personal answers, which carried no distinct downstream behavior. The `optional-agents` default recommendation was re-keyed to these categories (Inbox+Task+Calendar / Project Manager+Task / Personal CRM+Task / full roster for Other, respectively), replacing the old "productivity AOS vs. knowledge-work AOS" heuristic. `build-aos.md` (§12.1) and its packaged `SKILL.md` mirror updated to match. |
+| 2.1.2        | 2026-07-11 | Removed the `autonomy-baseline` question from the AOS-level setup interview (`aos-interviews.md`, §7C); the §3 permission model now applies unchanged by default at setup with no autonomy question asked, and instance-specific tightening or loosening happens later via `/configs/global-permissions.md` (§3.5). `build-aos.md` (§12.1) and its packaged `SKILL.md` mirror updated to match. |
 | 2.1.1        | 2026-07-08 | §36.1 Design Readiness Review cycle — all 20 §34 items re-verified, §33 safety rules confirmed, catalog validation passed (15 agents, 0 errors); two functionality-impacting inconsistencies resolved: §4.1 instance tree gained the missing `/outputs` subtree, §16.6 guide-skeleton metadata line gained the missing `spec_version` stamp; runbook §36.1 step 1.2 editorial fix |
 | 2.1.0        | 2026-07-06 | Lifecycle Profiles, Agent Advertising, Feedback Agent, Call-Name Routing + Schema Explicitness (Phase 2 of v2.0): §7B profiles gain five lifecycle sections; new §7C scripted interviews (H20); 14 per-agent builders collapsed into the generic build engine `build-agent.md`; `agent-profiles/` reorganized into per-agent `agent-specs/` folders; Feedback Agent added as fifth governance agent (`feedback.upstream`); F2 review-time advertising; F4 call-name routing (§16.10 router schema); BF-001 routing + attribution rules; U1 explicit schemas (§16.7–16.12 and in-place upgrades, items A1–H20); U2 `catalog.schema.json` + repo CI; U3 `/outputs` folder |
 | 2.0.0        | 2026-06-30 | Agent Catalog + Agent Profiles (Phase 1 of v2.0): new §7A (machine-checked agent identity/ownership catalog) and §7B (per-agent behavioral profiles), both as source under design-spec/; `agent-catalog.yaml` + 14 profiles authored for the 14-agent §7.3 roster; §7.4 demoted to a generated view; §11/§12 made catalog+profile projections; §10.3.1 instance-scope overlap check; §7.5 Phase A/Phase B split; §14.8/§15.4/§27 updated for the new `agent_catalog` and `agent_profile` file types |

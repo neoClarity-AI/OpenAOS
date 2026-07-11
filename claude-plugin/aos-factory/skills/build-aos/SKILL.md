@@ -1,7 +1,7 @@
 ---
 name: build-aos
 description: Build a complete Agentic Operating System (AOS) instance from scratch — run the interactive setup interview, create the instance folder structure and global files, provision the AOS Workspace root, build the required governance agents and the user's selected optional productive agents, and produce an AOS setup summary. The master AOS builder. Use when the user asks to set up, create, stand up, or build a new AOS, an "agentic operating system", or an additional AOS instance. To add or rebuild a single agent inside an existing instance instead, use the build-agent skill.
-spec_version: 2.1.1
+spec_version: 2.1.4
 ---
 # Build AOS
 
@@ -64,17 +64,23 @@ The step-5 pre-build preview uses this block (§9.1):
 ## Discovery Questions
 
 Defined by the scripted AOS setup interview in `aos-interviews.md` (§7C) —
-purpose, instance name, optional-agent selection, memory seeds, autonomy
-baseline, and optional call name. This builder references that script and does
-not restate it (§12.1).
+purpose, instance name, optional-agent selection, memory seeds, and optional
+call name. This builder references that script and does not restate it
+(§12.1).
 
 ## Recommended Defaults
 
 Defined by the `default:` values in `aos-interviews.md` (§7C): propose an
-instance name from the stated purpose; seed memory empty and never fabricate;
-adopt the §3 permission model unchanged; recommend Inbox + Task + Calendar for a
-productivity AOS or Research + Writing for a knowledge-work AOS; no call name
-unless requested. This builder references that script and does not restate it.
+instance name from the stated purpose; recommend agents by the stated
+aos-purpose category — Inbox + Task + Calendar + Document for Personal
+Productivity, Project Manager + Task + Document for Project Management,
+Personal CRM + Task + Calendar for Client Specific, and the full §7.2 roster
+with no default for Other; seed memory empty and never fabricate; no call name
+unless requested. This builder references that script and does not restate
+it. The §3 permission model
+applies unchanged by default — autonomy is no longer asked about at setup;
+instance-specific tightening or loosening happens later in
+`/configs/global-permissions.md` (§3.5).
 
 ## AOS Setup Sequence
 

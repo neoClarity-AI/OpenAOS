@@ -1,9 +1,9 @@
 ---
 title: Build AOS
 file_type: aos_builder
-spec_version: 2.1.1
+spec_version: 2.1.4
 created_date: 2026-07-06
-last_updated: 2026-07-09
+last_updated: 2026-07-11
 status: active
 compatible_aos_versions:
   - 1.x
@@ -66,17 +66,23 @@ The step-5 pre-build preview uses this block (§9.1):
 ## Discovery Questions
 
 Defined by the scripted AOS setup interview in `/aos-interviews.md` (§7C) —
-purpose, instance name, optional-agent selection, memory seeds, autonomy
-baseline, and optional call name. This builder references that script and does
-not restate it (§12.1).
+purpose, instance name, optional-agent selection, memory seeds, and optional
+call name. This builder references that script and does not restate it
+(§12.1).
 
 ## Recommended Defaults
 
 Defined by the `default:` values in `/aos-interviews.md` (§7C): propose an
-instance name from the stated purpose; seed memory empty and never fabricate;
-adopt the §3 permission model unchanged; recommend Inbox + Task + Calendar for a
-productivity AOS or Research + Writing for a knowledge-work AOS; no call name
-unless requested. This builder references that script and does not restate it.
+instance name from the stated purpose; recommend agents by the stated
+aos-purpose category — Inbox + Task + Calendar + Document for Personal
+Productivity, Project Manager + Task + Document for Project Management,
+Personal CRM + Task + Calendar for Client Specific, and the full §7.2 roster
+with no default for Other; seed memory empty and never fabricate; no call name
+unless requested. This builder references that script and does not restate
+it. The §3 permission model
+applies unchanged by default — autonomy is no longer asked about at setup;
+instance-specific tightening or loosening happens later in
+`/configs/global-permissions.md` (§3.5).
 
 ## AOS Setup Sequence
 
