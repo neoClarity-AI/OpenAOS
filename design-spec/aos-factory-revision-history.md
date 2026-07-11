@@ -2,9 +2,9 @@
 title: AOS Factory Design Specification — Revision History
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.1.1
+spec_version: 2.2.0
 created_date: 2026-06-02
-last_updated: 2026-07-08
+last_updated: 2026-07-10
 status: design_ready_for_factory_generation
 ---
 
@@ -16,6 +16,7 @@ Entries below are in reverse chronological order (newest first).
 
 | spec_version | Date       | Change |
 |--------------|------------|--------|
+| 2.2.0        | 2026-07-10 | Single-Instance, Minimal Routing (Phase 3 of v2.0): collapsed the multi-instance routing machinery now that a workspace hosts the factory plus exactly one AOS instance. §16.10 Router File Schema deleted and `/aos-router.md` + the `aos_router` file_type eliminated entirely; the factory-vs-instance guard folds into §16.10 (renumbered) Workspace-Root CLAUDE.md Schema, with §16.11 (was §16.12) Global Permissions Seed following. §1.6.6 renamed "Single Instance, Minimal Routing"; §1.6.8, §1.6.11/G5 reworded to drop routing-across-instances language. §4.1 and the §1.1 overview tree reduced to a single AOS Workspace root file (`/CLAUDE.md`) and one sibling AOS instance. §7.4, §10.3, §9.3, §12.1, §17.1, §28.1, §28.2 updated to remove router provisioning, joint router ownership, call-name/signal-match resolution, session pins, and cross-instance branching. Cross-agent routing (Chief of Staff orchestration, designated-owner routing, learnings attribution) is unaffected. |
 | 2.1.1        | 2026-07-08 | §36.1 Design Readiness Review cycle — all 20 §34 items re-verified, §33 safety rules confirmed, catalog validation passed (15 agents, 0 errors); two functionality-impacting inconsistencies resolved: §4.1 instance tree gained the missing `/outputs` subtree, §16.6 guide-skeleton metadata line gained the missing `spec_version` stamp; runbook §36.1 step 1.2 editorial fix |
 | 2.1.0        | 2026-07-06 | Lifecycle Profiles, Agent Advertising, Feedback Agent, Call-Name Routing + Schema Explicitness (Phase 2 of v2.0): §7B profiles gain five lifecycle sections; new §7C scripted interviews (H20); 14 per-agent builders collapsed into the generic build engine `build-agent.md`; `agent-profiles/` reorganized into per-agent `agent-specs/` folders; Feedback Agent added as fifth governance agent (`feedback.upstream`); F2 review-time advertising; F4 call-name routing (§16.10 router schema); BF-001 routing + attribution rules; U1 explicit schemas (§16.7–16.12 and in-place upgrades, items A1–H20); U2 `catalog.schema.json` + repo CI; U3 `/outputs` folder |
 | 2.0.0        | 2026-06-30 | Agent Catalog + Agent Profiles (Phase 1 of v2.0): new §7A (machine-checked agent identity/ownership catalog) and §7B (per-agent behavioral profiles), both as source under design-spec/; `agent-catalog.yaml` + 14 profiles authored for the 14-agent §7.3 roster; §7.4 demoted to a generated view; §11/§12 made catalog+profile projections; §10.3.1 instance-scope overlap check; §7.5 Phase A/Phase B split; §14.8/§15.4/§27 updated for the new `agent_catalog` and `agent_profile` file types |
@@ -29,6 +30,8 @@ Entries below are in reverse chronological order (newest first).
 ## Review Log (no-version entries)
 
 These entries record completed activities that did not change the design content and therefore did not increment `spec_version` (per the content-only versioning principle, §1.6.1).
+
+- **2026-07-10 — §36.1 Design Readiness Review against spec_version 2.2.0.** All 20 §34 checklist items were reset, independently re-verified (including running `scripts/validate-catalog.py` against `agent-catalog.yaml`: 0 errors, 0 warnings, 15 agents — 5 governance + 10 productive matching §7.1/§7.2/AGENTS.md), and re-marked Done; the §33 safety governance rules were confirmed. No functionality-impacting inconsistencies were found in the canonical design (`aos-factory-design-specification.md`) or the runbook, so no version increment was made. In particular, the v2.2.0 single-instance collapse (removal of `/aos-router.md` and the `aos_router` file type) was verified fully purged from both documents. One follow-up item was surfaced, outside this workflow's design-spec scope: `AGENTS.md`, `README.md`, and `claude-plugin/aos-factory/README.md` (plus its `templates/aos-router.md` reference) still instruct reading `/aos-router.md` and resolving "the active instance" — stale references to the routing mechanism removed in 2.2.0. Left unfixed pending a separate follow-up task per user decision; not a design-content change and does not affect `spec_version`.
 
 - **2026-07-01 — Canonical plugin directory aligned to the repo (no version increment).** The §36.3 default plugin target was corrected from `plugin/aos-factory/` (an empty directory in the repo) to `claude-plugin/aos-factory/`, the path the repo's `.claude-plugin/marketplace.json` actually publishes (`source: ./claude-plugin/aos-factory`). Runbook §36.3 steps 2 and 4 were updated; the historical 1.0.4 revision entries that mention the old path are left unchanged for fidelity. Held at `spec_version` 2.0.0 per the standing decision. Note: the live `claude-plugin/aos-factory/` is still stale (plugin.json 1.1.0; skills for the removed learning/finance/health agents; missing tutor) and will be regenerated when §36.3 plugin generation runs.
 

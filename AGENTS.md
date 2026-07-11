@@ -11,7 +11,7 @@ Governance agents are: Chief of Staff Agent, Memory Agent, Review Agent, Securit
 
 ## Instance routing
 
-Read `/aos-router.md` and resolve the active instance before running any workflow.
+Per the single-instance model (design spec §1.6.6, §16.10), there is no separate router file. Before running any workflow, determine whether the request targets the AOS Factory (`aos-factory/`, `design-spec/`) or the generated AOS instance — ask rather than guess when ambiguous.
 
 ## Contributing
 

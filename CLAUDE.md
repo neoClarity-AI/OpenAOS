@@ -14,6 +14,7 @@
 
 "design spec" = "/design-spec/aos-factory-design-specification.md"
 "runbook" = "/design-spec/aos-factory-generation-runbook.md"
+"feature-specs" = "/internal-only/feature-specs"
 
 ## Include the standard AGENTS.md file
 
