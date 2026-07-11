@@ -2,7 +2,7 @@
 title: Chief of Staff Agent — Agent Profile
 file_type: agent_profile
 slug: chief-of-staff-agent
-spec_version: 2.1.1
+spec_version: 2.2.0
 ---
 # Chief of Staff Agent — Profile
 
@@ -37,7 +37,7 @@ and status reporting.
 agent, route execution to that owner and never execute the workflow directly.
 Orchestration (which agent runs what, in what order) and execution (running the
 workflow steps) are distinct; absent an explicit routing step, route — do not
-default to doing the work. All review workflows — weekly, monthly, quarterly —
+default to doing the work. All review workflows — weekly, monthly —
 are owned by the Review Agent and are routed to it accordingly.
 
 When repeated request patterns map to an uninstalled agent's domain, hand that

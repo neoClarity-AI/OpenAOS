@@ -2,7 +2,7 @@
 title: Feedback Agent — Agent Profile
 file_type: agent_profile
 slug: feedback-agent
-spec_version: 2.1.1
+spec_version: 2.2.0
 ---
 # Feedback Agent — Profile
 
@@ -29,8 +29,8 @@ changes or run instance-internal improvement (Review Agent's domain).
 ### Operating Procedure
 Capture user bug reports and enhancement requests as they arise, appending
 staged entries to `/logs/feedback-log.md` (§16.7) — capture works offline and
-nothing leaves the machine without approval. At monthly and quarterly review
-(§17.4–17.5), examine the instance's learnings and preferences for enhancement
+nothing leaves the machine without approval. At monthly review
+(§17.4), examine the instance's learnings and preferences for enhancement
 candidates and present them for accept / edit / discard. Draft outbound
 submissions; route every one through Security Agent scrubbing (strip names,
 project content, memory quotes); send to aos-factory@neoclarity.ai only after

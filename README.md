@@ -90,7 +90,7 @@ If you're using VS Code with Claude Code, follow these instructions:
 
 **Works for personal and professional use.** The factory is designed as a reusable template. A user can build a personal AOS, a work AOS, or both, as sibling instances in the same workspace (see Repository Structure below). The user can build as many AOS instances as they need, with each specialized for a specific purpose. A routing mechanism activates the appropriate AOS and agents for a specific task.
 
-**Scheduled, recurring work.** Agents don't only act when prompted. They run on a cadence. Each AOS includes daily, weekly, monthly, and quarterly operating rhythms: a daily start-of-day briefing and inbox pass driven by the Chief of Staff, plus a weekly review, a monthly health check and user-guide refresh, and a quarterly retrospective owned by the Review Agent. You approve the schedule once. The system maintains the rhythm so routine work happens on its own.
+**Scheduled, recurring work.** Agents don't only act when prompted. They run on a cadence. Each AOS includes daily, weekly, and monthly operating rhythms: a daily start-of-day briefing and inbox pass driven by the Chief of Staff, plus a weekly review and a monthly health check, user-guide refresh, and goal-alignment retrospective, all owned by the Review Agent. You approve the schedule once. The system maintains the rhythm so routine work happens on its own.
 
 ## Key Benefits
 
@@ -98,7 +98,7 @@ If you're using VS Code with Claude Code, follow these instructions:
 
 **It's built for non-technical people.** Setup is an interview, not a config file. You talk. It builds. There's no command grammar to memorize. You trigger things by plain intent ("Start my day," "Process my inbox").
 
-**It documents and improves itself.** Every system generates its own plain-language user guide, and a built-in review agent keeps it clean daily, healthy monthly, and aligned with your goals quarterly. It gets better on a schedule instead of rotting.
+**It documents and improves itself.** Every system generates its own plain-language user guide, and a built-in review agent keeps it clean daily, and healthy and aligned with your goals monthly. It gets better on a schedule instead of rotting.
 
 **It grows with you.** Run one AOS or many (work, personal, a client project) side by side, with smart routing that always picks the right one and never mixes their memories. Add new agents anytime without redesigning anything.
 
