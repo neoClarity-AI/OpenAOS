@@ -2,7 +2,7 @@
 title: Calendar Agent — Agent Interviews
 file_type: interview_script
 slug: calendar-agent
-spec_version: 2.1.1
+spec_version: 2.3.2
 ---
 # Calendar Agent — Interviews
 

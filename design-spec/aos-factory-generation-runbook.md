@@ -2,9 +2,9 @@
 title: AOS Factory Generation Runbook
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.2.2
+spec_version: 2.3.2
 created_date: 2026-06-02
-last_updated: 2026-07-11
+last_updated: 2026-07-13
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -124,8 +124,8 @@ Read the source file `design-spec/aos-factory-design-specification.md`.
    1.2 In Section "34. Design Completion Checklist", mark every checklist item as Not Done. (Replace [x] with [ ]).
 2. Conduct a completeness check by verifying each item in the "34. Design Completion Checklist". When an item has been verified, mark it as Done (Replace [ ] with [x]). Report any missing items and recommended actions. Repeat this step until you have marked all items Done.
 3. Conduct a safety check by verifying the design complies with each safety-related governance rule in Section 33. Report any safety issues and recommended actions.
-4. Review the design in "aos-factory-design-specification.md" for logical consistency. Report any inconsistencies to the user. Include only inconsistencies that impact the functionality of the factory it generates. If no such inconsistencies exist then inform the user. Otherwise, work with the user to resolve each issue one at a time. For each issue, offer the user options and a recommendation.
-5. When all inconsistencies are resolved, present the consolidated resolutions and wait for the user to type exactly: Proceed — to finalize the consistency review. This gate authorizes only finalization of the review and update of the spec, not the generation of AOS Factory files.
+4. Review the design in "aos-factory-design-specification.md" for logical consistency. Report any inconsistencies to the user. Include only inconsistencies that impact the functionality of the factory it generates. If no such inconsistencies exist then inform the user and add a revision-history entry noting the review found no inconsistencies, logged at the current `spec_version` (no increment — Section 14, revision history rule). Otherwise, work with the user to resolve each issue one at a time. For each issue, offer the user options and a recommendation.
+5. When all inconsistencies are resolved, present the consolidated resolutions and wait for the user to type exactly: Proceed — to finalize the consistency review. This gate authorizes only finalization of the review and update of the spec, not the generation of AOS Factory files. Finalizing increments `spec_version` and adds the consolidated revision-history entry.
 6. Repeat steps 1 and 2 until no more issues are surfaced.
 
 Do not add, modify or delete any files unless the user types exactly: Proceed.
@@ -141,7 +141,7 @@ Read the source file `design-spec/aos-factory-design-specification.md`.
 3. Review the proposed Builder generation scope (Section 35) and plan with the user.
 4. Answer any additional user questions about the design or generation plan.
 5. Wait for the user to type exactly: Proceed — to authorize generation.
-6. Only after that exact instruction, generate the AOS Factory framework files.
+6. Only after that exact instruction, generate the AOS Factory framework files. Add a revision-history entry for this generation cycle. If the generated output differs from the prior generation, increment `spec_version`; if it is a no-op regeneration (no diff), log the entry at the current `spec_version` (no increment — Section 14, revision history rule).
 
 Do not generate actual AOS Factory files unless the user types exactly: Proceed.
 ```
@@ -157,14 +157,15 @@ Read the source file `design-spec/aos-factory-design-specification.md` (Section 
 3. Build a dry-run preview — list every file to be created or overwritten, writing nothing:
    3.1 `.claude-plugin/plugin.json` — manifest: name `aos-factory`, version synced to the framework `spec_version` (design spec Section 14.1) and `/builder-changelog.md`, plus description, author, keywords.
    3.2 `skills/build-*/SKILL.md` — one skill per builder. Convert each `/builders/build-*.md` into a `SKILL.md` whose frontmatter carries `name` and an invocation-oriented `description` (when-to-use triggers), with the builder body as the skill content. Map `/builders/build-aos.md` → `skills/build-aos/SKILL.md` and `/builders/build-agent.md` → `skills/build-agent/SKILL.md` (the generic engine; one skill covers every agent). The root `/build-aos.md` entry pointer is a framework-root convenience and is not packaged separately; the `build-aos` skill replaces it in plugin context.
-   3.3 `builder-changelog.md` — copy the framework `/builder-changelog.md` to the plugin root.
-   3.4 `templates/aos-router.md` and `templates/CLAUDE.md` — author the example workspace-root files the user copies to their AOS Workspace root after install (Section 28.2).
-   3.5 `README.md` — author or refresh the plugin install and usage instructions.
+   3.3 `agent-catalog.yaml`, `agent-specs/` (profile.md + interviews.md per agent), and `aos-interviews.md` — copy the rendered design artifacts from the factory root to the plugin root, byte-identical to their factory-root sources, so the installed plugin can run a spec-faithful build (Section 28.2).
+   3.4 `builder-changelog.md` — copy the framework `/builder-changelog.md` to the plugin root.
+   3.5 `templates/CLAUDE.md` and `templates/AGENTS.md` — author the example workspace-root files the user copies (or build-aos provisions) to their AOS Workspace root after install (Section 28.2).
+   3.6 `README.md` — author or refresh the plugin install and usage instructions.
 4. Apply the global file-safety and overwrite-approval model: for every existing file the preview would overwrite (e.g. when refreshing `claude-plugin/aos-factory/`), list it explicitly and flag it as an overwrite. Never silently overwrite (Section 28).
 5. Present the full preview (files to create, files to overwrite, manifest version) and answer any user questions.
 6. Wait for the user to type exactly: Proceed — to authorize plugin generation. This gate authorizes only writing the plugin directory; it does not authorize zipping, local-load testing, or marketplace publishing (those remain manual — Section 28.2 steps 5-8).
-7. Only after that exact instruction, write the plugin files. If the framework changed since the last packaging, bump `plugin.json` version and add a `/builder-changelog.md` entry.
-8. Validate the generated plugin against Section 28.2 and the QA checks in Sections 27 and 34: confirm `.claude-plugin/plugin.json` is present and well-formed, every builder maps to a `skills/build-*/SKILL.md`, each `SKILL.md` frontmatter has `name` and `description`, and any in-skill file references resolve.
+7. Only after that exact instruction, write the plugin files. Add a revision-history entry for this packaging cycle. If the framework changed since the last packaging, bump `plugin.json` version (synced to `spec_version`) and add a `/builder-changelog.md` entry; if nothing changed, log the revision-history entry at the current `spec_version` (no increment — Section 14, revision history rule) and do not bump `plugin.json` or add a changelog entry.
+8. Validate the generated plugin against Section 28.2 and the QA checks in Sections 27 and 34: confirm `.claude-plugin/plugin.json` is present and well-formed, every builder maps to a `skills/build-*/SKILL.md`, each `SKILL.md` frontmatter has `name` and `description`, any in-skill file references resolve, and the rendered design artifacts (`agent-catalog.yaml`, `agent-specs/` with profile.md + interviews.md for every agent, `aos-interviews.md`) are present at the plugin root and byte-identical to their factory-root sources (an empty diff against the factory root).
 
 Do not add, modify, or delete any plugin files unless the user types exactly: Proceed.
 ```

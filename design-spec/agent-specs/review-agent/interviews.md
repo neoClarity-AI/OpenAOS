@@ -2,7 +2,7 @@
 title: Review Agent — Agent Interviews
 file_type: interview_script
 slug: review-agent
-spec_version: 2.2.0
+spec_version: 2.3.2
 ---
 # Review Agent — Interviews
 

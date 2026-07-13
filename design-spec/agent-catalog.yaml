@@ -8,7 +8,7 @@
 # its root (/agent-catalog.yaml) that builders read (§7A.4).
 
 catalog_version: 1.2.0
-spec_version: 2.2.0
+spec_version: 2.3.2
 
 vocabulary:
   domains:
@@ -98,12 +98,11 @@ agents:
     tier: required
     one_line: >
       Coordinates, routes, prioritizes, and resolves conflicts across agents;
-      joint owner of the AOS Workspace router.
+      owns the factory-vs-instance guard in /CLAUDE.md.
     domains_owned: [orchestration.routing]
     artifacts_owned:
       - /agents/chief-of-staff-agent/**
       - /outputs/chief-of-staff-agent/**
-      - /aos-router.md
       - /configs/agent-registry.md
       - /aos-map.md
     inputs: []

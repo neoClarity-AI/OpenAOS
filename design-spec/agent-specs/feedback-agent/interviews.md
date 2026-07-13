@@ -2,7 +2,7 @@
 title: Feedback Agent — Agent Interviews
 file_type: interview_script
 slug: feedback-agent
-spec_version: 2.2.0
+spec_version: 2.3.2
 ---
 # Feedback Agent — Interviews
 
