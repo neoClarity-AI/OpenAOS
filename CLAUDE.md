@@ -16,6 +16,8 @@
 "runbook" = "/design-spec/aos-factory-generation-runbook.md"
 "feature-specs" = "/internal-only/feature-specs"
 
+Any file in or under the `/design-spec/` folder is considered a component of the design spec (source of truth), not a generated/rendered copy — this includes `agent-catalog.yaml`, `agent-specs/*`, and `aos-interviews.md`, not just the main specification document.
+
 ## Include the standard AGENTS.md file
 
 @AGENTS.md
