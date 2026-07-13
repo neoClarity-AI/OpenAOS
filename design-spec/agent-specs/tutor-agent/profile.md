@@ -2,7 +2,7 @@
 title: Tutor Agent — Agent Profile
 file_type: agent_profile
 slug: tutor-agent
-spec_version: 2.1.1
+spec_version: 2.3.2
 ---
 # Tutor Agent — Profile
 
@@ -81,6 +81,6 @@ style still shapes lessons.
 Signals (usage-pattern and user-request): no invocations across two consecutive
 review cycles; learning goals completed with none added; the user asking to
 remove or stop using the agent. The Review Agent surfaces these at the
-quarterly review — suggestion only. Procedure: §10.2 (prefer pausing when in
+monthly review — suggestion only. Procedure: §10.2 (prefer pausing when in
 doubt); retirement is `Proceed`-gated (§3.2), and the agent's memory,
 learnings, and logs are preserved per §10.2.

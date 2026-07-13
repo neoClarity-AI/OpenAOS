@@ -2,7 +2,7 @@
 title: Project Manager Agent — Agent Profile
 file_type: agent_profile
 slug: project-manager-agent
-spec_version: 2.1.1
+spec_version: 2.3.2
 ---
 # Project Manager Agent — Profile
 
@@ -26,7 +26,7 @@ not a coordinator.
 
 ### Operating Procedure
 Use the standard project folder structure — the five standard files plus
-`/assets` and `/archive` (§21) — via the project-kickoff workflow (§17.7) and the
+`/assets` and `/archive` (§21) — via the project-kickoff workflow (§17.6) and the
 project-brief template (§18.2). Record lifecycle state in the body of
 `project-status.md` (not frontmatter) and reflect it in `/memory/projects.md`.
 Keep project-specific decisions in `project-decisions.md`; system-wide decisions
@@ -85,6 +85,6 @@ verification: confirm active projects' lifecycle states are intact in both
 Signals (usage-pattern and user-request): no invocations across two consecutive
 review cycles; no active projects remaining and none started; the user asking
 to remove or stop using the agent. The Review Agent surfaces these at the
-quarterly review — suggestion only. Procedure: §10.2 (prefer pausing when in
+monthly review — suggestion only. Procedure: §10.2 (prefer pausing when in
 doubt); retirement is `Proceed`-gated (§3.2), and the agent's memory,
 learnings, and logs — and all project folders — are preserved per §10.2.

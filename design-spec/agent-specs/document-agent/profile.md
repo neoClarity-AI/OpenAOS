@@ -2,7 +2,7 @@
 title: Document Agent — Agent Profile
 file_type: agent_profile
 slug: document-agent
-spec_version: 2.1.1
+spec_version: 2.3.2
 ---
 # Document Agent — Profile
 
@@ -80,6 +80,6 @@ proposals as before.
 Signals (usage-pattern and user-request): no invocations across two consecutive
 review cycles; filing handoffs from the Writing Agent going unused; the user
 asking to remove or stop using the agent. The Review Agent surfaces these at
-the quarterly review — suggestion only. Procedure: §10.2 (prefer pausing when
+the monthly review — suggestion only. Procedure: §10.2 (prefer pausing when
 in doubt); retirement is `Proceed`-gated (§3.2), and the agent's memory,
 learnings, and logs — including its catalog — are preserved per §10.2.

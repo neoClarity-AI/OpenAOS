@@ -2,7 +2,7 @@
 title: Project Manager Agent — Agent Interviews
 file_type: interview_script
 slug: project-manager-agent
-spec_version: 2.1.1
+spec_version: 2.3.2
 ---
 # Project Manager Agent — Interviews
 

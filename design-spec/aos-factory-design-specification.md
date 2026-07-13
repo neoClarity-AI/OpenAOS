@@ -3,8 +3,8 @@ title: AOS Factory Design Specification
 file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
-last_updated: 2026-07-12
-spec_version: 2.2.2
+last_updated: 2026-07-13
+spec_version: 2.3.2
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -135,7 +135,7 @@ When authorized, the AOS Factory may produce:
 - Workflows
 - Configuration files
 - Decision logs
-- Daily, weekly, monthly, and quarterly operating routines
+- Daily, weekly, and monthly operating routines
 - Templates
 - Memory files
 - The actual folder structure for the AOS
@@ -204,7 +204,7 @@ One AOS Workspace hosts the AOS Factory and exactly one AOS instance, as sibling
 
 ### 1.6.7 Self-Documenting and Self-Improving
 
-The system explains itself and improves itself on a cadence. Every instance generates a plain-language HTML user guide (Section 16.6). A set of operating rhythms running from daily through quarterly keeps the system operationally clean, structurally healthy, and aligned with the user's actual goals (Section 25). The Review Agent owns the improvement rhythms — the weekly review, the monthly review (including the user-guide refresh), and the quarterly review — while the daily startup and end-of-day rhythms are driven by the Chief of Staff Agent (Sections 17.1–17.5, 7.4). Maintenance is a built-in behavior, not a manual afterthought.
+The system explains itself and improves itself on a cadence. Every instance generates a plain-language HTML user guide (Section 16.6). A set of operating rhythms running from daily through monthly keeps the system operationally clean, structurally healthy, and aligned with the user's actual goals (Section 25). The Review Agent owns the improvement rhythms — the weekly review and the monthly review (including the user-guide refresh and the goal-alignment check) — while the daily startup and end-of-day rhythms are driven by the Chief of Staff Agent (Sections 17.1–17.4, 7.4). Maintenance is a built-in behavior, not a manual afterthought.
 
 ### 1.6.8 Built for Non-Technical Users, Portable Across Platforms
 
@@ -270,7 +270,7 @@ The **Chief of Staff Agent** should coordinate, route, prioritize, and resolve c
 
 As much responsibility as possible should be pushed down to specialized agents.
 
-**Designated-owner routing (normative).** When a workflow has a designated **workflow owner** — an agent named as owning that workflow (for example, the Review Agent owns the weekly, monthly, and quarterly review workflows, Section 17) — the Chief of Staff Agent routes execution to that owner and never executes the workflow directly. Orchestration (the Chief of Staff's responsibility: which agent runs what, in what order) and execution (the designated owner's responsibility: running the workflow steps) are distinct. Absent an explicit routing step, the Chief of Staff must route, not default to doing the work itself.
+**Designated-owner routing (normative).** When a workflow has a designated **workflow owner** — an agent named as owning that workflow (for example, the Review Agent owns the weekly and monthly review workflows, Section 17) — the Chief of Staff Agent routes execution to that owner and never executes the workflow directly. Orchestration (the Chief of Staff's responsibility: which agent runs what, in what order) and execution (the designated owner's responsibility: running the workflow steps) are distinct. Absent an explicit routing step, the Chief of Staff must route, not default to doing the work itself.
 
 ## 2.3 Required Governance Layer Plus Optional Productive Agents
 
@@ -336,7 +336,7 @@ The following actions always require approval:
 - Delete files
 - Overwrite files
 - Rename files
-- Move files (except moving items into /inbox/processed under the approved inbox-to-task workflow, which is pre-authorized as part of that workflow — see Sections 17.6 and 31)
+- Move files (except moving items into /inbox/processed under the approved inbox-to-task workflow, which is pre-authorized as part of that workflow — see Sections 17.5 and 31)
 - Archive files
 - Bulk-modify files
 - Send messages
@@ -575,7 +575,6 @@ During setup, `/builders/build-aos.md` should create these global files when aut
 /workflows/end-of-day-shutdown-workflow.md
 /workflows/weekly-review-workflow.md
 /workflows/monthly-review-workflow.md
-/workflows/quarterly-review-workflow.md
 /workflows/inbox-to-task-workflow.md
 /workflows/project-kickoff-workflow.md
 /workflows/decision-capture-workflow.md
@@ -699,7 +698,7 @@ Owns retrospectives, system improvement, weekly reviews, decision audits, AOS re
 Also owns and reconciles the instance version (aos_version in /aos-manifest.md): it reconciles the value against /logs/change-log.md during the monthly review and verifies it in its completeness audit, while breaking/MAJOR bumps are applied at the time of change (Section 14.3.1). It refines and regenerates only data files and projections; per the drift invariant (Section 14.8) it does not modify framework-derived definition files.
 
 Feedback Agent
-Owns the upstream feedback channel (feedback.upstream): captures user bug reports and enhancement requests into the local feedback log (/logs/feedback-log.md, Section 16.7); at monthly/quarterly review examines the instance's learnings and preferences for enhancement candidates and presents them for accept / edit / discard; drafts outbound submissions, routes each through Security Agent scrubbing, and sends to aos-factory@neoclarity.ai only after the user types Proceed (Section 3.2). Its channel covers both instance feedback and factory/spec feedback. When no email capability is configured, submissions remain queued in the feedback log as staged and the user is prompted to send manually.
+Owns the upstream feedback channel (feedback.upstream): captures user bug reports and enhancement requests into the local feedback log (/logs/feedback-log.md, Section 16.7); at monthly review examines the instance's learnings and preferences for enhancement candidates and presents them for accept / edit / discard; drafts outbound submissions, routes each through Security Agent scrubbing, and sends to aos-factory@neoclarity.ai only after the user types Proceed (Section 3.2). Its channel covers both instance feedback and factory/spec feedback. When no email capability is configured, submissions remain queued in the feedback log as staged and the user is prompted to send manually.
 ```
 
 ## 7.5 Agent Maker Agent Clarification
@@ -943,7 +942,7 @@ The five lifecycle sections are normative:
 
 **Update.** What happens when a new factory release (`spec_version` change) is applied to an existing AOS: the agent's definition files are regenerated (`Proceed`-gated per §14.7/§14.8); its data files are never overwritten; and this section carries any **MIGRATION INSTRUCTIONS** needed to preserve accumulated memory, learnings, preferences, and data-layer behavior — e.g. carrying entries forward when a release changes an entry-block schema, renames a memory field, or relocates a file. Where a migration requires user input, the questions live in the Update interview of the agent's §7C interviews file; the MIGRATION INSTRUCTIONS reference them. Ends with a post-update verification that accumulated preferences still shape the agent's behavior as before. Update sections are executed by the factory's update flow (§14.4 modes), never by the agents themselves. A release with no structural changes has a trivial Update section ("no migration required").
 
-**Retirement.** The user-request and usage-pattern signals indicating the agent is no longer needed (e.g. no invocations across N review cycles — surfaced by the Review Agent at quarterly review, suggestion only), and the retirement procedure (§10.2). Retirement remains `Proceed`-gated (§3.2, §10.2). Required governance agents state here that they cannot be retired (§2.3).
+**Retirement.** The user-request and usage-pattern signals indicating the agent is no longer needed (e.g. no invocations across N review cycles — surfaced by the Review Agent at monthly review, suggestion only), and the retirement procedure (§10.2). Retirement remains `Proceed`-gated (§3.2, §10.2). Required governance agents state here that they cannot be retired (§2.3).
 
 Lifecycle **states** (§10.1) stay in the registry/manifest; the profile describes lifecycle **behavior** only.
 
@@ -1187,10 +1186,15 @@ Initial setup should use this sequence:
 7. Ask the user to select at least one optional productive agent
 8. Build selected optional agents
 9. Update the agent registry
-10. Produce an AOS setup summary
+10. Offer to schedule the rhythmic workflows as Cowork Scheduled Tasks
+11. Produce an AOS setup summary
 ```
 
-The step 10 **AOS setup summary** is a saved file: `/logs/aos-build-summary.md`, file_type `build_summary` (§15.4), with a schema parallel to the Section 13 per-agent Build Summary (Files Created, Key Decisions, User Preferences Captured, Permissions and Boundaries, Open Questions, Suggested Next Steps) at instance scope.
+**Scheduling the rhythmic workflows (step 10).** The four cadence-driven workflows — daily startup, end-of-day shutdown, weekly review, and monthly review (Section 17.1–17.4) — are candidates for a Cowork Scheduled Task per workflow, each one invoking that workflow's routed execution on its cadence. This is offered, never assumed: present the four candidates with their standard cadence (Section 25) and the reviewing agent's preferred timing where already captured (e.g. the Review Agent's `review-timing` answer, Section 26), and create a task only for each one the user accepts; declining any or all leaves that workflow manually triggered, as today. Event-triggered workflows (inbox-to-task, project kickoff, decision capture, memory review; Sections 17.5–17.8) are not scheduled — they run when their triggering event occurs, not on a cadence. Creating a Scheduled Task is Level 2 (Section 3.4): preview the proposed schedule and gate creation behind `Proceed`, consistent with the rest of this sequence. Each accepted schedule is logged to `/logs/change-log.md`.
+
+Each Scheduled Task's instructions must contain **exactly one line** pointing to its associated workflow file, as an `@`-path reference resolved against the instance root — e.g. `@/[aos-name]/workflows/daily-startup-workflow.md`. The task carries no other embedded instructions; the workflow file remains the single source of truth for what the run does, so editing the workflow changes future runs without touching the schedule.
+
+The step 11 **AOS setup summary** is a saved file: `/logs/aos-build-summary.md`, file_type `build_summary` (§15.4), with a schema parallel to the Section 13 per-agent Build Summary (Files Created, Key Decisions, User Preferences Captured, Permissions and Boundaries, Open Questions, Suggested Next Steps) at instance scope.
 
 Actual file creation still waits until the user types:
 
@@ -1330,7 +1334,7 @@ Each instance-born agent's registry entry carries an **absorbed-ownership block*
 - Retired agents
 ```
 
-The map's installed-vs-available distinction is the data source for proactive surfacing of uninstalled agents: the Review Agent's weekly/quarterly advertising check (§17.3, §17.5) and the user guide's Available Agents subsection (§16.6) are both projected from the registry/map (regenerable projections per §14.8). Surfacing is suggestion only; installation remains the normal §9.4 flow.
+The map's installed-vs-available distinction is the data source for proactive surfacing of uninstalled agents: the Review Agent's weekly/monthly advertising check (§17.3, §17.4) and the user guide's Available Agents subsection (§16.6) are both projected from the registry/map (regenerable projections per §14.8). Surfacing is suggestion only; installation remains the normal §9.4 flow.
 
 File schema (`/aos-map.md`, file_type `aos_map`, §15.4):
 
@@ -1489,12 +1493,14 @@ The generic build engine `/builders/build-agent.md` (file_type `agent_builder`) 
 
 ## Registry and Map Updates
 
+## Rhythmic Workflow Scheduling
+
 ## Validation Checklist
 
 ## AOS Setup Summary
 ```
 
-`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1, executing the scripted AOS setup interview in `aos-interviews.md` (Section 7C) — the script is normative for question content, order, and captured fields; `Discovery Questions` and `Recommended Defaults` reference that script rather than restating it. `AOS Setup Sequence` follows the setup sequence in Section 9.3, which includes provisioning the AOS Workspace root files (`/CLAUDE.md`, `/AGENTS.md`) from the shipped example copies (Section 28.2), non-destructively — created when absent and overwritten only after a separate `Proceed`. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Validation Checklist` uses the completeness checks in Section 27.
+`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1, executing the scripted AOS setup interview in `aos-interviews.md` (Section 7C) — the script is normative for question content, order, and captured fields; `Discovery Questions` and `Recommended Defaults` reference that script rather than restating it. `AOS Setup Sequence` follows the setup sequence in Section 9.3, which includes provisioning the AOS Workspace root files (`/CLAUDE.md`, `/AGENTS.md`) from the shipped example copies (Section 28.2), non-destructively — created when absent and overwritten only after a separate `Proceed`. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Rhythmic Workflow Scheduling` follows Section 9.3 step 10: offer a Cowork Scheduled Task for each of the four cadence-driven workflows (daily startup, end-of-day shutdown, weekly review, monthly review), gated per-workflow behind `Proceed`; event-triggered workflows are never scheduled. `Validation Checklist` uses the completeness checks in Section 27.
 
 The root entry `/build-aos.md` (file_type `builder_entry`) is a short pointer to `/builders/build-aos.md` and does not repeat this schema.
 
@@ -2066,7 +2072,7 @@ The guide has a defined **skeleton** so that `/builders/build-aos.md` can always
 - Folder Orientation — each top-level folder's purpose and handling rules (mirrors the Section 4 tree)
 - Agents Overview — points to /configs/agent-registry.md and /aos-map.md (does not duplicate them)
 - Core Rules & Safety — the Proceed rule and the three permission levels, pointing to /configs/global-permissions.md
-- Operating Rhythms — daily / weekly / monthly / quarterly review pointers
+- Operating Rhythms — daily / weekly / monthly review pointers
 - Managing Agents — how to add, pause, retire, and restore agents (points to /builders); includes an Available Agents subsection listing agents not yet installed, projected from /configs/agent-registry.md and /aos-map.md (Section 10.4)
 - Invocation Reference — how the user triggers workflows and agents (see below)
 ```
@@ -2235,7 +2241,7 @@ The startup brief should distinguish between:
 - Items requiring user approval
 ```
 
-These promotion categories mirror the full set of promotion targets in the inbox-to-task workflow (Sections 17.6 and 31). The nine categories above are the startup brief's defined skeleton: generated `daily-startup-workflow.md` files render the brief with these categories as its sections, in this order.
+These promotion categories mirror the full set of promotion targets in the inbox-to-task workflow (Sections 17.5 and 31). The nine categories above are the startup brief's defined skeleton: generated `daily-startup-workflow.md` files render the brief with these categories as its sections, in this order.
 
 Primary owner:
 
@@ -2289,7 +2295,7 @@ Approved review question:
 What needs follow-up soon?
 ```
 
-The weekly review includes an advertising check: the Review Agent asks whether any `Available` (uninstalled) agent would close a gap observed this week (Section 10.4), including request patterns the Chief of Staff has handed over. Suggestion only — installation remains the Section 9.4 flow. A declined suggestion is logged and not re-raised until the next quarterly review or a material change in usage pattern (Section 17.5).
+The weekly review includes an advertising check: the Review Agent asks whether any `Available` (uninstalled) agent would close a gap observed this week (Section 10.4), including request patterns the Chief of Staff has handed over. Suggestion only — installation remains the Section 9.4 flow. A declined suggestion is logged and not re-raised until the next monthly review or a material change in usage pattern (Section 17.4).
 
 Primary owner:
 
@@ -2308,13 +2314,14 @@ Create:
 Purpose:
 
 ```text
-Review stale projects, memory hygiene, workflow quality, permission boundaries, tool access, structural clutter, and system cleanup needs.
+Review stale projects, memory hygiene, workflow quality, permission boundaries, tool access, structural clutter, and system cleanup needs; and review whether the AOS is still aimed at the right goals, whether agents remain useful, and whether workflows still support the user's priorities.
 ```
 
-Approved review question:
+Approved review questions:
 
 ```text
 What is stale, misplaced, or structurally messy?
+Is the whole system still aimed at the right goals?
 ```
 
 Stale project review is part of monthly review.
@@ -2325,35 +2332,7 @@ The Review Agent regenerates the AOS User Guide (`/docs/aos-user-guide.html`) as
 
 The Feedback Agent's self-examination also runs at monthly review: it examines the instance's learnings and preferences for enhancement candidates and presents them to the user for accept / edit / discard (staged in `/logs/feedback-log.md`, Section 16.7); outbound submissions are sent only after Security Agent scrubbing and `Proceed`.
 
-Primary owner:
-
-```text
-Review Agent
-```
-
-## 17.5 Quarterly Review Workflow
-
-Create:
-
-```text
-/workflows/quarterly-review-workflow.md
-```
-
-Purpose:
-
-```text
-Review whether the AOS is still aimed at the right goals, whether agents remain useful, and whether workflows still support the user’s priorities.
-```
-
-Approved review question:
-
-```text
-Is the whole system still aimed at the right goals?
-```
-
-The Feedback Agent's self-examination also runs at quarterly review, as at the monthly review (Section 17.4): enhancement candidates from learnings and preferences are presented for accept / edit / discard; sends require Security Agent scrubbing and `Proceed`.
-
-The quarterly review repeats the advertising check (Section 17.3) and is the point where previously declined suggestions may be re-raised. **Anti-nagging rule (normative):** a declined suggestion is logged and not re-raised until the next quarterly review or a material change in usage pattern. The quarterly review also surfaces retirement signals for installed agents (§7B.3 Retirement) — likewise suggestion only.
+The monthly review repeats the advertising check (Section 17.3) and is the point where previously declined suggestions may be re-raised. **Anti-nagging rule (normative):** a declined suggestion is logged and not re-raised until the next monthly review or a material change in usage pattern. The monthly review also surfaces retirement signals for installed agents (§7B.3 Retirement) — likewise suggestion only.
 
 Primary owner:
 
@@ -2361,7 +2340,7 @@ Primary owner:
 Review Agent
 ```
 
-## 17.6 Inbox-to-Task Workflow
+## 17.5 Inbox-to-Task Workflow
 
 Create:
 
@@ -2389,7 +2368,7 @@ Primary owner:
 Chief of Staff Agent, with Inbox Agent support when installed.
 ```
 
-## 17.7 Project Kickoff Workflow
+## 17.6 Project Kickoff Workflow
 
 Create:
 
@@ -2409,7 +2388,7 @@ Primary owner:
 Chief of Staff Agent, with Project Manager Agent support when installed.
 ```
 
-## 17.8 Decision Capture Workflow
+## 17.7 Decision Capture Workflow
 
 Create:
 
@@ -2429,7 +2408,7 @@ Primary owner:
 Chief of Staff Agent, with Memory Agent support.
 ```
 
-## 17.9 Memory Review Workflow
+## 17.8 Memory Review Workflow
 
 Create:
 
@@ -2853,7 +2832,6 @@ Approved rhythms:
 - End-of-day shutdown workflow
 - Weekly review workflow
 - Monthly review workflow
-- Quarterly review workflow
 - Stale project review as part of monthly review
 - Memory hygiene as lightweight weekly review plus deeper monthly review
 - AOS User Guide refresh as part of monthly review
@@ -2873,8 +2851,6 @@ What needs follow-up soon?
 
 Monthly review:
 What is stale, misplaced, or structurally messy?
-
-Quarterly review:
 Is the whole system still aimed at the right goals?
 ```
 
@@ -2882,8 +2858,7 @@ Approved rationale:
 
 ```text
 - The weekly review keeps the AOS operationally clean and prevents loose ends from becoming forgotten obligations.
-- The monthly review keeps the AOS structurally healthy by reviewing stale projects, memory hygiene, workflows, boundaries, and tool access.
-- The quarterly review keeps the AOS aligned with larger goals and prevents the system from being well-maintained but aimed at outdated priorities.
+- The monthly review keeps the AOS structurally healthy by reviewing stale projects, memory hygiene, workflows, boundaries, and tool access, and keeps it aligned with larger goals so it doesn't stay well-maintained but aimed at outdated priorities.
 ```
 
 ---
@@ -3105,7 +3080,7 @@ Approved decisions:
 - Processed inbox items should be moved to /inbox/processed to avoid duplicate processing.
 - Moving an item to /inbox/processed is treated as part of normal inbox processing and should be allowed if the user has approved the inbox-processing workflow. This is the sole pre-authorized exception to the move-approval rule in Section 3.2.
 - The daily startup workflow should include a startup brief section summarizing recently processed inbox items.
-- The startup brief should distinguish between items processed today, items still unresolved, items promoted to tasks, items promoted to projects, items promoted to calendar items, items promoted to memory, items promoted to decisions, items promoted to archive, and items requiring user approval. These promotion categories mirror the full set of promotion targets in the inbox-to-task workflow (Section 17.6).
+- The startup brief should distinguish between items processed today, items still unresolved, items promoted to tasks, items promoted to projects, items promoted to calendar items, items promoted to memory, items promoted to decisions, items promoted to archive, and items requiring user approval. These promotion categories mirror the full set of promotion targets in the inbox-to-task workflow (Section 17.5).
 ```
 
 Files affected later:

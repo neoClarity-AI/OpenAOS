@@ -2,7 +2,7 @@
 title: AOS Setup — Interviews
 file_type: interview_script
 slug: build-aos
-spec_version: 2.2.0
+spec_version: 2.3.2
 ---
 # AOS Setup — Interviews
 
@@ -15,8 +15,9 @@ Begin by displaying this welcome message: "Thank you for choosing to install Ope
 
 ```yaml
 - id: aos-purpose
-  ask: What is this AOS for (work, personal, or a specific purpose)?
-  type: text
+  ask: What is this AOS for?
+  type: choice
+  options: [Personal Productivity, Project Management, Client Specific, Other]
   default: none
   skippable: no
   when: always
@@ -33,7 +34,7 @@ Begin by displaying this welcome message: "Thank you for choosing to install Ope
 - id: optional-agents
   ask: Which optional productive agents do you want first? At least one is required (§2.3, §7.2); the rest can be added later (§9.4).
   type: text
-  default: none — recommend Inbox + Task + Calendar for a productivity AOS, or Research + Writing for a knowledge-work AOS
+  default: recommend by the stated aos-purpose category — Inbox + Task + Calendar + Document for Personal Productivity, Project Manager + Task + Document for Project Management, Personal CRM + Task + Calendar for Client Specific; for Other, present the full §7.2 roster with no default
   skippable: no
   when: always
   captures: agent selection; /configs/agent-registry.md; /aos-map.md
@@ -46,15 +47,13 @@ Begin by displaying this welcome message: "Thank you for choosing to install Ope
   when: always
   captures: /memory global files initial entries
 
-- id: autonomy-baseline
-  ask: How much autonomy do you want by default, and where should approval always be required beyond the global rules (§3)?
-  type: text
-  default: the §3 model unchanged
-  skippable: yes
-  when: always
-  captures: /configs/global-permissions.md
-
 ```
+
+Purpose categories: Personal Productivity merges the former separate "work"
+and "personal" answers, since neither carried distinct downstream behavior. If
+the user selects Other, capture a short free-text description alongside it —
+that description substitutes for the category name wherever purpose feeds
+`aos-name`'s default slug (§29) and the /aos-manifest.md scope field.
 
 ## Update Interview
 

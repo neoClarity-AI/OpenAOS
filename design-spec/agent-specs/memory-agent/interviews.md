@@ -2,7 +2,7 @@
 title: Memory Agent — Agent Interviews
 file_type: interview_script
 slug: memory-agent
-spec_version: 2.1.1
+spec_version: 2.3.2
 ---
 # Memory Agent — Interviews
 
@@ -32,7 +32,7 @@ spec_version: 2.1.1
   default: default (weekly light, monthly deep)
   skippable: yes
   when: always
-  captures: memory-config.md review cadence (§17.9, §20.3)
+  captures: memory-config.md review cadence (§17.8, §20.3)
 ```
 
 ## Update Interview

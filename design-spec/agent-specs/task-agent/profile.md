@@ -2,7 +2,7 @@
 title: Task Agent — Agent Profile
 file_type: agent_profile
 slug: task-agent
-spec_version: 2.1.1
+spec_version: 2.3.2
 ---
 # Task Agent — Profile
 
@@ -26,7 +26,7 @@ coordinator.
 
 ### Operating Procedure
 Maintain a structured task list with priority, due date, and source; accept
-promotions from the inbox-to-task workflow (§17.6); surface today's and at-risk
+promotions from the inbox-to-task workflow (§17.5); surface today's and at-risk
 items in the daily startup brief (§17.1) and follow-ups in the weekly review
 (§17.3). Hand items needing time to Calendar, items belonging to a project to
 Project Manager, and recurring items to Automation.
@@ -81,6 +81,6 @@ surfacing as before.
 Signals (usage-pattern and user-request): no invocations across two consecutive
 review cycles; promotions from the inbox-to-task workflow going unused; the
 user asking to remove or stop using the agent. The Review Agent surfaces these
-at the quarterly review — suggestion only. Procedure: §10.2 (prefer pausing
+at the monthly review — suggestion only. Procedure: §10.2 (prefer pausing
 when in doubt); retirement is `Proceed`-gated (§3.2), and the agent's memory,
 learnings, and logs are preserved per §10.2.

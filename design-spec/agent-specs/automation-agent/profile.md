@@ -2,7 +2,7 @@
 title: Automation Agent — Agent Profile
 file_type: agent_profile
 slug: automation-agent
-spec_version: 2.1.1
+spec_version: 2.3.2
 ---
 # Automation Agent — Profile
 
@@ -83,6 +83,6 @@ still consults the matrix as before.
 Signals (usage-pattern and user-request): no invocations across two consecutive
 review cycles; recurring-task handoffs from the Task Agent going unused; the
 user asking to remove or stop using the agent. The Review Agent surfaces these
-at the quarterly review — suggestion only. Procedure: §10.2 (prefer pausing when
+at the monthly review — suggestion only. Procedure: §10.2 (prefer pausing when
 in doubt); retirement is `Proceed`-gated (§3.2), and the agent's memory,
 learnings, and logs are preserved per §10.2.

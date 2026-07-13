@@ -8,7 +8,7 @@
 # its root (/agent-catalog.yaml) that builders read (§7A.4).
 
 catalog_version: 1.2.0
-spec_version: 2.2.0
+spec_version: 2.3.2
 
 vocabulary:
   domains:
@@ -81,7 +81,7 @@ agents:
     inputs: []
     outputs: [memory.governance]
     collaborates_with:
-      - { agent: review-agent, direction: handoff-from, "on": "deeper monthly memory-hygiene review (§17.9)" }
+      - { agent: review-agent, direction: handoff-from, "on": "deeper monthly memory-hygiene review (§17.8)" }
       # All agents escalate-to security-agent on permission/access/privacy conflicts (§24).
     pre_authorized_actions: []
     approval_required_actions:
@@ -137,8 +137,8 @@ agents:
     outputs: [review.retrospective]
     collaborates_with:
       - { agent: security-agent, direction: handoff-to, "on": "may recommend matrix changes (§22)" }
-      - { agent: memory-agent,   direction: handoff-to, "on": "deeper monthly memory-hygiene review (§17.9)" }
-      - { agent: feedback-agent, direction: handoff-to, "on": "enhancement candidates discovered during monthly/quarterly reviews (§17.4–17.5)" }
+      - { agent: memory-agent,   direction: handoff-to, "on": "deeper monthly memory-hygiene review (§17.8)" }
+      - { agent: feedback-agent, direction: handoff-to, "on": "enhancement candidates discovered during monthly review (§17.4)" }
       # All agents escalate-to security-agent on permission/access/privacy conflicts (§24).
     pre_authorized_actions:
       - "Regenerate /docs/aos-user-guide.html during monthly review (§16.6, §17.4)"
@@ -166,7 +166,7 @@ agents:
     inputs: [review.retrospective]
     outputs: [feedback.upstream]
     collaborates_with:
-      - { agent: review-agent,   direction: handoff-from, "on": "enhancement candidates discovered during monthly/quarterly reviews (§17.4–17.5)" }
+      - { agent: review-agent,   direction: handoff-from, "on": "enhancement candidates discovered during monthly review (§17.4)" }
       - { agent: security-agent, direction: escalates-to, "on": "scrub of every outbound submission before send (§3.2, §22)" }
       # The Proceed gate on every outbound send is the user's (§3.2); expressed
       # below rather than as a collaboration edge (edges resolve to agent slugs, V5).

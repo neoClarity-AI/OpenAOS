@@ -2,7 +2,7 @@
 title: Document Agent — Agent Interviews
 file_type: interview_script
 slug: document-agent
-spec_version: 2.1.1
+spec_version: 2.3.2
 ---
 # Document Agent — Interviews
 
