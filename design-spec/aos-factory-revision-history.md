@@ -2,7 +2,7 @@
 title: AOS Factory Design Specification — Revision History
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.2.1
+spec_version: 2.2.2
 created_date: 2026-06-02
 last_updated: 2026-07-12
 status: design_ready_for_factory_generation
@@ -16,6 +16,7 @@ Entries below are in reverse chronological order (newest first).
 
 | spec_version | Date       | Change |
 |--------------|------------|--------|
+| 2.2.2        | 2026-07-12 | Ship the rendered design artifacts with the plugin — the §28.2 plugin layout and packaging step 2 never required `agent-catalog.yaml`, `agent-specs/` (profile.md + interviews.md per agent), or `aos-interviews.md` at the plugin root, so a plugin built strictly from the spec could not run a spec-faithful build. §28.2 layout tree and packaging step 2 now require these rendered copies at the plugin root, byte-identical to their factory-root sources; runbook §36.3 gains dry-run sub-step 3.3 for the copy (former 3.3–3.5 renumbered to 3.4–3.6) and step 8 now validates presence and byte-identity. No plugin file changes: the shipped `claude-plugin/aos-factory/` copies were verified already byte-identical. Increment to 2.2.2. |
 | 2.2.1        | 2026-07-12 | Ship `templates/AGENTS.md` with the plugin and provision `/AGENTS.md` during AOS instance creation — the shipped `templates/CLAUDE.md` includes `@AGENTS.md`, but no AGENTS.md template was shipped or copied, leaving a dangling include in fresh workspaces. §4.1 workspace root now lists both governing files; §9.3 step 3 build-aos provisions both non-destructively; §15.4 `project_instructions` covers both; §16.10 gains the AGENTS.md schema (governance-agent removal hard rule, factory-vs-instance routing note); §28.1/§28.2 plugin layout and packaging step 3 cover both templates; runbook §36.3 step 3.4 authors both. Increment to 2.2.1. |
 | 2.2.0        | 2026-07-12 | §36.1 Design Readiness Review — all 20 §34 items reset, independently re-verified, and re-marked Done; §33 safety rules confirmed; catalog validator passed (0 errors, 0 warnings, 15 agents, 16 domains). Full spec (Sections 1–32) and runbook reviewed for logical consistency; no functionality-impacting inconsistencies found. Held at 2.2.0, no increment. Cosmetic note only: §1.6.10 repo URL (`Open-AOS-Factory`) vs local folder name (`OpenAOS`) — no action. |
 | 2.2.0        | 2026-07-10 | §36.1 Design Readiness Review (second cycle) — all 20 §34 items reset, independently re-verified, and re-marked Done; §33 safety rules confirmed; catalog validator passed (0 errors, 0 warnings, 15 agents, 16 domains); all companion source artifacts (agent-catalog.yaml, 15 agent-specs folders, aos-interviews.md, catalog.schema.json) confirmed present. No functionality-impacting inconsistencies found. Held at 2.2.0, no increment. |

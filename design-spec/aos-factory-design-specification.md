@@ -4,7 +4,7 @@ file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
 last_updated: 2026-07-12
-spec_version: 2.2.1
+spec_version: 2.2.2
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -3004,6 +3004,9 @@ my-aos-factory/                 (plugin root)
   commands/                     (optional: slash-command entry points)
   agents/                       (optional)
   .mcp.json                     (optional: bundled MCP servers)
+  agent-catalog.yaml            (rendered copy; byte-identical to factory-root /agent-catalog.yaml)
+  agent-specs/                  (rendered copies: profile.md + interviews.md per agent; byte-identical to factory-root /agent-specs/)
+  aos-interviews.md             (rendered copy; byte-identical to factory-root /aos-interviews.md)
   builder-changelog.md          (framework/plugin changelog)
   README.md                     (plugin install + usage instructions)
   templates/                    (shipped example workspace-root files)
@@ -3019,8 +3022,12 @@ Steps:
    sync with the framework spec_version (Section 14.1) and /builder-changelog.md.
 2. Place the generated factory content at the plugin root: expose the builder
    files (build-aos.md and each /builders/build-*.md) as skills or slash
-   commands so Claude can invoke them after install. Components must sit at the
-   plugin root, never inside .claude-plugin/.
+   commands so Claude can invoke them after install, and copy the rendered
+   design artifacts — /agent-catalog.yaml, /agent-specs/[agent-name]-agent/
+   (profile.md + interviews.md per agent), and /aos-interviews.md — to the
+   plugin root, byte-identical to their factory-root sources, so the installed
+   plugin can run a spec-faithful build. Components must sit at the plugin
+   root, never inside .claude-plugin/.
 3. Author the example workspace-root files under templates/ (CLAUDE.md and
    AGENTS.md), and author or refresh README.md with install and usage
    instructions. These are written during this packaging step, not during
