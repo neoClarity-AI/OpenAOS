@@ -1,6 +1,6 @@
 # OpenAOS
 
-| ![](https://repository-images.githubusercontent.com/1263423041/c7102ffa-3f2b-4d04-ac2e-2e17a0f31beb) | AI for the rest of us!<br /><br />Realize the full potential of Claude Cowork with a fully-governed team of AI Agents that you build through conversation. No experience required. |
+| ![](https://repository-images.githubusercontent.com/1263423041/c7102ffa-3f2b-4d04-ac2e-2e17a0f31beb) | AI for the rest of us!<br /><br />Realize the full potential of Claude Cowork with a fully-governed team of AI Agents that you build through conversation.<br /><br />No experience required. |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 
 
@@ -91,23 +91,25 @@ Although **OpenAOS** is designed with Cowork in mind, it also runs works well on
 
 **Single Responsibility Principle.** Each agent has a well-defined purpose and set of responsibilities. The Factory ensures that responsibilities don't overlap. For instance, the Chief of Staff agent coordinates and routes without taking on any other responsibilities.
 
-**Works for personal and professional use.** The factory is designed as a reusable template. A user can build a personal AOS, a work AOS, or both, as sibling instances in the same workspace (see Repository Structure below). The user can build as many AOS instances as they need, with each specialized for a specific purpose. A routing mechanism activates the appropriate AOS and agents for a specific task.
+**Create multiple AOS instances.** The factory is designed as a skill, complete with reusable templates. You can use it to build as many AOS's as you want. For instance, you have have an AOS for personal productivity (inbox triage, task management, calendar, etc.), an AOS for each of your key clients, or perhaps an AOS for each of your major projects. Each AOS resides in its own Claude Cowork project, which guarantees isolation from one another.
 
-**Scheduled, recurring work.** Agents don't only act when prompted. They run on a cadence. Each AOS includes daily, weekly, and monthly operating rhythms: a daily start-of-day briefing and inbox pass driven by the Chief of Staff, plus a weekly review and a monthly health check, user-guide refresh, and goal-alignment retrospective, all owned by the Review Agent. You approve the schedule once. The system maintains the rhythm so routine work happens on its own.
+**Scheduled, recurring work.** Agents don't only act when prompted. They can also run on a cadence. Each AOS includes daily, weekly, and monthly operating rhythms: a daily start-of-day briefing and inbox pass driven by the Chief of Staff, plus a weekly review and a monthly health check, user-guide refresh, and goal-alignment retrospective, all owned by the Review Agent. You approve the schedule once. The system maintains the rhythm so routine work happens on its own.
 
 ## Key Benefits
 
+**Easy to setup.** You don't need any specialized technical knowledge to build your own AOS. You simply create a new Claude Cowork project and then issue the command to "Build an AOS". The **OpenAOS** then walks you through an interview in plain English. It guides, you talk, it builds.
+
+**Easy to modify and update.** You can add agents at any time. Just say "Add an agent" to be given a selection of uninstalled agents. Also, as the OpenAOS evolves, you can update your plugin and use it, in turn, to update your AOS for the latest features.
+
 **You can trust it with real work.** Governance comes first, not as an afterthought. Before any productive agent is added, five governance agents (security, memory, coordination, quality review, and upstream feedback) are already in place. The system never deletes, overwrites, or moves your files on its own. Anything consequential waits for you to type one word: `Proceed`.
 
-**It's built for non-technical people.** Setup is an interview, not a config file. You talk. It builds. There's no command grammar to memorize. You trigger things by plain intent ("Start my day," "Process my inbox").
+**It's built for non-technical people.** Using your AOS requires no command grammar to memorize. You trigger things by plain intent ("Start my day," "Process my inbox", etc.)
 
-**It documents and improves itself.** Every system generates its own plain-language user guide, and a built-in review agent keeps it clean daily, and healthy and aligned with your goals monthly. It gets better on a schedule instead of rotting.
+**It documents and improves itself.** Every system generates its own plain-language user guide, and a built-in review agent ensures that your AOS stays healthy and aligns itself with your goals. In other words, it gets better with use.
 
-**It grows with you.** Run one AOS or many (work, personal, a client project) side by side, with smart routing that always picks the right one and never mixes their memories. Add new agents anytime without redesigning anything.
+**It's designed to be forked and extended.** Everything is plain markdown built from standardized schemas. The whole system is generated from one canonical design spec, so the design, the docs, and even this README can't quietly drift apart. That same discipline is what makes outside contribution easy.
 
-**It's designed to be forked and extended.** Everything is plain markdown built from standardized schemas. The whole system is generated from one canonical design spec, so the design, the docs, and even this pitch can't quietly drift apart. That same discipline is what makes outside contribution easy.
-
-**It's portable.** Tuned for Claude, it easily adapts to other LLMs
+**It's portable.** Tuned for Claude Cowork, but the same design-spec can be configured to work with other platforms, such a Codex. However, this requires some technical know-how.
 
 ---
 
