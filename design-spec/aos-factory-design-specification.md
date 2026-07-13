@@ -56,9 +56,9 @@ The full revision history of this specification — including all dated Design C
 aos-factory-revision-history.md
 ```
 
-Entries there are maintained in reverse chronological order (newest first); new entries are added at the top. Each release is a single entry headed `## <spec_version> — <title> (<date>)`, with resolved items as a numbered list whose bold lead-in names the issue. A version table at the top of the file maps each `spec_version` to its date and a one-line summary.
+Entries there are maintained in reverse chronological order (newest first); new entries are added at the top, as rows in a single table (`spec_version | Date | Change`). The table is a log of completed cycles, not a one-row-per-unique-version index — the same `spec_version` may appear in consecutive rows when multiple cycles complete against it without a content change, each with its own date and change description.
 
-`spec_version` increments once per completed maintenance action. A full §36.1 consistency-review cycle is one increment and one consolidated entry — not one per re-read iteration, however many iterations the loop takes. A structural change (for example, a document restructure) is its own separate increment.
+Every completed §36.1 Design Readiness Review, §36.2 AOS Factory Generation, or §36.3 Claude Plugin Generation cycle gets a row, so the file is a single place to see the current state of the spec, the factory, and the plugin. `spec_version` increments only when a cycle actually changes the specification (or, for §36.3, the packaged framework) — a full §36.1 consistency-review cycle is one increment and one consolidated row when it resolves at least one inconsistency, not one per re-read iteration, however many iterations the loop takes. A cycle that completes with no changes (for example, a Design Readiness Review that surfaces no inconsistencies, or a Factory/Plugin Generation that produces no diff from the prior run) still gets a row describing that outcome, logged against the current `spec_version` rather than incrementing it. A structural change (for example, a document restructure) is its own separate increment.
 
 ---
 
