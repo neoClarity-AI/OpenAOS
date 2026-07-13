@@ -1,6 +1,6 @@
 # OpenAOS
 
-| ![](https://repository-images.githubusercontent.com/1263423041/de66a229-87e0-4dc9-b196-26aefd3bc2bc) | Realize the full potential of Claude Cowork with a fully-governed team of AI Agents that you build. <br />No code - just conversation! |
+| ![](https://repository-images.githubusercontent.com/1263423041/c7102ffa-3f2b-4d04-ac2e-2e17a0f31beb) | AI for the rest of us!<br /><br />Realize the full potential of Claude Cowork with a fully-governed team of AI Agents that you build through conversation. No experience required. |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 
 
