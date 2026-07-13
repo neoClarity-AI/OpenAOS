@@ -2,9 +2,9 @@
 title: AOS Factory Design Specification — Revision History
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.2.0
+spec_version: 2.2.1
 created_date: 2026-06-02
-last_updated: 2026-07-10
+last_updated: 2026-07-12
 status: design_ready_for_factory_generation
 ---
 
@@ -16,6 +16,8 @@ Entries below are in reverse chronological order (newest first).
 
 | spec_version | Date       | Change |
 |--------------|------------|--------|
+| 2.2.1        | 2026-07-12 | Ship `templates/AGENTS.md` with the plugin and provision `/AGENTS.md` during AOS instance creation — the shipped `templates/CLAUDE.md` includes `@AGENTS.md`, but no AGENTS.md template was shipped or copied, leaving a dangling include in fresh workspaces. §4.1 workspace root now lists both governing files; §9.3 step 3 build-aos provisions both non-destructively; §15.4 `project_instructions` covers both; §16.10 gains the AGENTS.md schema (governance-agent removal hard rule, factory-vs-instance routing note); §28.1/§28.2 plugin layout and packaging step 3 cover both templates; runbook §36.3 step 3.4 authors both. Increment to 2.2.1. |
+| 2.2.0        | 2026-07-12 | §36.1 Design Readiness Review — all 20 §34 items reset, independently re-verified, and re-marked Done; §33 safety rules confirmed; catalog validator passed (0 errors, 0 warnings, 15 agents, 16 domains). Full spec (Sections 1–32) and runbook reviewed for logical consistency; no functionality-impacting inconsistencies found. Held at 2.2.0, no increment. Cosmetic note only: §1.6.10 repo URL (`Open-AOS-Factory`) vs local folder name (`OpenAOS`) — no action. |
 | 2.2.0        | 2026-07-10 | §36.1 Design Readiness Review (second cycle) — all 20 §34 items reset, independently re-verified, and re-marked Done; §33 safety rules confirmed; catalog validator passed (0 errors, 0 warnings, 15 agents, 16 domains); all companion source artifacts (agent-catalog.yaml, 15 agent-specs folders, aos-interviews.md, catalog.schema.json) confirmed present. No functionality-impacting inconsistencies found. Held at 2.2.0, no increment. |
 | 2.2.0        | 2026-07-10 | §36.1 Design Readiness Review — all 20 §34 items reset, independently re-verified (`scripts/validate-catalog.py`: 0 errors, 0 warnings, 15 agents), and re-marked Done; §33 safety rules confirmed. No functionality-impacting inconsistencies found in the canonical design or runbook; verified the v2.2.0 single-instance collapse (removal of `/aos-router.md` and the `aos_router` file type) fully purged from both documents. Held at 2.2.0, no increment. Follow-up noted outside this workflow's scope: `AGENTS.md`, `README.md`, and `claude-plugin/aos-factory/README.md` still reference the removed router mechanism — deferred to a separate task. |
 | 2.2.0        | 2026-07-10 | Single-Instance, Minimal Routing (Phase 3 of v2.0): collapsed the multi-instance routing machinery now that a workspace hosts the factory plus exactly one AOS instance. §16.10 Router File Schema deleted and `/aos-router.md` + the `aos_router` file_type eliminated entirely; the factory-vs-instance guard folds into §16.10 (renumbered) Workspace-Root CLAUDE.md Schema, with §16.11 (was §16.12) Global Permissions Seed following. §1.6.6 renamed "Single Instance, Minimal Routing"; §1.6.8, §1.6.11/G5 reworded to drop routing-across-instances language. §4.1 and the §1.1 overview tree reduced to a single AOS Workspace root file (`/CLAUDE.md`) and one sibling AOS instance. §7.4, §10.3, §9.3, §12.1, §17.1, §28.1, §28.2 updated to remove router provisioning, joint router ownership, call-name/signal-match resolution, session pins, and cross-instance branching. Cross-agent routing (Chief of Staff orchestration, designated-owner routing, learnings attribution) is unaffected. |
