@@ -3,26 +3,6 @@
 
 # OpenAOS Quick Start for Claude Cowork
 
-**OpenAOS** builds and maintains an **Agentic Operating System (AOS)** instance. Each AOS is an AI standardized operating environment composed of specialized agents, workflows, memory files, templates, and configuration files that work together to create a complete agentic system. OpenAOS guides both technical and non-technical users through setup via a conversational interview, produces all files automatically once approved, and can add or rebuild individual agents at any time. Although this particular implementation is configured to run on Claude Cowork (for non-technical users) or Claude Code (for developers), it can be easily ported to work with Codex and possibly other platforms.
-
-The **OpenAOS** is an open-source project located here: https://github.com/neoClarity-AI/Open-AOS-Factory
-
-**What Is an AI Agent?**
-
-An AI agent is an LLM (like Claude) that has been given a specific role, a defined set of responsibilities, and the autonomy to carry out tasks on your behalf. Rather than simply answering questions, an agent operates from a written set of instructions that tell it what it is responsible for, what tools and data it may use, where its boundaries lie, and when it should escalate back to you. In an AOS, each agent is specialized — one handles your inbox, another manages your calendar, another tracks projects — so that each behaves like a focused, reliable team member instead of a general-purpose assistant. Agents can work on their own, hand tasks off to one another, and follow the same rules every time, which is what makes the overall system predictable and trustworthy.
-
-**What is an Agentic Operating System?**
-
-An Agentic Operating System is not a piece of software you install — it is a structured workspace that gives your LLM a persistent identity, a memory, and a set of specialized agents, each with clear responsibilities, boundaries, and escalation rules. The AOS runs inside your Claude project folder. Once built, Claude reads the agent files at the start of every session and behaves consistently across conversations, routing tasks to the right agent, remembering context, and following the rules you approved when the system was set up.
-
-**What Are the Benefits of an AOS?**
-
-An **Agentic Operating System (AOS)** turns scattered, one-off interactions with an LLM into a dependable system that works the way you do. Because each agent has a fixed role, clear boundaries, and a shared memory, you stop re-explaining context and re-checking output every session. The system remembers your preferences, follows the rules you approved, and behaves consistently across conversations. Specialized agents let you delegate whole categories of work (such as inbox, calendar, projects, and research). Each task is handled by a focused, reliable team member rather than a general-purpose assistant. Built-in escalation rules keep you in control of anything sensitive. The result is less cognitive load, fewer dropped threads, and more leverage: you describe outcomes, the right agent does the work, and you get predictable, trustworthy results. And because the AOS is structured rather than coded, you get these benefits without any technical expertise, and can extend the system by adding new agents whenever your needs grow.
-
-## Claude Cowork
-
-Although the **OpenAOS** is generic in nature and can be adapted to a variety of LLMs, **Claude Cowork** is used for this particular implementation. **Claude Cowork** makes Agentic AI accessible to non-technical users. But it is not an AOS. The **OpenAOS** adds the structure necessary to make Claude Cowork a true AOS, without requiring any technical expertise to use.  Claude Code's agentic capabilities to the Claude Desktop app for knowledge work beyond coding. Instead of responding to one prompt at a time, Claude can take on complex, multi-step tasks and carry them out on your behalf — reading and writing your local files, running code in an isolated environment, and producing finished deliverables like formatted documents, spreadsheets, and presentations. You describe an outcome, let Claude work, and come back to completed results.
-
 ## Prerequisites
 
 Before using the OpenAOS, you'll need:
