@@ -1,6 +1,6 @@
 # OpenAOS
 
-| ![OpenAOS — AI for the rest of us](https://repository-images.githubusercontent.com/1263423041/c7102ffa-3f2b-4d04-ac2e-2e17a0f31beb) | AI for the rest of us!<br /><br />Realize the full potential of Claude Cowork with a fully-governed team of AI Agents that you build through conversation.<br /><br />No experience required. |
+| ![OpenAOS — AI for the rest of us](https://repository-images.githubusercontent.com/1263423041/c7102ffa-3f2b-4d04-ac2e-2e17a0f31beb) | AI for the rest of us<br /><br />Realize the full potential of Claude Cowork with a fully-governed team of AI Agents that you build through conversation.<br /><br />No technical experience required. |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 
 *Lovingly built by humans with Claude in the loop*
