@@ -1,6 +1,6 @@
 # OpenAOS
 
-| ![OpenAOS — AI for the rest of us](https://repository-images.githubusercontent.com/1263423041/c7102ffa-3f2b-4d04-ac2e-2e17a0f31beb) | AI for the rest of us<br /><br />Realize the full potential of Claude Cowork with a fully-governed team of AI Agents that you build through conversation.<br /><br />No technical experience required. |
+| ![OpenAOS — AI for the rest of us](https://repository-images.githubusercontent.com/1263423041/c7102ffa-3f2b-4d04-ac2e-2e17a0f31beb) | AI for the rest of us<br /><br />Realize the full potential of Claude Cowork with a fully-governed team of AI Agents that you build through conversation.<br /><br />No technical experience required |
 | ------------------------------------------------------------ | ------------------------------------------------------------ |
 
 *Lovingly built by humans with Claude in the loop*
@@ -23,7 +23,7 @@ An Agentic Operating System is not a piece of software you install. It's a struc
 
 **1. A factory that builds operating systems, not just agents.** "Agent factory" tooling already exists (Microsoft's Agent Factory, Mozilla's "agent-factory", Oracle's Private Agent Factory, research like MetaGPT and Automated Design of Agentic Systems). All of them generate *individual agents* or *multi-agent workflows*. **OpenAOS** instead generates a complete, governed **Agentic Operating System** (workspace, persistent identity, shared memory, governance layer, and a coordinated agent team). Factory-of-systems, not factory-of-agents, is the difference.
 
-**2. Mandatory governance agents that bootstrap the system.** "Governance-first" is now an emerging, named paradigm, but the literature treats governance as a *layer* or *control plane* bolted around the agents. This project makes governance **five required agents** (security, memory, coordination, review, and upstream feedback) that *must* be instantiated before any productive agent exists. Governance isn't a wrapper; it's a foundational component for every AOS instance built by OpenAOS.
+**2. Mandatory governance agents that bootstrap the system.** "Governance-first" is now an emerging, named paradigm, but the literature treats governance as a *layer* or *control plane* bolted around the agents. This project makes governance **five required agents** (security, memory, coordination, review, and upstream feedback) that *must* be instantiated before any productive agent exists. Governance isn't a wrapper; it's a foundational component for every AOS instance built by **OpenAOS**.
 
 Individually, each idea has neighbors in the field. The **combination** of a factory that generates a governed AOS instance, governance reified as required agents, all regenerated from a single canonical spec, and aimed at non-technical users, is one we have not found assembled in any single existing project. That combination is the contribution.
 
