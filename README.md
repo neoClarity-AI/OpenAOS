@@ -7,7 +7,7 @@
 
 ## Why This Exists
 
-Claude Cowork gives you a powerful general-purpose platform: project memory, skills, subagents, plugins, scheduled tasks, and a permission system. What it deliberately doesn't give you is a framework for assembling those primitives into a trustworthy, coordinated team of agents. A non-technical person has no straightforward path from the generic platform to a governed agent team built for their own specific needs. **OpenAOS** closes that gap. It lets anyone turn the general-purpose platform into purpose-built, governed agents through an interview-style conversation.  No config, no code. What's more, governance comes first, not as an afterthought. Every consequential action waits on a one-word human approval (`Proceed`), and the entire system is generated from a single canonical specification, so the design, the docs, and the shipped code cannot quietly drift apart.
+Claude by Anthropic is a set of Large Language Models (LLMs), among the most powerful and popular generative AI tools on the plant. Claude Cowork is a desktop app designed to make Claude more useful and accessible for non-technical users. It gives you a powerful general-purpose platform: project memory, skills, subagents, plugins, scheduled tasks, and a permission system. What it deliberately doesn't give you is a framework for assembling these primitives into a trustworthy, coordinated team of agents. A non-technical person has no straightforward path from the generic platform (essentially a blank sheet) to a highly productive app tailored to the their specific needs. **OpenAOS** closes that gap. It lets anyone turn Claude Cowork into a purpose-built team of governed agents through an interview-style conversation. No settings to configure, no code to write. What's more, governance comes first, not as an afterthought. Every consequential action waits on a one-word human approval (`Proceed`), minimizing the risk of unintentional changes.  and the entire system is generated from a single canonical specification, so the design, the docs, and the shipped code cannot quietly drift apart.
 
 ## Overview
 
@@ -21,17 +21,29 @@ An Agentic Operating System is not a piece of software you install. It's a struc
 
 **OpenAOS** sits in two active areas of agent design and contributes a distinct combination rather than a single from-scratch invention.
 
-**1. A factory that builds operating systems, not just agents.** "Agent factory" tooling already exists (Microsoft's Agent Factory, Mozilla's "agent-factory", Oracle's Private Agent Factory, research like MetaGPT and Automated Design of Agentic Systems). All of them generate *individual agents* or *multi-agent workflows*. **OpenAOS** instead generates a complete, governed **Agentic Operating System** (workspace, persistent identity, shared memory, governance layer, and a coordinated agent team). Factory-of-systems, not factory-of-agents, is the difference.
+**1. A factory that builds operating systems, not just agents.** "Agent factory" tooling already exists (Microsoft's Agent Factory, Mozilla's "agent-factory", Oracle's Private Agent Factory, research like MetaGPT and Automated Design of Agentic Systems). All of them generate *individual agents* or *multi-agent workflows*. **OpenAOS** instead generates a complete, governed **Agentic Operating System** (workspace, persistent identity, shared memory, governance layer, and a coordinated agent team). Here's the difference: **OpenAOS** is a factory-of-systems, not factory-of-agents. In this way, it offers a complete solution for non-technical users.
 
 **2. Mandatory governance agents that bootstrap the system.** "Governance-first" is now an emerging, named paradigm, but the literature treats governance as a *layer* or *control plane* bolted around the agents. This project makes governance **five required agents** (security, memory, coordination, review, and upstream feedback) that *must* be instantiated before any productive agent exists. Governance isn't a wrapper; it's a foundational component for every AOS instance built by **OpenAOS**.
 
-Individually, each idea has neighbors in the field. The **combination** of a factory that generates a governed AOS instance, governance reified as required agents, all regenerated from a single canonical spec, and aimed at non-technical users, is one we have not found assembled in any single existing project. That combination is the contribution.
+**3. The design spec is the single source of truth.**  The **OpenAOS** design spec is used to render the `aos-factory`, a specialized set of agents that work with you to build your own custom AOS. The design spec then packages the rendered factory into a Claude plugin that you can easily install and use.  to build the This factory follows a well defined structure and set of rules laid out in the design spec. These include the governance model, the permission levels, the folder schema, the builder section structure, agent responsibilities and boundaries, workflow definitions, and escalation rules. The design spec his its own review process to ensure consistency and safety and the plugin is built from the factory.
+
+Individually, each idea has neighbors in the field. The **combination** of a factory that generates a governed AOS instance, governance implemented as required agents, all generated from a single canonical spec, and aimed at non-technical users, is one we have not found assembled in any single existing project. That combination is the contribution.
 
 ### How OpenAOS Relates to Claude Cowork
 
 **OpenAOS** is not a replacement for Claude Cowork. Rather, **OpenAOS** complements and extends it. Cowork provides the primitives and stays general-purpose by design. **OpenAOS** turns those primitives into a specific, governed system shaped to the user's needs.
 
-Some of what **OpenAOS** adds is genuinely new ground: governance reified as required agents, and spec-driven regeneration of the whole system. Some of it deliberately overlaps the platform — most notably the `Proceed` gate (see below).
+The AOS built by **OpenAOS** is not a replacement for the Claude Cowork. Rather, the AOS complements and extends it. Cowork provides the primitives and stays general-purpose by design. The AOS turns those primitives into a specific, governed system shaped to the user's specific needs.
+
+**Where it overlaps.** An AOS built by **OpenAOS** reuses Cowork's own primitives rather than replacing them: project memory (the `memory/` folder is a structured application of it, not a new mechanism), skills/subagents (agents are markdown instruction files invoked through Cowork's existing skill/subagent execution), scheduled tasks (the daily/weekly/monthly operating rhythms are Cowork's scheduler, pre-wired to specific cadences), the permission system (the three-level model and tool-access matrix sit on top of Cowork's own approval gating), and plugins (**OpenAOS** itself ships and installs as a standard Cowork plugin).
+
+**Where it complements.** Cowork has no concept of agents that must exist before productive work happens, no enforcement of single-responsibility boundaries between skills, no unified approval gate beyond its own built-in safeguards, no notion of a canonical spec used to generate the running system, and no built-in cadence for documenting or reviewing itself. The Factory adds all of these: the five required governance agents, Chief-of-Staff-enforced single responsibility, the `Proceed` gate layered on top of Cowork's own safety checks, spec-driven regeneration, and the self-documenting/self-improving review rhythms.
+
+In short, Cowork supplies the engine; the AOS is a custom-built vehicle powered by that engine. **OpenAOS** reuses Cowork's mechanisms whenever possible and adds only the governance and non-technical usability to realize Cowork's full potential.
+
+**Using OpenAOS on Claude Code**
+
+Although Claude Code is not as user friendly as Claude Cowork, it has additional capabilities for power users. Claude Code not only runs **OpenAOS**, it's also the preferred development environment for OpenAOS contributors. For this reason, instructions are provided for both Claude Cowork and Claude Code.
 
 ------
 
@@ -45,39 +57,12 @@ The **OpenAOS** implementation included with this repo requires:
 
 ---
 
-## Pick Your Entry Point
+## Quick Start
 
-You can adopt **OpenAOS** at whatever depth suits you:
+The fastest way to get started is to use the OpenAOS Plugin. Here's how: 
 
-- **A Claude plugin:** easy install, no clutter.
-- **A prebuilt OpenAOS:** fork the full repo to run it directly (built with Claude Opus 4.8, and can be rebuilt with newer models as they ship).
-- **The design spec:** this is the best way to modify **OpenAOS** itself and contribute to the open source project. Only pull requests for the design spec will be considered.
-
-### Quick Start with the Claude Plugin
-
-If you're using Claude Cowork, follow the instructions here: https://github.com/neoClarity-AI/neoClarity-Plugins/tree/main/aos-factory 
-
-Although **OpenAOS** is designed with Cowork in mind, it also works well on Claude Code. If you're using VS Code, follow these instructions:
-
-**Using VS Code**
-
-- **Install Claude on VS Code.** Instructions here: https://code.claude.com/docs/en/vs-code
-- **Create a folder for the AOS.**  File -> Open Folder... -> New Folder. You can name it anything you like. For these instructions, let's call it **AOS Workspace**.
-- **Install the aos-factory plugin.** In a Claude Code terminal session, enter these commands:
-
-```
-/plugin marketplace add https://github.com/neoClarity-AI/neoClarity-Plugins
-/plugin install aos-factory@neoclarity-plugins
-```
-
-- **Create an AOS instance**. In a Claude Code terminal session, enter this command:
-
-```
-/build-aos help
-```
-
-- Read the overview to familiarize yourself with the skill, then proceed with the interview to create your first AOS instance.
-- You can begin issuing commands to your new AOS. See the **AOS User Guide** (`docs/aos-user-guide.html`) in the `docs` folder of your new AOS instance for details.
+- [Quick Start for Claude Cowork](claude-plugin/quick-start-claude-cowork.md)
+- [Quick Start for Claude Code](claude-plugin/quick-start-claude-code.md)
 
 ---
 
@@ -90,8 +75,6 @@ Although **OpenAOS** is designed with Cowork in mind, it also works well on Clau
 **Non-destructive by default.** No agent deletes, overwrites, renames, moves, or bulk-modifies files without explicit approval — when in doubt it creates a new file, appends to a log, or asks. Every Level 2 action requires the user to type exactly `Proceed`; anything short of that exact word is a hold. This sits on top of the platform's own safeguards by design: Cowork and Code already gate consequential actions, but both will sometimes edit files before you're ready, so the `Proceed` gate guarantees nothing changes until you're satisfied and gives you a clean point to abandon a direction before anything is committed.
 
 **Single Responsibility Principle.** Each agent has a well-defined purpose and set of responsibilities. **OpenAOS** ensures that responsibilities don't overlap. For instance, the Chief of Staff agent coordinates and routes without taking on any other responsibilities.
-
-**Create multiple AOS instances.** **OpenAOS** is designed as a skill, complete with reusable templates. You can use it to build as many AOS instances as you want. For instance, you could have an AOS for personal productivity (inbox triage, task management, calendar, etc.), an AOS for each of your key clients, or perhaps an AOS for each of your major projects. Each AOS resides in its own Claude Cowork project, which guarantees isolation from one another.
 
 **Scheduled, recurring work.** Agents don't only act when prompted. They can also run on a cadence. Each AOS includes daily, weekly, and monthly operating rhythms: a daily start-of-day briefing and inbox pass driven by the Chief of Staff, plus a weekly review and a monthly health check, user-guide refresh, and goal-alignment retrospective, all owned by the Review Agent. You approve the schedule once. The system maintains the rhythm so routine work happens on its own.
 
@@ -138,13 +121,13 @@ At least one optional productive agent must be added before the AOS setup is con
 ## Repository Structure
 
 ```
-OpenAOS/                ← project root
+OpenAOS/                         ← project root
 │
 ├── CLAUDE.md                    ← session-start instructions for Claude
-├── AGENTS.md                    ← cross-agent rules (governance-removal hard rule, factory-vs-instance guard); pulled in by CLAUDE.md
-├── README.md
-├── CONTRIBUTING.md
-├── LICENSE
+├── AGENTS.md                    ← Proceed gate definition, basic routing; pulled in by CLAUDE.md
+├── README.md                    ← This document
+├── CONTRIBUTING.md              ← Instructions for those interested in contributing to the project
+├── LICENSE                      ← MIT license
 │
 ├── design-spec/                 ← canonical design specification document set
 │   ├── aos-factory-design-specification.md  ← canonical design spec
@@ -166,10 +149,8 @@ OpenAOS/                ← project root
         ├── README.md
         ├── builder-changelog.md
         ├── skills/              ← 2 SKILL.md files: build-aos and build-agent
-        └── templates/           ← starter CLAUDE.md to copy to workspace root
+        └── templates/           ← starter files to copy into the workspace
 ```
-
-The AOS instance is created as a **sibling folder** at the project root alongside `aos-factory/`. For example: `work-aos/` or `personal-aos/`. **OpenAOS** never writes into the instance except through an authorized build.
 
 ---
 
@@ -206,7 +187,7 @@ The AOS instance is created as a **sibling folder** at the project root alongsid
 
 The canonical source of truth for **OpenAOS** is `design-spec/aos-factory-design-specification.md`. It records every design decision made during **OpenAOS**'s development: the governance model, the permission levels, the folder schema, the builder section structure, agent responsibilities and boundaries, workflow definitions, escalation rules, and the framework-vs-instance layout. If the spec and a builder file ever disagree, the spec wins.
 
-The spec is also the correct starting point for any change to **OpenAOS** itself. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contribution workflow.
+The spec is the correct starting point for any change to **OpenAOS** itself. See [CONTRIBUTING.md](CONTRIBUTING.md) for the full contribution workflow.
 
 ---
 

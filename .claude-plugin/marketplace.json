@@ -6,7 +6,7 @@
   },
   "plugins": [
     {
-      "name": "openaos",
+      "name": "aos-factory",
       "source": "./claude-plugin/aos-factory",
       "description": "An open source tool that helps you create and maintain your own custom Agenetic Operating System (AOS)."
     }
