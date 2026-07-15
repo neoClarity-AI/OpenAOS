@@ -1,0 +1,27 @@
+name: Validate Agent Catalog
+
+on:
+  pull_request:
+    paths:
+      - "design-spec/agent-catalog.yaml"
+      - "design-spec/catalog.schema.json"
+      - "scripts/validate-catalog.py"
+  push:
+    branches: [main]
+    paths:
+      - "design-spec/agent-catalog.yaml"
+      - "design-spec/catalog.schema.json"
+      - "scripts/validate-catalog.py"
+
+jobs:
+  validate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install dependencies
+        run: pip install pyyaml jsonschema
+      - name: Validate catalog (schema + V1-V5 checks)
+        run: python scripts/validate-catalog.py
