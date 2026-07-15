@@ -19,7 +19,7 @@ An Agentic Operating System (AOS) is not a piece of software you install. It's a
 
 ### What Makes OpenAOS Unique?
 
-**OpenAOS** sits in two active areas of agent design and contributes a distinct combination rather than a single from-scratch invention.
+**OpenAOS** contributes a distinct combination of innovations.
 
 **1. A factory that builds operating systems, not just agents.** "Agent factory" tooling already exists (Microsoft's Agent Factory, Mozilla's "agent-factory", Oracle's Private Agent Factory, research like MetaGPT and Automated Design of Agentic Systems). All of them generate *individual agents* or *multi-agent workflows*. **OpenAOS** instead generates a complete, governed **Agentic Operating System** (workspace, persistent identity, shared memory, governance layer, and a coordinated agent team). Here's the difference: **OpenAOS** is a factory-of-systems, not factory-of-agents. In this way, it offers a complete solution for non-technical users.
 
