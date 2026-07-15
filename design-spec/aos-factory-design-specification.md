@@ -3,8 +3,8 @@ title: AOS Factory Design Specification
 file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
-last_updated: 2026-07-13
-spec_version: 2.3.2
+last_updated: 2026-07-14
+spec_version: 2.3.3
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -1188,6 +1188,7 @@ Initial setup should use this sequence:
 9. Update the agent registry
 10. Offer to schedule the rhythmic workflows as Cowork Scheduled Tasks
 11. Produce an AOS setup summary
+12. Open the AOS User Guide for the user
 ```
 
 **Scheduling the rhythmic workflows (step 10).** The four cadence-driven workflows — daily startup, end-of-day shutdown, weekly review, and monthly review (Section 17.1–17.4) — are candidates for a Cowork Scheduled Task per workflow, each one invoking that workflow's routed execution on its cadence. This is offered, never assumed: present the four candidates with their standard cadence (Section 25) and the reviewing agent's preferred timing where already captured (e.g. the Review Agent's `review-timing` answer, Section 26), and create a task only for each one the user accepts; declining any or all leaves that workflow manually triggered, as today. Event-triggered workflows (inbox-to-task, project kickoff, decision capture, memory review; Sections 17.5–17.8) are not scheduled — they run when their triggering event occurs, not on a cadence. Creating a Scheduled Task is Level 2 (Section 3.4): preview the proposed schedule and gate creation behind `Proceed`, consistent with the rest of this sequence. Each accepted schedule is logged to `/logs/change-log.md`.
@@ -1195,6 +1196,8 @@ Initial setup should use this sequence:
 Each Scheduled Task's instructions must contain **exactly one line** pointing to its associated workflow file, as an `@`-path reference resolved against the instance root — e.g. `@/[aos-name]/workflows/daily-startup-workflow.md`. The task carries no other embedded instructions; the workflow file remains the single source of truth for what the run does, so editing the workflow changes future runs without touching the schedule.
 
 The step 11 **AOS setup summary** is a saved file: `/logs/aos-build-summary.md`, file_type `build_summary` (§15.4), with a schema parallel to the Section 13 per-agent Build Summary (Files Created, Key Decisions, User Preferences Captured, Permissions and Boundaries, Open Questions, Suggested Next Steps) at instance scope.
+
+**Opening the AOS User Guide (step 12).** As the final action, once the instance exists and validation passes, open `/[aos-name]/docs/aos-user-guide.html` in the Claude Cowork side panel, and print a link in the chat window to open the same file in a browser. This is a display action only — no files are written — so it runs after the `Proceed`-gated creation completes.
 
 Actual file creation still waits until the user types:
 
@@ -1498,9 +1501,11 @@ The generic build engine `/builders/build-agent.md` (file_type `agent_builder`) 
 ## Validation Checklist
 
 ## AOS Setup Summary
+
+## Open the AOS User Guide
 ```
 
-`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1, executing the scripted AOS setup interview in `aos-interviews.md` (Section 7C) — the script is normative for question content, order, and captured fields; `Discovery Questions` and `Recommended Defaults` reference that script rather than restating it. `AOS Setup Sequence` follows the setup sequence in Section 9.3, which includes provisioning the AOS Workspace root files (`/CLAUDE.md`, `/AGENTS.md`) from the shipped example copies (Section 28.2), non-destructively — created when absent and overwritten only after a separate `Proceed`. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Rhythmic Workflow Scheduling` follows Section 9.3 step 10: offer a Cowork Scheduled Task for each of the four cadence-driven workflows (daily startup, end-of-day shutdown, weekly review, monthly review), gated per-workflow behind `Proceed`; event-triggered workflows are never scheduled. `Validation Checklist` uses the completeness checks in Section 27.
+`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1, executing the scripted AOS setup interview in `aos-interviews.md` (Section 7C) — the script is normative for question content, order, and captured fields; `Discovery Questions` and `Recommended Defaults` reference that script rather than restating it. `AOS Setup Sequence` follows the setup sequence in Section 9.3, which includes provisioning the AOS Workspace root files (`/CLAUDE.md`, `/AGENTS.md`) from the shipped example copies (Section 28.2), non-destructively — created when absent and overwritten only after a separate `Proceed`. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Rhythmic Workflow Scheduling` follows Section 9.3 step 10: offer a Cowork Scheduled Task for each of the four cadence-driven workflows (daily startup, end-of-day shutdown, weekly review, monthly review), gated per-workflow behind `Proceed`; event-triggered workflows are never scheduled. `Validation Checklist` uses the completeness checks in Section 27. `Open the AOS User Guide` performs Section 9.3 step 12: as the final action, once the instance exists and validation passes, it opens `/[aos-name]/docs/aos-user-guide.html` in the Claude Cowork side panel and prints a browser link in the chat — a display-only action that writes no files and runs after the `Proceed`-gated creation completes.
 
 The root entry `/build-aos.md` (file_type `builder_entry`) is a short pointer to `/builders/build-aos.md` and does not repeat this schema.
 

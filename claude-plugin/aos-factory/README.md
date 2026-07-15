@@ -5,7 +5,7 @@ professional system of specialized markdown agents, workflows, memory, templates
 configs, logs, and documentation — through a guided, approval-gated interview.
 
 This plugin is a rendering of the AOS Factory design specification
-(`spec_version 2.3.2`). The specification is the single source of truth; this
+(`spec_version 2.3.3`). The specification is the single source of truth; this
 package is generated from it (design spec §1.6.1, §28).
 
 ## What's in the box

@@ -2,7 +2,7 @@
 title: Task Agent — Agent Interviews
 file_type: interview_script
 slug: task-agent
-spec_version: 2.3.2
+spec_version: 2.3.3
 ---
 # Task Agent — Interviews
 

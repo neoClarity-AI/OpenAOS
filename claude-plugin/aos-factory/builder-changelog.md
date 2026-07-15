@@ -1,9 +1,9 @@
 ---
 title: AOS Factory Builder Changelog
 file_type: builder_changelog
-spec_version: 2.3.2
+spec_version: 2.3.3
 created_date: 2026-07-13
-last_updated: 2026-07-13
+last_updated: 2026-07-14
 status: active
 ---
 # AOS Factory Builder Changelog
@@ -18,10 +18,25 @@ Entries are in reverse chronological order (newest first).
 
 | spec_version | Plugin version | Date       | Summary                                                        |
 | ------------ | -------------- | ---------- | -------------------------------------------------------------- |
+| 2.3.3        | 2.3.3          | 2026-07-14 | Factory framework regenerated at spec_version 2.3.3 (§36.2).    |
 | 2.3.2        | 2.3.2          | 2026-07-13 | Factory framework generated from spec_version 2.3.2 (§36.2).   |
 | 2.1.0        | 2.1.0          | 2026-07-06 | Generic build engine replaces the 14 per-agent builders.       |
 | 2.0.0        | 2.0.0          | 2026-07-01 | Agent Catalog + per-agent profiles; factory ships rendered artifacts. |
 | 1.0.4        | 1.0.4          | 2026-06-11 | Claude plugin packaging defined (§28.2).                       |
+
+## 2.3.3 — Factory framework regeneration (2026-07-14)
+
+Plugin version: **2.3.3** (synced to `spec_version`).
+
+Regenerated the AOS Factory framework files at `spec_version 2.3.3` (runbook
+§36.2, generation scope §35.2). The 2.3.3 design change was confined to §9.3
+(new step 12, "Open the AOS User Guide") and §12.1 (builder schema aligned to
+list the matching `## Open the AOS User Guide` section) — the `build-aos.md`
+step-12 body was already present, so this regeneration advances the
+`spec_version` stamp on all 36 framework files from 2.3.2 to 2.3.3 and re-renders
+the factory-root copies of `agent-catalog.yaml`, `aos-interviews.md`, and the 15
+`agent-specs/` folders byte-identical to their (also-restamped) design-spec
+sources. No change to builder logic or agent design content relative to 2.3.2.
 
 ## 2.3.2 — Factory framework generation (2026-07-13)
 
