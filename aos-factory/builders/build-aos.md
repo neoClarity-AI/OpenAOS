@@ -1,7 +1,7 @@
 ---
 title: Build AOS
 file_type: aos_builder
-spec_version: 2.3.2
+spec_version: 2.3.3
 created_date: 2026-07-13
 last_updated: 2026-07-13
 status: active

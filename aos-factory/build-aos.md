@@ -1,7 +1,7 @@
 ---
 title: Build AOS (Entry)
 file_type: builder_entry
-spec_version: 2.3.2
+spec_version: 2.3.3
 created_date: 2026-07-13
 last_updated: 2026-07-13
 status: active

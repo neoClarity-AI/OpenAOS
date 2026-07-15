@@ -2,7 +2,7 @@
 title: Personal CRM Agent — Agent Profile
 file_type: agent_profile
 slug: personal-crm-agent
-spec_version: 2.3.2
+spec_version: 2.3.3
 ---
 # Personal CRM Agent — Profile
 

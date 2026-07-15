@@ -2,7 +2,7 @@
 title: Calendar Agent — Agent Profile
 file_type: agent_profile
 slug: calendar-agent
-spec_version: 2.3.2
+spec_version: 2.3.3
 ---
 # Calendar Agent — Profile
 
