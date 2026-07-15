@@ -15,7 +15,7 @@ Claude by Anthropic is one of the most powerful and popular generative AI tools 
 
 **What is an Agentic Operating System?**
 
-An Agentic Operating System is not a piece of software you install. It's a structured workspace that gives your LLM a persistent identity, a memory, and a set of specialized agents, each with clear responsibilities, boundaries, and escalation rules. The AOS runs inside your Claude project folder. Once built, Claude reads the agent files at the start of every session and behaves consistently across conversations, routing tasks to the right agent, remembering context, and following the rules you approved when the system was set up.
+An Agentic Operating System (AOS) is not a piece of software you install. It's a structured workspace that gives a Large Languae Model (LLM) like Claude a persistent identity, a memory, and a set of specialized agents, each with clear responsibilities, boundaries, and escalation rules. The AOS consists of a collection of markdown files and HTML templates designed to work efficiently together. Once built, Claude reads the "bootstrap" file AGENTS.md at the start of every session and then reads additional AOS files based on the nature of the request. This structure causes Claude Cowork to behave consistently across conversations, route tasks to the right agent, coorindate multiple agents, remember context, and follow well defined rules.
 
 ### What Makes OpenAOS Unique?
 
