@@ -1,12 +1,12 @@
 {
-  "name": "openaos",
+  "name": "neoclarity-marketplace",
   "owner": {
-    "name": "OpenAOS",
+    "name": "neoClarity Plugin Marketplace",
     "email": "openaos@neoclarity.ai"
   },
   "plugins": [
     {
-      "name": "aos-factory",
+      "name": "openaos",
       "source": "./claude-plugin/aos-factory",
       "description": "An open source tool that helps you create and maintain your own custom Agenetic Operating System (AOS)."
     }
