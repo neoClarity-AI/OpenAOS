@@ -2,9 +2,9 @@
 title: AOS Factory Design Specification — Revision History
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.3.2
+spec_version: 2.3.3
 created_date: 2026-06-02
-last_updated: 2026-07-13
+last_updated: 2026-07-14
 status: design_ready_for_factory_generation
 ---
 
@@ -16,6 +16,7 @@ Entries below are in reverse chronological order (newest first).
 
 | spec_version | Date       | Change                                                       |
 | ------------ | ---------- | ------------------------------------------------------------ |
+| 2.3.3        | 2026-07-14 | §36.1 Design Readiness Review — all 20 §34 items reset, independently re-verified, and re-marked Done; §33 safety rules confirmed; catalog validator passed (0 errors, 0 warnings, 15 agents, 16 domains); all 15 agent-specs folders (profile.md + interviews.md), agent-catalog.yaml, and aos-interviews.md confirmed present. This cycle formally **adopts the new §9.3 step 12 "Open the AOS User Guide"** (added to the setup sequence and reflected in `build-aos.md`), and **resolves one consistency item (C1):** `build-aos.md` carried an `## Open the AOS User Guide` section absent from the §12.1 builder schema — §12.1's schema block and prose were aligned to list it, restoring §1.6.1 spec↔artifact parity. Spec changed; **incremented 2.3.2 → 2.3.3**. Follow-up (separate §36.2): regenerate the factory/plugin so their `spec_version` stamps catch up from 2.3.2 to 2.3.3 — file *content* already matches. |
 | 2.3.2        | 2026-07-13 | §36.3 Claude Plugin Generation — packaged the 2.3.2 framework into `claude-plugin/aos-factory/` (39 files, all newly created, no overwrites): authored `.claude-plugin/plugin.json` (version 2.3.2, synced to spec_version), `skills/build-aos/SKILL.md` and `skills/build-agent/SKILL.md` (builder bodies + invocation frontmatter), `templates/CLAUDE.md`, `templates/AGENTS.md`, and `README.md`; copied byte-identical `agent-catalog.yaml`, `aos-interviews.md`, `builder-changelog.md`, and all 15 `agent-specs/` folders from the factory root. §36.3 step 8 validation passed (manifest well-formed, both builders map to SKILL.md with name+description, rendered artifacts byte-identical to factory root). Framework unchanged since packaging; held at 2.3.2, no increment. |
 | 2.3.2        | 2026-07-13 | §36.2 AOS Factory Generation — generated the factory framework from spec_version 2.3.2 (§35.2 scope, 36 files under `aos-factory/`): authored `/build-aos.md`, `/builders/build-aos.md`, `/builders/build-agent.md`, `/builder-changelog.md`; rendered byte-identical factory-root copies of `/agent-catalog.yaml`, `/aos-interviews.md`, and all 15 `/agent-specs/[agent-name]-agent/` folders (profile.md + interviews.md). §34 checklist all Done, §33 safety rules satisfied, catalog validator passed (0 errors, 0 warnings, 15 agents, 16 domains). Spec unchanged; held at 2.3.2, no increment. |
 | 2.3.2        | 2026-07-13 | §36.1 Design Readiness Review — all 20 §34 items reset, independently re-verified, and re-marked Done; §33 safety rules confirmed; catalog validator passed (0 errors, 0 warnings, 15 agents, 16 domains); all 15 agent-specs folders (profile.md + interviews.md), agent-catalog.yaml, and aos-interviews.md confirmed present. Canonical design (Sections 1–32) and runbook reviewed for logical consistency; no functionality-impacting inconsistencies found. Held at 2.3.2, no increment. |

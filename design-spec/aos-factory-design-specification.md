@@ -3,8 +3,8 @@ title: AOS Factory Design Specification
 file_type: design_spec
 project: Script to Build Agentic OS Factory
 created_date: 2026-06-02
-last_updated: 2026-07-13
-spec_version: 2.3.2
+last_updated: 2026-07-14
+spec_version: 2.3.3
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
@@ -1501,9 +1501,11 @@ The generic build engine `/builders/build-agent.md` (file_type `agent_builder`) 
 ## Validation Checklist
 
 ## AOS Setup Summary
+
+## Open the AOS User Guide
 ```
 
-`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1, executing the scripted AOS setup interview in `aos-interviews.md` (Section 7C) — the script is normative for question content, order, and captured fields; `Discovery Questions` and `Recommended Defaults` reference that script rather than restating it. `AOS Setup Sequence` follows the setup sequence in Section 9.3, which includes provisioning the AOS Workspace root files (`/CLAUDE.md`, `/AGENTS.md`) from the shipped example copies (Section 28.2), non-destructively — created when absent and overwritten only after a separate `Proceed`. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Rhythmic Workflow Scheduling` follows Section 9.3 step 10: offer a Cowork Scheduled Task for each of the four cadence-driven workflows (daily startup, end-of-day shutdown, weekly review, monthly review), gated per-workflow behind `Proceed`; event-triggered workflows are never scheduled. `Validation Checklist` uses the completeness checks in Section 27.
+`Builder Operating Mode` should combine coach and collaborator behavior (Section 1.5), default to dry-run / preview, and gate file creation behind `Proceed`. `Interview Flow` follows the batch pattern in Section 9.1, executing the scripted AOS setup interview in `aos-interviews.md` (Section 7C) — the script is normative for question content, order, and captured fields; `Discovery Questions` and `Recommended Defaults` reference that script rather than restating it. `AOS Setup Sequence` follows the setup sequence in Section 9.3, which includes provisioning the AOS Workspace root files (`/CLAUDE.md`, `/AGENTS.md`) from the shipped example copies (Section 28.2), non-destructively — created when absent and overwritten only after a separate `Proceed`. `Folder Structure to Create` uses the Section 4 tree, created as a sibling AOS root per Section 4.1. `Global Files to Create` uses the Section 6 list, including `/docs/aos-user-guide.html`, which is generated from the skeleton in Section 16.6 with an Invocation Reference table scoped to the installed agents. `Optional Agent Selection` must enforce that at least one optional productive agent is chosen (Sections 2.3 and 7.2). `Rhythmic Workflow Scheduling` follows Section 9.3 step 10: offer a Cowork Scheduled Task for each of the four cadence-driven workflows (daily startup, end-of-day shutdown, weekly review, monthly review), gated per-workflow behind `Proceed`; event-triggered workflows are never scheduled. `Validation Checklist` uses the completeness checks in Section 27. `Open the AOS User Guide` performs Section 9.3 step 12: as the final action, once the instance exists and validation passes, it opens `/[aos-name]/docs/aos-user-guide.html` in the Claude Cowork side panel and prints a browser link in the chat — a display-only action that writes no files and runs after the `Proceed`-gated creation completes.
 
 The root entry `/build-aos.md` (file_type `builder_entry`) is a short pointer to `/builders/build-aos.md` and does not repeat this schema.
 

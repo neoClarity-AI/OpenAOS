@@ -2,9 +2,9 @@
 title: AOS Factory Generation Runbook
 file_type: design_spec
 project: Script to Build Agentic OS Factory
-spec_version: 2.3.2
+spec_version: 2.3.3
 created_date: 2026-06-02
-last_updated: 2026-07-13
+last_updated: 2026-07-14
 status: design_ready_for_factory_generation
 important_constraint: Do not generate actual AOS Factory files unless the user explicitly types exactly Proceed.
 ---
