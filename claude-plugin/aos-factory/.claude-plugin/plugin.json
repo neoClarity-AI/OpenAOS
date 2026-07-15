@@ -1,7 +1,7 @@
 {
-  "name": "openaos"
-  "version": "2.3.2",
-  "description": "OpenAOS version 2.3.2. An open source tool that helps you create and maintain your own custom Agenetic Operating System (AOS).",
+  "name": "openaos",
+  "version": "2.3.3",
+  "description": "OpenAOS version 2.3.3. An open source tool that helps you create and maintain your own custom Agentic Operating System (AOS).",
   "author": {
     "name": "neoClarity",
     "email": "openaos@neoclarity.ai"

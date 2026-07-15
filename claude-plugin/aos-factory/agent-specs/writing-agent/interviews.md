@@ -2,7 +2,7 @@
 title: Writing Agent — Agent Interviews
 file_type: interview_script
 slug: writing-agent
-spec_version: 2.3.2
+spec_version: 2.3.3
 ---
 # Writing Agent — Interviews
 

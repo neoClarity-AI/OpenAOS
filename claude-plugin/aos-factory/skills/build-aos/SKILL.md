@@ -264,3 +264,11 @@ with an instance-scope schema parallel to the §13 per-agent Build Summary:
 ## Open Questions
 ## Suggested Next Steps
 ```
+
+## Open the AOS User Guide
+
+As the final action (§9.3 step 12), once the instance exists and validation
+passes, open `/[aos-name]/docs/aos-user-guide.html` in the Claude Cowork side
+panel, and print a link in the chat window to open the same file in a browser.
+This is a display action only — no files are written — so it runs after the
+`Proceed`-gated creation completes.

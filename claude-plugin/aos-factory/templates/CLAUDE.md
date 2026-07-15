@@ -1,7 +1,7 @@
 ---
 title: AOS Workspace Instructions (Example)
 file_type: project_instructions
-spec_version: 2.3.2
+spec_version: 2.3.3
 ---
 # AOS Workspace — Session Instructions
 
