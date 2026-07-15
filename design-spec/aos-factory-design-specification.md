@@ -1188,6 +1188,7 @@ Initial setup should use this sequence:
 9. Update the agent registry
 10. Offer to schedule the rhythmic workflows as Cowork Scheduled Tasks
 11. Produce an AOS setup summary
+12. Open the AOS User Guide for the user
 ```
 
 **Scheduling the rhythmic workflows (step 10).** The four cadence-driven workflows — daily startup, end-of-day shutdown, weekly review, and monthly review (Section 17.1–17.4) — are candidates for a Cowork Scheduled Task per workflow, each one invoking that workflow's routed execution on its cadence. This is offered, never assumed: present the four candidates with their standard cadence (Section 25) and the reviewing agent's preferred timing where already captured (e.g. the Review Agent's `review-timing` answer, Section 26), and create a task only for each one the user accepts; declining any or all leaves that workflow manually triggered, as today. Event-triggered workflows (inbox-to-task, project kickoff, decision capture, memory review; Sections 17.5–17.8) are not scheduled — they run when their triggering event occurs, not on a cadence. Creating a Scheduled Task is Level 2 (Section 3.4): preview the proposed schedule and gate creation behind `Proceed`, consistent with the rest of this sequence. Each accepted schedule is logged to `/logs/change-log.md`.
@@ -1195,6 +1196,8 @@ Initial setup should use this sequence:
 Each Scheduled Task's instructions must contain **exactly one line** pointing to its associated workflow file, as an `@`-path reference resolved against the instance root — e.g. `@/[aos-name]/workflows/daily-startup-workflow.md`. The task carries no other embedded instructions; the workflow file remains the single source of truth for what the run does, so editing the workflow changes future runs without touching the schedule.
 
 The step 11 **AOS setup summary** is a saved file: `/logs/aos-build-summary.md`, file_type `build_summary` (§15.4), with a schema parallel to the Section 13 per-agent Build Summary (Files Created, Key Decisions, User Preferences Captured, Permissions and Boundaries, Open Questions, Suggested Next Steps) at instance scope.
+
+**Opening the AOS User Guide (step 12).** As the final action, once the instance exists and validation passes, open `/[aos-name]/docs/aos-user-guide.html` in the Claude Cowork side panel, and print a link in the chat window to open the same file in a browser. This is a display action only — no files are written — so it runs after the `Proceed`-gated creation completes.
 
 Actual file creation still waits until the user types:
 
